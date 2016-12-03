@@ -29,3 +29,6 @@
 *.app
 
 !Tool/premake/win/*
+
+Build/*
+Generated/*

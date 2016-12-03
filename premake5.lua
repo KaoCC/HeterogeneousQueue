@@ -34,14 +34,14 @@ workspace "HeterogeneousQueue"
 
     dofile ("./OpenCLSearch.lua" )
 
-    -- The Ray Tracer
+    -- The HQ
 
     project "HQ"
 
         kind "ConsoleApp"
         includedirs "HQ/include"
 
-        files {"HQ/src/**.cpp", "HQ/kernel/**.cl"}
+        files {"HQ/src/**.cpp", "HQ/kernel/**.cl", "HQ/src/**.hpp", "Test/main.cpp"}
 
 
 
