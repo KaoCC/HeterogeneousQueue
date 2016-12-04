@@ -37,7 +37,8 @@ namespace HQ {
 
     public:
 
-        virtual bool wait() = 0;
+        virtual void wait() = 0;
+        virtual void signal() = 0;
         virtual bool isComplete() const = 0;
 
         virtual ~Event() = 0;
@@ -50,7 +51,7 @@ namespace HQ {
     public:
 
             // test only
-//        virtual ~TaskParameter() = 0;
+        virtual ~TaskParameter() = 0;
     };
 
 
@@ -63,9 +64,8 @@ namespace HQ {
         virtual TaskParameter* getTaskParameter() = 0;
         virtual Event* getEvent() = 0;
 
-            // tmp: for testing only !
- //       virtual ~Task() = 0;    
-
+        // tmp: for testing only !
+        virtual ~Task() = 0;    
     };
 
 
@@ -75,6 +75,9 @@ namespace HQ {
     HQAPI void hqEnqueue(Task* task);
 
 
+//for testing
+    HQAPI Event* hqCreateEvent();
+    HQAPI void hqDestroyEvent(Event* event);
 
 }
 

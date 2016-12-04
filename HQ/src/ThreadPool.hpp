@@ -62,11 +62,17 @@ namespace HQ {
             while (!done) {
 
                 if (taskQueue.pop(task)) {
-                    
+       
                     auto& runFunction = task->getRunFunction();
                     runFunction(task->getTaskParameter());
 
                     //TODO: check for event ?
+
+                    Event* event = task->getEvent();
+                    if (event) {
+                        event->signal();
+                    }
+
 
                 } else {
                     std::this_thread::sleep_for(std::chrono::milliseconds(sleepTime));

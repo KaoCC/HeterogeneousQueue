@@ -33,6 +33,16 @@ namespace HQ {
     }
 
 
+    Task::~Task() {
+    }
+
+	TaskParameter::~TaskParameter() {
+	}
+
+    Event::~Event() {
+    }
+
+
 } 
 
 
