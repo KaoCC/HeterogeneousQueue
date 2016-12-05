@@ -87,7 +87,6 @@ int main () {
 	TestTask testTaskB;
 	HQ::hqEnqueue(&testTaskB);
 
-
     HQ::hqDestroyEvent(testTask->getEvent());
     HQ::hqDestroy();
 

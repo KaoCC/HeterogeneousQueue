@@ -38,14 +38,33 @@ workspace "HeterogeneousQueue"
 
     project "HQ"
 
-        kind "ConsoleApp"
+        kind "StaticLib"
+        defines {"HQ_STATIC_LIBRARY"}
+
         includedirs "HQ/include"
 
-        files {"HQ/src/**.cpp", "HQ/kernel/**.cl", "HQ/src/**.hpp", "Test/main.cpp"}
+        files {"HQ/**.cpp", "HQ/**.hpp"}
 
 
+    -- Compute Engine    
+
+    project "CE"
+
+        kind "StaticLib"
+        defines {"CE_STATIC_LIBRARY"}
+
+        includedirs "CE/include"
+        files  {"CE/**.cpp", "CE/**.hpp"}
 
 
+    -- Test Drive
+    project "Test"
+        kind "ConsoleApp"
+
+        links "HQ"
+
+        includedirs {"HQ/include", "CE/include"}
+        files {"Test/**.cpp"}
 
 
 
