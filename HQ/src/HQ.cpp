@@ -9,7 +9,7 @@ namespace HQ {
     static ThreadPool* tp = nullptr;
 
 
-    void hqInit() {
+    void CreateHeterogeneousQueue() {
 
         if (!tp) {
             tp = new ThreadPool();
@@ -18,7 +18,7 @@ namespace HQ {
     }
 
 
-    void hqDestroy() {
+    void DestroyHeterogeneousQueue() {
 
         if (tp) {
             delete tp;
@@ -26,7 +26,7 @@ namespace HQ {
 
     }
 
-    void hqEnqueue(Task* task) {
+    void EnqueueHeterogeneousQueue(Task* task) {
         if (tp) {
             tp->enqueue(task);
         }

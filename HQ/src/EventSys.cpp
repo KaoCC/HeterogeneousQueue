@@ -38,11 +38,11 @@ namespace HQ {
 
 
 
-	Event* hqCreateEvent() {
+	Event* CreateEvent() {
 		return new EventSys();
 	}
 
-	void hqDestroyEvent(Event* event) {
+	void DestroyEvent(Event* event) {
 		if (event) {
 			delete event;
 		}

@@ -69,15 +69,15 @@ namespace HQ {
     };
 
 
-    HQAPI void hqInit();
-    HQAPI void hqDestroy();
+    HQAPI void CreateHeterogeneousQueue();
+    HQAPI void DestroyHeterogeneousQueue();
 
-    HQAPI void hqEnqueue(Task* task);
+    HQAPI void EnqueueHeterogeneousQueue(Task* task);
 
 
 //for testing
-    HQAPI Event* hqCreateEvent();
-    HQAPI void hqDestroyEvent(Event* event);
+    HQAPI Event* CreateEvent();
+    HQAPI void DestroyEvent(Event* event);
 
 }
 

@@ -70,14 +70,14 @@ private:
 
 int main () {
 
-    HQ::hqInit();
+    HQ::CreateHeterogeneousQueue();
 
 
     TestTask* testTask = new TestTask();
-    testTask->setEvent(HQ::hqCreateEvent());
+    testTask->setEvent(HQ::CreateEvent());
 
 	// Task with Event
-    HQ::hqEnqueue(testTask);
+    HQ::EnqueueHeterogeneousQueue(testTask);
     testTask->getEvent()->wait();
 
 	//test
@@ -85,10 +85,10 @@ int main () {
 
 	// this will be non-blocking
 	TestTask testTaskB;
-	HQ::hqEnqueue(&testTaskB);
+	HQ::EnqueueHeterogeneousQueue(&testTaskB);
 
-    HQ::hqDestroyEvent(testTask->getEvent());
-    HQ::hqDestroy();
+    HQ::DestroyEvent(testTask->getEvent());
+    HQ::DestroyHeterogeneousQueue();
 
     delete testTask;
 
