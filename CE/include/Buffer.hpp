@@ -4,13 +4,18 @@
 
 #include "CE_common.hpp"
 
-class CE_API Buffer
-{
-public:
 
-	virtual size_t getSize() = 0;
+namespace CE {
 
-};
+	class CE_API Buffer
+	{
+	public:
+
+		virtual size_t getSize() = 0;
+
+	};
+
+}
 
 
 

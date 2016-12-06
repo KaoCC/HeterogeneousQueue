@@ -8,11 +8,18 @@
 
 namespace CE {
 
+	class Device;
+
     class CE_API ComputeEngine {
 
     public:
 
-		virtual size_t GetDeviceCount() const = 0;
+		virtual size_t getDeviceCount() const = 0;
+
+
+		virtual void createDevice(size_t index) = 0;
+		virtual void deleteDevice(Device* device) = 0;
+
         virtual ~ComputeEngine() = 0;
 
 

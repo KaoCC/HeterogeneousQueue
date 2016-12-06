@@ -15,6 +15,7 @@
 #include "HQ.hpp"
 #include "ThreadSafeQueue.hpp"
 
+
 namespace HQ {
 
 
@@ -27,17 +28,23 @@ namespace HQ {
 		void enqueue(Task* task);
 		size_t getSize() const;
 
+		const std::atomic_bool& isDone() const;
+
 		~ThreadPool();
 
+		const int sleepTime = 20;
 
 	private:
 
-		void runLoop();
+		friend class Worker;
+		//void runLoop();
 
-		int sleepTime = 20;
 		std::atomic_bool done{ false };
 		std::vector<std::thread> workerThreads;
 		ThreadSafeQueue<Task*> taskQueue;
+
+		// test
+		//Worker w;
 
 	};
 

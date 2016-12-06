@@ -1,7 +1,8 @@
 
-
+#include "Worker.hpp"
 #include "ThreadPool.hpp"
 
+#include <iostream>
 
 namespace HQ {
 
@@ -13,8 +14,11 @@ namespace HQ {
 			numberOfThreads = 4;
 		}
 
+		// test
+		std::cerr << numberOfThreads << std::endl;
+
 		for (size_t i = 0; i < numberOfThreads; ++i) {
-			workerThreads.push_back(std::thread(&ThreadPool::runLoop, this));
+			workerThreads.push_back(std::thread(Worker(*this)));
 		}
 
 	}
@@ -32,32 +36,37 @@ namespace HQ {
 	}
 
 
-	void ThreadPool::runLoop() {
-
-		Task* task = nullptr;
-
-		while (!done) {
-
-			if (taskQueue.pop(task)) {
-
-				auto& runFunction = task->getRunFunction();
-				runFunction(task->getTaskParameter());
-
-				//TODO: check for event ?
-
-				Event* event = task->getEvent();
-				if (event) {
-					event->signal();
-				}
-
-
-			} else {
-				std::this_thread::sleep_for(std::chrono::milliseconds(sleepTime));
-			}
-
-		}
-
+	const std::atomic_bool& ThreadPool::isDone() const {
+		return done;
 	}
+
+
+	//void ThreadPool::runLoop() {
+
+	//	Task* task = nullptr;
+
+	//	while (!done) {
+
+	//		if (taskQueue.pop(task)) {
+
+	//			auto& runFunction = task->getRunFunction();
+	//			runFunction(task->getTaskParameter());
+
+	//			//TODO: check for event ?
+
+	//			Event* event = task->getEvent();
+	//			if (event) {
+	//				event->signal();
+	//			}
+
+
+	//		} else {
+	//			std::this_thread::sleep_for(std::chrono::milliseconds(sleepTime));
+	//		}
+
+	//	}
+
+	//}
 
 	ThreadPool::~ThreadPool() {
 		done = true;

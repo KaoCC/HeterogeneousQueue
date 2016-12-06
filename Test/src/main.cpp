@@ -87,6 +87,7 @@ int main () {
 	TestTask testTaskB;
 	HQ::EnqueueHeterogeneousQueue(&testTaskB);
 
+
     HQ::DestroyEvent(testTask->getEvent());
     HQ::DestroyHeterogeneousQueue();
 
