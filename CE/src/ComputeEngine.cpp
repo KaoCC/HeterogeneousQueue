@@ -1,6 +1,6 @@
 
 #include "ComputeEngine.hpp"
-
+#include "ComputeEngineMix.hpp"
 
 
 
@@ -11,9 +11,17 @@ namespace CE {
 
 
 
-	ComputeEngine* CreateComputeEngine() {
-		// not yet supported
-		return nullptr;
+	ComputeEngine* CreateComputeEngine(CE::Platform type) {
+
+		ComputeEngine* ret = nullptr;
+
+		if (type == CE::kMix) {
+			ret = new CE::ComputeEngineMix();
+		}
+
+
+		// return nullptr if not yet supported
+		return ret;
 	}
 
 	void DeleteComputeEngine(ComputeEngine* ce) {

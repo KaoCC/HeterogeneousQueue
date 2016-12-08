@@ -1,5 +1,5 @@
 
-#include "Worker.hpp"
+#include "ComputePlatform.hpp"
 #include "ThreadPool.hpp"
 
 #include <iostream>
@@ -18,7 +18,7 @@ namespace HQ {
 		std::cerr << numberOfThreads << std::endl;
 
 		for (size_t i = 0; i < numberOfThreads; ++i) {
-			workerThreads.push_back(std::thread(Worker(*this)));
+			workerThreads.push_back(std::thread(&ThreadPool::runLoop, this));
 		}
 
 	}
@@ -41,32 +41,35 @@ namespace HQ {
 	}
 
 
-	//void ThreadPool::runLoop() {
+	void ThreadPool::runLoop() {
 
-	//	Task* task = nullptr;
+		// init the ComputePlatform
+		//ComputePlatform w;
 
-	//	while (!done) {
+		Task* task = nullptr;
 
-	//		if (taskQueue.pop(task)) {
+		while (!done) {
 
-	//			auto& runFunction = task->getRunFunction();
-	//			runFunction(task->getTaskParameter());
+			if (taskQueue.pop(task)) {
 
-	//			//TODO: check for event ?
+				auto& runFunction = task->getRunFunction();
+				runFunction(task->getTaskParameter());
 
-	//			Event* event = task->getEvent();
-	//			if (event) {
-	//				event->signal();
-	//			}
+				//TODO: check for event ?
+
+				Event* event = task->getEvent();
+				if (event) {
+					event->signal();
+				}
 
 
-	//		} else {
-	//			std::this_thread::sleep_for(std::chrono::milliseconds(sleepTime));
-	//		}
+			} else {
+				std::this_thread::sleep_for(std::chrono::milliseconds(sleepTime));
+			}
 
-	//	}
+		}
 
-	//}
+	}
 
 	ThreadPool::~ThreadPool() {
 		done = true;

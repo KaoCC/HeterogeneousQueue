@@ -34,16 +34,11 @@ workspace "HeterogeneousQueue"
 
     dofile ("./OpenCLSearch.lua" )
 
-    -- The HQ
 
-    project "HQ"
+    -- linkage def
+    defines {"HQ_STATIC_LIBRARY"}
+    defines {"CE_STATIC_LIBRARY"}
 
-        kind "StaticLib"
-        defines {"HQ_STATIC_LIBRARY"}
-
-        includedirs "HQ/include"
-
-        files {"HQ/**.cpp", "HQ/**.hpp"}
 
 
     -- Compute Engine    
@@ -51,10 +46,24 @@ workspace "HeterogeneousQueue"
     project "CE"
 
         kind "StaticLib"
-        defines {"CE_STATIC_LIBRARY"}
+        --defines {"CE_STATIC_LIBRARY"}
 
         includedirs "CE/include"
         files  {"CE/**.cpp", "CE/**.hpp"}
+
+
+    -- The HQ
+
+    project "HQ"
+
+        kind "StaticLib"
+        --defines {"HQ_STATIC_LIBRARY"}
+
+        -- tmp: linkage
+        links "CE"
+        includedirs {"HQ/include", "CE/include"}
+
+        files {"HQ/**.cpp", "HQ/**.hpp"}
 
 
     -- Test Drive

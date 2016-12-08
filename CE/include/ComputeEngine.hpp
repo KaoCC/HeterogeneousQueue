@@ -14,11 +14,13 @@ namespace CE {
 
     public:
 
+
+		virtual Device* createDevice(size_t index) const = 0;
+		virtual void deleteDevice(Device* device) = 0;
 		virtual size_t getDeviceCount() const = 0;
 
 
-		virtual void createDevice(size_t index) = 0;
-		virtual void deleteDevice(Device* device) = 0;
+		virtual Platform getPlatform() const = 0;
 
         virtual ~ComputeEngine() = 0;
 
@@ -28,7 +30,7 @@ namespace CE {
 
 
 
-	CE_API ComputeEngine* CreateComputeEngine();
+	CE_API ComputeEngine* CreateComputeEngine(CE::Platform type);
 	CE_API void DeleteComputeEngine(ComputeEngine* ce);
 
 }

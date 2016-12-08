@@ -22,7 +22,29 @@
 #define CE_API
 #endif
 
+#include <cstdint>
 
+namespace CE {
+
+	enum Platform
+	{
+		kOpenCL = (1 << 0),
+		kVulkan = (1 << 1),
+		kMix	= (1 << 2),
+
+		kAny = 0xFF
+	};
+
+	enum class DeviceType : std::uint8_t {
+		kUnknown,
+		kGpu,
+		kCpu,
+		kAccelerator,
+		kSequential
+	};
+
+
+}
 
 
 #endif

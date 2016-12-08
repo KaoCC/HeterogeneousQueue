@@ -11,9 +11,37 @@ namespace CE {
 	class Executable;
 	class Function;
 
+
+
+	//struct DeviceSpec {
+	//	char const* name;
+	//	char const* vendor;
+
+	//	DeviceType  type;
+	//	SourceType  sourceTypes;
+
+	//	size_t min_alignment;
+	//	size_t max_num_queues;
+
+	//	size_t global_mem_size;
+	//	size_t local_mem_size;
+	//	size_t max_alloc_size;
+	//	size_t max_local_size;
+	//};
+
+	struct DeviceSpec {
+		const char* name;
+		const char* vendor;
+		DeviceType  type;
+	};
+
+
 	class CE_API Device {
 	public:
 
+		// Device Properties
+		virtual void GetSpec(DeviceSpec& spec) = 0;
+		virtual Platform GetPlatform() const = 0;
 
 		virtual Buffer* createBuffer(size_t size, size_t flags) = 0;
 		virtual Buffer* createBuffer(size_t size, size_t flags, void* data) = 0;
@@ -28,8 +56,13 @@ namespace CE {
 		virtual void execute(Function const* func, size_t queue, size_t global_size, size_t local_size) = 0;
 
 
+		//TODO: add more function here
 
 		virtual ~Device() = 0;
+
+		// remove copy & assignment
+		Device(Device const&) = delete;
+		Device& operator = (Device const&) = delete;
 
 	};
 

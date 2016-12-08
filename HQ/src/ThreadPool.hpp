@@ -14,7 +14,7 @@
 
 #include "HQ.hpp"
 #include "ThreadSafeQueue.hpp"
-
+#include "ComputePlatform.hpp"
 
 namespace HQ {
 
@@ -36,15 +36,14 @@ namespace HQ {
 
 	private:
 
-		friend class Worker;
-		//void runLoop();
+		void runLoop();
 
 		std::atomic_bool done{ false };
 		std::vector<std::thread> workerThreads;
 		ThreadSafeQueue<Task*> taskQueue;
 
 		// test
-		//Worker w;
+		ComputePlatform w;
 
 	};
 
