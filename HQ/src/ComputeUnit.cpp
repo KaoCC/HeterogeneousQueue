@@ -23,6 +23,10 @@ namespace HQ {
 
 	}
 
+	CE::Device * ComputeUnit::getDevice() const {
+		return device;
+	}
+
 }
 
 

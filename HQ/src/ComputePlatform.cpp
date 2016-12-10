@@ -13,7 +13,7 @@ namespace HQ {
 		ce = CE::CreateComputeEngine(CE::kMix);
 
 		// TODO: may need to change the ctor
-		for (size_t i = 0; i < numberOfUnits; ++i) {
+		for (size_t i = 0; i < NUM_OF_UNITS; ++i) {
 			computeUnits.push_back(new ComputeUnit(ce, i));
 		}
 
@@ -22,8 +22,19 @@ namespace HQ {
 
 
 
+	ComputeUnit * ComputePlatform::getComputeUnit(size_t index) {
+
+		if (index < NUM_OF_UNITS) {
+			return computeUnits[index];
+		} else {
+			// throw ?
+			return nullptr;
+		}
+	}
+
+
 	ComputePlatform::~ComputePlatform() {
-		for (size_t i = 0; i < numberOfUnits; ++i) {
+		for (size_t i = 0; i < NUM_OF_UNITS; ++i) {
 			delete computeUnits[i];
 		}
 

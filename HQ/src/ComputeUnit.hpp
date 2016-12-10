@@ -11,6 +11,7 @@ namespace HQ {
 	public:
 		ComputeUnit(CE::ComputeEngine* ce, size_t index);
 
+		CE::Device* getDevice() const;
 
 	private:
 

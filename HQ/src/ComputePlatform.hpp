@@ -27,6 +27,8 @@ namespace HQ {
 		//void enqueue();
 
 
+		ComputeUnit* getComputeUnit(size_t index);
+
 		~ComputePlatform();
 
 		ComputePlatform(const ComputePlatform&) = delete;
@@ -37,7 +39,7 @@ namespace HQ {
 
 
 		// test
-		static const size_t numberOfUnits = 1;
+		static const size_t NUM_OF_UNITS = 1;
 
 		std::vector<ComputeUnit*> computeUnits;
 

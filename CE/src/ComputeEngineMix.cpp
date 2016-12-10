@@ -9,6 +9,11 @@ namespace CE {
 
 	ComputeEngineMix::ComputeEngineMix() {
 		// init devices ?
+
+		for (size_t i = 0; i < NUM_OF_DEVICE; ++i) {
+			deviceList[i] = nullptr;
+		}
+
 	}
 
 	size_t ComputeEngineMix::getDeviceCount() const {
@@ -27,9 +32,11 @@ namespace CE {
 			throw "Number of device exceeds";
 		}
 
+
 		
 		// the first one is the sequential device
 		if (index == 0) {
+			// KAOCC: chaeck for existence ?
 			deviceList[index] = new DeviceSequential();
 		}
 

@@ -30,6 +30,10 @@ namespace CE {
 		this->f = f;
 	}
 
+	const std::function<void(int)>& FunctionSequential::getFunction() const {
+		return f;
+	}
+
 
 }
 

@@ -24,7 +24,7 @@ namespace CE {
 
 		const std::string getName() const;
 		void setFunctionBinding(std::function<void(int)>&& f);
-
+		const std::function<void(int)>& getFunction() const;
 
 	private:
 

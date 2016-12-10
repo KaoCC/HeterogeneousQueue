@@ -1,6 +1,6 @@
 #include "DeviceSequential.hpp"
 #include "ExecutableSequential.hpp"
-
+#include "FunctionSequential.hpp"
 
 namespace CE {
 
@@ -36,9 +36,18 @@ namespace CE {
 	// TODO: for loop ?
 	void CE::DeviceSequential::execute(Function const * func, size_t queue, size_t global_size, size_t local_size) {
 
+		//KAOCC: dynamic cast?
+		const FunctionSequential* funcSeq = static_cast<const FunctionSequential*>(func);
+		auto execFunc = funcSeq->getFunction();
 
+		// execute through the ND-Range sequentially
+		for (size_t i = 0; i < global_size; ++i) {
+			execFunc(i);
+		}
 
 	}
+
+	// Global access functions for APIs
 
 	Executable * DeviceSequential::createExecutable() {
 		return new ExecutableSequential();
