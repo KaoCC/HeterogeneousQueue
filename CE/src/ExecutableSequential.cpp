@@ -3,7 +3,7 @@
 
 namespace CE {
 
-	Function * ExecutableSequential::createFunction(char const * name) {
+	Function* ExecutableSequential::createFunction(char const * name) {
 
 		Function* f = new FunctionSequential(name);
 		functionTable[name] = f;
@@ -24,6 +24,22 @@ namespace CE {
 			functionTable.erase(it);
 		}
 
+
+	}
+
+
+
+	Function * CreateSequentialFunction(Executable* exec, const char * name, std::function<void(int)>&& f) {
+
+		ExecutableSequential* execSeq = static_cast<ExecutableSequential*>(exec);
+
+		Function* func = execSeq->createFunction(name);
+		FunctionSequential* funcSeq = static_cast<FunctionSequential*>(func);
+
+
+
+
+		return func;
 
 	}
 

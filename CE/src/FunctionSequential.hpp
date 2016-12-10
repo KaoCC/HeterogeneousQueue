@@ -21,7 +21,9 @@ namespace CE {
 		virtual void setArg(size_t idx, Buffer const * arg) override;
 
 
+
 		const std::string getName() const;
+		void setFunctionBinding(std::function<void(int)>&& f);
 
 
 	private:

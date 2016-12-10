@@ -15,7 +15,7 @@ namespace CE {
 		Platform getPlatform() const override;
 
 		// Inherited via ComputeEngine
-		virtual Device * createDevice(size_t index) const override;
+		virtual Device * createDevice(size_t index) override;
 		virtual void deleteDevice(Device * device) override;
 
 
@@ -24,7 +24,7 @@ namespace CE {
 		static const size_t NUM_OF_DEVICE = 1;
 
 		// default: sequential CPU + all GPU in CL
-		Device* device[NUM_OF_DEVICE];
+		Device* deviceList[NUM_OF_DEVICE];
 
 	};
 

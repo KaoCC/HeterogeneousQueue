@@ -6,7 +6,7 @@
 
 namespace CE {
 
-	Device::~Device() {
-	}
+
+
 
 }

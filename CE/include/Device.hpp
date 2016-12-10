@@ -39,6 +39,10 @@ namespace CE {
 	class CE_API Device {
 	public:
 
+
+		Device() = default;
+		virtual ~Device() = default;
+
 		// Device Properties
 		virtual void GetSpec(DeviceSpec& spec) = 0;
 		virtual Platform GetPlatform() const = 0;
@@ -58,7 +62,6 @@ namespace CE {
 
 		//TODO: add more function here
 
-		virtual ~Device() = 0;
 
 		// remove copy & assignment
 		Device(Device const&) = delete;
@@ -66,6 +69,8 @@ namespace CE {
 
 	};
 
+	CE_API Executable * CreateSequentialExecutable(Device* device);
+	
 }
 
 

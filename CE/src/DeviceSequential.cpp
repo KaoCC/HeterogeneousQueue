@@ -1,5 +1,5 @@
 #include "DeviceSequential.hpp"
-
+#include "ExecutableSequential.hpp"
 
 
 namespace CE {
@@ -36,6 +36,21 @@ namespace CE {
 	// TODO: for loop ?
 	void CE::DeviceSequential::execute(Function const * func, size_t queue, size_t global_size, size_t local_size) {
 
+
+
+	}
+
+	Executable * DeviceSequential::createExecutable() {
+		return new ExecutableSequential();
+	}
+
+
+	Executable * CreateSequentialExecutable(Device * device) {
+
+		//change to dynamic cast perhaps ?
+		DeviceSequential* deviceSeq = static_cast<DeviceSequential*>(device);
+
+		return deviceSeq->createExecutable();
 
 
 	}

@@ -1,7 +1,7 @@
 
 #include "ComputeUnit.hpp"
 
-
+#include "Device.hpp"
 
 
 namespace HQ {
@@ -11,8 +11,15 @@ namespace HQ {
 		// tmp
 		device = ce->createDevice(index);
 
+		CE::DeviceSpec spec;
+		device->GetSpec(spec);
+		if (spec.type == CE::DeviceType::kSequential) {
+			
+			// put it here or user space ?
+			//CreateSequentialExecutable(device);
+			
 
-
+		}
 
 	}
 

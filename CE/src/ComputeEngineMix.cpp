@@ -2,7 +2,7 @@
 #include "ComputeEngineMix.hpp"
 
 
-
+#include "DeviceSequential.hpp"
 
 
 namespace CE {
@@ -20,13 +20,28 @@ namespace CE {
 		return Platform::kMix;
 	}
 
-	Device* ComputeEngineMix::createDevice(size_t index) const {
+	Device* ComputeEngineMix::createDevice(size_t index) {
 		//FIXME: yet to be done
-		return nullptr;
+	
+		if (index >= NUM_OF_DEVICE) {
+			throw "Number of device exceeds";
+		}
+
+		
+		// the first one is the sequential device
+		if (index == 0) {
+			deviceList[index] = new DeviceSequential();
+		}
+
+		return deviceList[index];
+
+
+
 	}
 
 	void ComputeEngineMix::deleteDevice(Device * device) {
 
+		// need to change
 		if (device) {
 			delete device;
 		}

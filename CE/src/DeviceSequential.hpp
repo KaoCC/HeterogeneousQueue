@@ -21,6 +21,8 @@ namespace CE {
 		virtual void execute(Function const * func, size_t queue, size_t global_size, size_t local_size) override;
 
 
+		// Sequential
+		Executable * createExecutable();
 
 		// members ?
 

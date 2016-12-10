@@ -7,11 +7,10 @@
 #include <map>
 #include <string>
 
+
 namespace CE {
 
 	class ExecutableSequential : public Executable {
-
-
 
 	public:
 
@@ -24,6 +23,8 @@ namespace CE {
 		std::map<std::string, Function*> functionTable;
 
 	};
+
+
 }
 
 

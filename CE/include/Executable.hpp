@@ -3,6 +3,8 @@
 
 #include "CE_common.hpp"
 
+#include <functional>
+
 namespace CE {
 
 	class Function;
@@ -16,7 +18,7 @@ namespace CE {
 	};
 
 
-
+	CE_API Function* CreateSequentialFunction(Executable* exec, const char* name, std::function<void(int)>&& f);
 
 }
 
