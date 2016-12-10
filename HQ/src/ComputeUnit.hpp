@@ -1,5 +1,5 @@
-#ifndef _COMPUTE_UNIT_HPP_
-#define _COMPUTE_UNIT_HPP_
+#ifndef _HQ_COMPUTEUNIT_HPP_
+#define _HQ_COMPUTEUNIT_HPP_
 
 #include "ComputeEngine.hpp"
 #include "Device.hpp"

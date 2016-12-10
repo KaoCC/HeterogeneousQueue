@@ -3,27 +3,25 @@
 
 namespace CE {
 
-	FunctionSequential::FunctionSequential() {
+	FunctionSequential::FunctionSequential(const char* str) : name (str) {
 
+	}
+
+	FunctionSequential::FunctionSequential(const char * name) {
 	}
 
 	void FunctionSequential::setArg(size_t idx, size_t arg_size, void * arg) {
 
-		// tmp impl
-
-		if (idx > parameters.size()) {
-			parameters.resize(idx);
-			// or report error ?
-		}
-
-		// check for validation ?
-		parameters[idx] = arg;
-
-
+		// yet to be done
 	}
 
 	void FunctionSequential::setArg(size_t idx, Buffer const * arg) {
 		// yet to be done
+	}
+
+
+	const std::string FunctionSequential::getName() const {
+		return name;
 	}
 
 

@@ -4,6 +4,9 @@
 
 #include "Executable.hpp"
 
+#include <map>
+#include <string>
+
 namespace CE {
 
 	class ExecutableSequential : public Executable {
@@ -18,9 +21,7 @@ namespace CE {
 
 	private:
 
-
-
-
+		std::map<std::string, Function*> functionTable;
 
 	};
 }

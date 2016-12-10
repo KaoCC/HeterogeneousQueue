@@ -5,7 +5,7 @@
 #include "Function.hpp"
 
 #include <functional>
-#include <vector>
+#include <string>
 
 namespace CE {
 
@@ -13,19 +13,22 @@ namespace CE {
 
 	public:
 
-		FunctionSequential();
+		FunctionSequential(const char* name);
+
 
 		// Inherited via Function
 		virtual void setArg(size_t idx, size_t arg_size, void * arg) override;
 		virtual void setArg(size_t idx, Buffer const * arg) override;
 
 
+		const std::string getName() const;
 
 
 	private:
 
+
 		std::function<void(int)> f;
-		std::vector<void*> parameters;
+		std::string name;
 
 	};
 

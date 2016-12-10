@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <string>
+#include <functional>
 #include "HQ.hpp"
 
 
@@ -66,9 +67,18 @@ private:
 };
 
 
+void test(int i) {
+	std::cout << "test function" << std::endl;
+}
 
 
 int main () {
+
+
+	// test
+
+
+
 
     HQ::CreateHeterogeneousQueue();
 
