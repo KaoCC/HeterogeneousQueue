@@ -4,15 +4,17 @@
 #include "HQ.hpp"
 #include "ThreadPool.hpp"
 
+#include "HeterogeneousQueue.hpp"
+
 namespace HQ {
 
-    static ThreadPool* tp = nullptr;
+    static HeterogeneousQueue* hq = nullptr;
 
 
     void CreateHeterogeneousQueue() {
 
-        if (!tp) {
-            tp = new ThreadPool();
+        if (!hq) {
+			hq = new HeterogeneousQueue();
         }
 
     }
@@ -20,17 +22,24 @@ namespace HQ {
 
     void DestroyHeterogeneousQueue() {
 
-        if (tp) {
-            delete tp;
+        if (hq){
+            delete hq;
         }
 
     }
 
     void EnqueueHeterogeneousQueue(Task* task) {
-        if (tp) {
-            tp->enqueue(task);
+        if (hq) {
+			hq->enqueue(task);
         }
     }
+
+	HQAPI CE::Function const* CreateSequentialFunctionWithIndex(size_t index, const char* name, std::function<void(int)>&& f) {
+
+		CE::Function const* func = hq->getPlatfrom().getComputeUnit(index)->createSequentialFunction(name, std::move(f));
+
+		return func;
+	}
 
 
     Task::~Task() {

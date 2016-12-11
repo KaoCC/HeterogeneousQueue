@@ -32,6 +32,9 @@ void ff(TaskParameter* tt) {
 	std::cout << "NAME:" << real->name << std::endl;
 }
 
+void fff(int gid) {
+	std::cout << gid << std::endl;
+}
 
 class TestTask : public HQ::Task {
 
@@ -39,13 +42,17 @@ public:
 
 
 
-    RunFunctionType getRunFunction() override {
+    CE::Function const* getRunFunction(size_t index) override {
         return runF;
     }
 
     TaskParameter* getTaskParameter() override {
         return &p;
     }
+
+	size_t getGlobalSize() override  {
+		return 100;
+	}
 
     Event* getEvent() override {
         return event;
@@ -60,7 +67,7 @@ public:
 	}
 
 private:
-    RunFunctionType runF {ff};
+	CE::Function const* runF { CreateSequentialFunctionWithIndex(0, "test", std::move(fff) )};
 	TestTaskParameter p;
     Event* event {nullptr};
 

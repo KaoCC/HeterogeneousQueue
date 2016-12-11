@@ -48,6 +48,8 @@ namespace CE {
 
 	void ComputeEngineMix::deleteDevice(Device * device) {
 
+		//KAOCC: check the index
+
 		// need to change
 		if (device) {
 			delete device;

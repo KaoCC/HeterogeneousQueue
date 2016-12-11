@@ -21,8 +21,37 @@ namespace HQ {
 	}
 
 
+	void ComputePlatform::enqueue(Task * task) {
 
-	ComputeUnit * ComputePlatform::getComputeUnit(size_t index) {
+		// tmp
+		// simple impl.
+
+		size_t gs = task->getGlobalSize();
+		size_t partial = gs / computeUnits.size();
+		size_t sz = 0;
+
+		for (size_t i = 0; i < computeUnits.size(); ++i) {
+
+			if ((gs - partial) / partial > 0) {
+				sz = partial;
+			} else {
+				sz = gs;
+			}
+
+
+			// TODO: need to set up the offset
+			// TODO: need to be a thread pool model
+			// TODO: sync ?
+			computeUnits[i]->exeucte(task->getRunFunction(i), sz);
+
+			gs -= partial;
+		}
+
+
+	}
+
+	// should be removed
+	ComputeUnit * ComputePlatform::getComputeUnit(size_t index) const {
 
 		if (index < NUM_OF_UNITS) {
 			return computeUnits[index];
@@ -30,6 +59,11 @@ namespace HQ {
 			// throw ?
 			return nullptr;
 		}
+	}
+
+
+	size_t ComputePlatform::getNumberOfComputeUnit() const {
+		return computeUnits.size();
 	}
 
 

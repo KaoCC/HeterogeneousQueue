@@ -7,6 +7,8 @@
 #include "ComputeUnit.hpp"
 //#include "ThreadPool.hpp"
 
+#include "HQ.hpp"
+
 // From CE
 #include "ComputeEngine.hpp"
 
@@ -24,10 +26,13 @@ namespace HQ {
 
 		//TODO: add enqueue member function
 		// param: Task ?
-		//void enqueue();
 
+		void enqueue(Task* task);
 
-		ComputeUnit* getComputeUnit(size_t index);
+		// KAOCC: remove this, we should not expose the internal data
+		ComputeUnit* getComputeUnit(size_t index) const;
+
+		size_t getNumberOfComputeUnit() const;
 
 		~ComputePlatform();
 
@@ -41,10 +46,10 @@ namespace HQ {
 		// test
 		static const size_t NUM_OF_UNITS = 1;
 
-		std::vector<ComputeUnit*> computeUnits;
-
-		
+		std::vector<ComputeUnit*> computeUnits;	
 		CE::ComputeEngine* ce {nullptr};
+
+		//TODO: add sync support
 
 	};
 

@@ -23,7 +23,7 @@ namespace HQ {
 
 	public:
 
-		ThreadPool();
+		ThreadPool(ComputePlatform& p);
 		
 		void enqueue(Task* task);
 		size_t getSize() const;
@@ -40,10 +40,9 @@ namespace HQ {
 
 		std::atomic_bool done{ false };
 		std::vector<std::thread> workerThreads;
-		ThreadSafeQueue<Task*> taskQueue;
 
-		// test
-		ComputePlatform w;
+		ThreadSafeQueue<Task*> taskQueue;
+		ComputePlatform& platformRef;
 
 	};
 

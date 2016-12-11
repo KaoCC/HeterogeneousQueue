@@ -5,6 +5,11 @@
 namespace CE {
 
 	void CE::DeviceSequential::GetSpec(DeviceSpec & spec) {
+
+		spec.name = "Sequential Device";
+		spec.vendor = "KAOCC";
+		spec.type = DeviceType::kSequential;
+
 	}
 
 
@@ -13,6 +18,7 @@ namespace CE {
 		return Platform::kMix;
 	}
 
+	// YET TO BE DONE !
 	Buffer * CE::DeviceSequential::createBuffer(size_t size, size_t flags) {
 		return nullptr;
 	}
@@ -47,19 +53,25 @@ namespace CE {
 
 	}
 
-	// Global access functions for APIs
 
 	Executable * DeviceSequential::createExecutable() {
 		return new ExecutableSequential();
 	}
 
 
-	Executable * CreateSequentialExecutable(Device * device) {
+	// Global access functions for APIs
 
-		//change to dynamic cast perhaps ?
-		DeviceSequential* deviceSeq = static_cast<DeviceSequential*>(device);
+	CE_API Executable * CreateSequentialExecutable(Device * device) {
 
-		return deviceSeq->createExecutable();
+		// KAOCC: change to dynamic cast;
+		DeviceSequential* deviceSeq = dynamic_cast<DeviceSequential*>(device);
+		
+
+		if (deviceSeq != nullptr) {
+			return deviceSeq->createExecutable();
+		} else {
+			return nullptr;
+		}
 
 
 	}

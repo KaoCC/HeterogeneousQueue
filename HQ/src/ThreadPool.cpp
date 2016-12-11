@@ -7,7 +7,7 @@
 namespace HQ {
 
 
-	ThreadPool::ThreadPool() {
+	ThreadPool::ThreadPool(ComputePlatform& p) : platformRef(p) {
 
 		unsigned numberOfThreads = std::thread::hardware_concurrency();
 		if (!numberOfThreads) {
@@ -43,17 +43,16 @@ namespace HQ {
 
 	void ThreadPool::runLoop() {
 
-		// init the ComputePlatform
-		//ComputePlatform w;
-
 		Task* task = nullptr;
 
 		while (!done) {
 
 			if (taskQueue.pop(task)) {
 
-				auto& runFunction = task->getRunFunction();
-				runFunction(task->getTaskParameter());
+				//auto& runFunction = task->getRunFunction();
+				//runFunction(task->getTaskParameter());
+
+				platformRef.enqueue(task);
 
 				//TODO: check for event ?
 

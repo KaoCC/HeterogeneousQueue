@@ -27,10 +27,9 @@
 #define HQAPI
 #endif
 
-
+#include "Function.hpp"
 
 namespace HQ {
-
 
 
     class HQAPI Event {
@@ -58,10 +57,14 @@ namespace HQ {
     class HQAPI Task {
  
     public:
-        using RunFunctionType = std::function<void(TaskParameter*)>;
+        //using RunFunctionType = std::function<void(TaskParameter*)>;
 
-        virtual RunFunctionType getRunFunction() = 0;
+        virtual CE::Function const* getRunFunction(size_t index) = 0;
         virtual TaskParameter* getTaskParameter() = 0;
+
+
+		virtual size_t getGlobalSize() = 0;
+
         virtual Event* getEvent() = 0;
 
         // tmp: for testing only !
@@ -73,6 +76,8 @@ namespace HQ {
     HQAPI void DestroyHeterogeneousQueue();
 
     HQAPI void EnqueueHeterogeneousQueue(Task* task);
+
+	HQAPI CE::Function const* CreateSequentialFunctionWithIndex(size_t index, const char* name, std::function<void(int)>&& f);
 
 
 //for testing

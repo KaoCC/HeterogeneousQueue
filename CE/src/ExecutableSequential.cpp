@@ -5,9 +5,17 @@ namespace CE {
 
 	Function* ExecutableSequential::createFunction(char const * name) {
 
-		Function* f = new FunctionSequential(name);
-		functionTable[name] = f;
-		return f;
+		// KAOCC: check for existence ?
+		auto it = functionTable.find(name);
+
+		if (it != functionTable.end()) {
+			return it->second;
+		} else {
+
+			Function* f = new FunctionSequential(name);
+			functionTable[name] = f;
+			return f;
+		}
 
 	}
 
@@ -29,17 +37,20 @@ namespace CE {
 
 
 
-	Function * CreateSequentialFunction(Executable* exec, const char * name, std::function<void(int)>&& f) {
+	// Global access function
 
+	Function* CreateSequentialFunction(Executable* exec, const char * name, std::function<void(int)>&& f) {
+
+		// KAOCC: chould change to dynamic cast
 		ExecutableSequential* execSeq = static_cast<ExecutableSequential*>(exec);
+
 
 		Function* func = execSeq->createFunction(name);
 		FunctionSequential* funcSeq = static_cast<FunctionSequential*>(func);
+		funcSeq->setFunctionBinding(std::move(f));
 
 
-
-
-		return func;
+		return funcSeq;
 
 	}
 
