@@ -19,12 +19,13 @@ namespace HQ {
 
 		void exeucte(CE::Function const* f, size_t globalSize);
 
-		CE::Function* createSequentialFunction(const char* name, std::function<void(int)>&& f);
+		//CE::Function* createSequentialFunction(const char* name, std::function<void(int)>&& f);
+		CE::Executable* createSequentialExecutable();
 
 	private:
 
 		CE::Device* device {nullptr};
-		CE::Executable* program {nullptr};
+		//CE::Executable* program {nullptr};
 
 	};
 

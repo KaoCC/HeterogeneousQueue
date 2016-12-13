@@ -27,7 +27,7 @@
 #define HQAPI
 #endif
 
-#include "Function.hpp"
+#include "Executable.hpp"
 
 namespace HQ {
 
@@ -77,7 +77,8 @@ namespace HQ {
 
     HQAPI void EnqueueHeterogeneousQueue(Task* task);
 
-	HQAPI CE::Function const* CreateSequentialFunctionWithIndex(size_t index, const char* name, std::function<void(int)>&& f);
+	//HQAPI CE::Function const* CreateSequentialFunctionWithIndex(size_t index, const char* name, std::function<void(int)>&& f);
+	HQAPI CE::Executable* CreateSequentialExecutableWithIndex(size_t index);
 
 
 //for testing

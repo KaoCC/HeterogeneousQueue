@@ -5,6 +5,9 @@
 
 #include "ComputeEngine.hpp"
 
+#include <thread>
+#include <array>
+
 namespace HQ {
 
 	ComputePlatform::ComputePlatform() {
@@ -26,25 +29,31 @@ namespace HQ {
 		// tmp
 		// simple impl.
 
-		size_t gs = task->getGlobalSize();
-		size_t partial = gs / computeUnits.size();
-		size_t sz = 0;
 
+		// clear
+		futures.clear();
+
+		size_t gs = task->getGlobalSize();
+		const size_t partial = gs / computeUnits.size();
+
+
+		size_t sz = partial;
 		for (size_t i = 0; i < computeUnits.size(); ++i) {
 
-			if ((gs - partial) / partial > 0) {
-				sz = partial;
-			} else {
-				sz = gs;
+			if (i == computeUnits.size() - 1) {
+				// add the rest
+				sz += gs - (partial * computeUnits.size());
 			}
 
 
 			// TODO: need to set up the offset
 			// TODO: need to be a thread pool model
 			// TODO: sync ?
-			computeUnits[i]->exeucte(task->getRunFunction(i), sz);
+			futures.push_back(std::async(dispatch, computeUnits[i], task->getRunFunction(i), sz, partial * i));
+		}
 
-			gs -= partial;
+		for (auto& f : futures) {
+			f.get();
 		}
 
 
@@ -73,6 +82,14 @@ namespace HQ {
 		}
 
 		CE::DeleteComputeEngine(ce);
+	}
+
+
+	// helper function
+	//TODO: we may return Event later on
+	void ComputePlatform::dispatch(ComputeUnit * cu, CE::Function const* func, size_t globalSz, size_t offset) {
+
+		cu->exeucte(func, globalSz);
 	}
 
 }

@@ -43,6 +43,9 @@ namespace HQ {
 	private:
 
 
+		// a helper function for std::async
+		static void dispatch(ComputeUnit* cu, CE::Function const* func, size_t globalSize, size_t offset);
+
 		// test
 		static const size_t NUM_OF_UNITS = 1;
 
@@ -50,6 +53,10 @@ namespace HQ {
 		CE::ComputeEngine* ce {nullptr};
 
 		//TODO: add sync support
+
+		// tmp
+		// for async
+		std::vector<std::future<void>> futures;
 
 	};
 

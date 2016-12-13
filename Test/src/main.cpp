@@ -41,6 +41,10 @@ class TestTask : public HQ::Task {
 public:
 
 
+	TestTask() {
+		program = CreateSequentialExecutableWithIndex(0);
+		runF = CreateSequentialFunction(program, "test", std::move(fff));
+	}
 
     CE::Function const* getRunFunction(size_t index) override {
         return runF;
@@ -51,7 +55,7 @@ public:
     }
 
 	size_t getGlobalSize() override  {
-		return 100;
+		return 1000;
 	}
 
     Event* getEvent() override {
@@ -67,7 +71,9 @@ public:
 	}
 
 private:
-	CE::Function const* runF { CreateSequentialFunctionWithIndex(0, "test", std::move(fff) )};
+	//CE::Function const* runF { CreateSequentialFunctionWithIndex(0, "test", std::move(fff) )};
+	CE::Function* runF;
+	CE::Executable* program;
 	TestTaskParameter p;
     Event* event {nullptr};
 

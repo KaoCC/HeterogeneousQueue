@@ -34,11 +34,16 @@ namespace HQ {
         }
     }
 
-	HQAPI CE::Function const* CreateSequentialFunctionWithIndex(size_t index, const char* name, std::function<void(int)>&& f) {
+	//HQAPI CE::Function const* CreateSequentialFunctionWithIndex(size_t index, const char* name, std::function<void(int)>&& f) {
 
-		CE::Function const* func = hq->getPlatfrom().getComputeUnit(index)->createSequentialFunction(name, std::move(f));
+	//	CE::Function const* func = hq->getPlatfrom().getComputeUnit(index)->createSequentialFunction(name, std::move(f));
 
-		return func;
+	//	return func;
+	//}
+
+	HQAPI CE::Executable * CreateSequentialExecutableWithIndex(size_t index) {
+		CE::Executable* exec = hq->getPlatfrom().getComputeUnit(index)->createSequentialExecutable();
+		return exec;
 	}
 
 
