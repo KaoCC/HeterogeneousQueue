@@ -89,7 +89,8 @@ namespace HQ {
 	//TODO: we may return Event later on
 	void ComputePlatform::dispatch(ComputeUnit * cu, CE::Function const* func, size_t globalSz, size_t offset) {
 
-		cu->exeucte(func, globalSz);
+		// tmp
+		cu->submit(func, globalSz);
 	}
 
 }

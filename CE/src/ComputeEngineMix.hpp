@@ -24,6 +24,8 @@ namespace CE {
 		static const size_t NUM_OF_DEVICE = 1;
 
 		// default: sequential CPU + all GPU in CL
+		// KAOCC: we should NOT store the actual device instances !!!!!!!
+		// TODO: change to device info.
 		Device* deviceList[NUM_OF_DEVICE];
 
 	};

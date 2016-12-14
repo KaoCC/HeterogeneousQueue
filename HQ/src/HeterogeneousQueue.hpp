@@ -4,6 +4,7 @@
 
 
 #include "ThreadPool.hpp"
+#include "ComputePlatform.hpp"
 
 namespace HQ {
 
@@ -22,6 +23,10 @@ namespace HQ {
 		const ComputePlatform& getPlatfrom() const;
 
 	private:
+
+		// enqueue helper function
+		static void submitTask(ComputePlatform& platform, Task* task);
+
 		ComputePlatform platform;
 		ThreadPool threadPool;
 	};

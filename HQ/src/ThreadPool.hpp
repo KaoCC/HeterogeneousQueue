@@ -11,21 +11,18 @@
 #include <future>
 #include <algorithm>
 
-
-#include "HQ.hpp"
 #include "ThreadSafeQueue.hpp"
-#include "ComputePlatform.hpp"
 
 namespace HQ {
 
-
+	
 	class ThreadPool {
 
 	public:
 
-		ThreadPool(ComputePlatform& p);
+		ThreadPool();
 		
-		void enqueue(Task* task);
+		void enqueue(std::function<void()>&& f);
 		size_t getSize() const;
 
 		const std::atomic_bool& isDone() const;
@@ -41,8 +38,7 @@ namespace HQ {
 		std::atomic_bool done{ false };
 		std::vector<std::thread> workerThreads;
 
-		ThreadSafeQueue<Task*> taskQueue;
-		ComputePlatform& platformRef;
+		ThreadSafeQueue<std::packaged_task<void()>> taskQueue;
 
 	};
 

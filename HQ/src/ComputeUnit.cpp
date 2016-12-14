@@ -35,10 +35,15 @@ namespace HQ {
 		return device;
 	}
 
-	void ComputeUnit::exeucte(CE::Function const* f, size_t globalSize) {
+	void ComputeUnit::submit(CE::Function const* f, size_t globalSize) {
 
+		//auto runFunction = std::bind(&CE::Device::execute, device , f, 0, globalSize, 0);
+
+		// Mutex here ?
 		//tmp
-		device->execute(f, 0, globalSize, 0);
+		//device->execute(f, 0, globalSize, 0);
+
+		pool.enqueue(std::bind(&CE::Device::execute, device, f, 0, globalSize, 0));
 	}
 
 	CE::Executable * ComputeUnit::createSequentialExecutable() {

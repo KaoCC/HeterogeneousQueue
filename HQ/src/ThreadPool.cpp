@@ -2,12 +2,12 @@
 #include "ComputePlatform.hpp"
 #include "ThreadPool.hpp"
 
-#include <iostream>
+#include <functional>
 
 namespace HQ {
 
 
-	ThreadPool::ThreadPool(ComputePlatform& p) : platformRef(p) {
+	ThreadPool::ThreadPool() {
 
 		unsigned numberOfThreads = std::thread::hardware_concurrency();
 		if (!numberOfThreads) {
@@ -15,7 +15,7 @@ namespace HQ {
 		}
 
 		// test
-		std::cerr << numberOfThreads << std::endl;
+		//std::cerr << numberOfThreads << std::endl;
 
 		for (size_t i = 0; i < numberOfThreads; ++i) {
 			workerThreads.push_back(std::thread(&ThreadPool::runLoop, this));
@@ -23,13 +23,19 @@ namespace HQ {
 
 	}
 
-	void ThreadPool::enqueue(Task* task) {
+	//void ThreadPool::enqueue(Task* task) {
 
-		//TODO: may need to add something related to Event...
-		taskQueue.push(task);
+	//	//TODO: may need to add something related to Event...
+	//	taskQueue.push(task);
 
+	//}
+
+
+	void ThreadPool::enqueue(std::function<void()>&& f) {
+
+		std::packaged_task<void()> task { std::move(f) };
+		taskQueue.push(std::move(task));
 	}
-
 
 	size_t ThreadPool::getSize() const {
 		return taskQueue.size();
@@ -43,24 +49,27 @@ namespace HQ {
 
 	void ThreadPool::runLoop() {
 
-		Task* task = nullptr;
+		//Task* task = nullptr;
+
+		std::packaged_task<void()> runFunction;
 
 		while (!done) {
 
-			if (taskQueue.pop(task)) {
+			if (taskQueue.pop(runFunction)) {
 
 				//auto& runFunction = task->getRunFunction();
 				//runFunction(task->getTaskParameter());
 
-				platformRef.enqueue(task);
+				//platformRef.enqueue(task);
 
 				//TODO: check for event ?
 
-				Event* event = task->getEvent();
-				if (event) {
-					event->signal();
-				}
+				//Event* event = task->getEvent();
+				//if (event) {
+				//	event->signal();
+				//}
 
+				runFunction();
 
 			} else {
 				std::this_thread::sleep_for(std::chrono::milliseconds(sleepTime));

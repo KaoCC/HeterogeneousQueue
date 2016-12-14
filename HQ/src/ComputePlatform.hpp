@@ -12,6 +12,8 @@
 // From CE
 #include "ComputeEngine.hpp"
 
+#include <future>
+
 namespace HQ {
 
 

@@ -3,6 +3,7 @@
 
 #include "ComputeEngine.hpp"
 #include "Device.hpp"
+#include "ThreadPool.hpp"
 
 #include <functional>
 
@@ -17,7 +18,7 @@ namespace HQ {
 		// KAOCC: this should be removed
 		CE::Device* getDevice() const;
 
-		void exeucte(CE::Function const* f, size_t globalSize);
+		void submit(CE::Function const* f, size_t globalSize);
 
 		//CE::Function* createSequentialFunction(const char* name, std::function<void(int)>&& f);
 		CE::Executable* createSequentialExecutable();
@@ -26,6 +27,8 @@ namespace HQ {
 
 		CE::Device* device {nullptr};
 		//CE::Executable* program {nullptr};
+
+		ThreadPool pool;
 
 	};
 
