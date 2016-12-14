@@ -41,6 +41,18 @@ workspace "HeterogeneousQueue"
 
 
 
+    -- CLAL (OpenCL Abstraction Layer)
+
+    project "CLAL"
+
+        kind "StaticLib"
+        --defines {CLAL_STATIC_LIBRARY}
+
+        
+        files {"CLAL/**.cpp", "CLAL/**.hpp"}
+
+
+
     -- Compute Engine    
 
     project "CE"
