@@ -104,12 +104,17 @@ int main () {
     testTask->getEvent()->wait();
 
 	//test
-	//_sleep(10000);
+	_sleep(10000);
+
+	std::cout << "Task 1 complete" << std::endl;
 
 	// this will be non-blocking
 	TestTask testTaskB;
 	HQ::EnqueueHeterogeneousQueue(&testTaskB);
 
+	_sleep(10000);
+
+	std::cout << "Task 2 complete" << std::endl;
 
     HQ::DestroyEvent(testTask->getEvent());
     HQ::DestroyHeterogeneousQueue();
