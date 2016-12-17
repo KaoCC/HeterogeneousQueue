@@ -15,7 +15,7 @@
 
 namespace CLAL {
 
-	// Base class for all the OpenCL components
+	// Base class (Wrapper) for all the OpenCL components
 	// assume that T is a pointer type for CL
 	template <typename T, cl_int(STDCALL *Retain)(T), cl_int(STDCALL *Release)(T)>
 	class ReferenceCount {
@@ -33,10 +33,12 @@ namespace CLAL {
 			RetainComponent();
 		}
 
+		// copy
 		ReferenceCount(const BaseType& rhs) : component(rhs.component) {
 			RetainComponent();
 		}
 
+		// assignment
 		BaseType& operator= (const BaseType& rhs) {
 
 			if (&rhs != this) {

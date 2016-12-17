@@ -1,5 +1,9 @@
 
 
+if os.is("windows") then
+    defines{ "WIN32" }
+end
+
 workspace "HeterogeneousQueue"
 
     location "Generated"
