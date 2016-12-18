@@ -81,6 +81,59 @@ namespace CLAL {
 
 
 
+
+
+
+	// for OpenCL platform
+	template<>
+	class ReferenceCount<cl_platform_id, nullptr, nullptr> {
+
+	public:
+		using BaseType = ReferenceCount<cl_platform_id, nullptr, nullptr>;
+
+
+		ReferenceCount() : platform(nullptr) {
+
+		}
+
+		explicit ReferenceCount(cl_platform_id plat) : platform(plat) {
+		}
+
+
+		// copy
+		ReferenceCount(const BaseType& rhs) : platform(rhs.platform) {
+		}
+
+
+		// assignment
+		BaseType& operator= (const BaseType& rhs) {
+
+			if (&rhs != this) {
+				platform = rhs.platform;
+			}
+
+			return *this;
+		}
+
+
+		//convert
+		operator cl_platform_id() const {
+			return platform;
+		}
+
+
+		~ReferenceCount() {
+		}
+
+
+	private:
+
+		cl_platform_id platform;
+	};
+
+
+
+
 }
 
 

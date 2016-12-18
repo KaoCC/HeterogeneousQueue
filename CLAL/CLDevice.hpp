@@ -18,9 +18,9 @@ namespace CLAL {
 
 		
 
-		std::string const& getName() const;
-		std::string const& getVendor() const;
-		std::string const& getVersion() const;
+		const std::string& getName() const;
+		const std::string& getVendor() const;
+		const std::string& getVersion() const;
 
 
 		cl_device_type getType() const;

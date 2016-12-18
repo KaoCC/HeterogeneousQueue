@@ -1,4 +1,5 @@
 #include "CLDevice.hpp"
+#include <vector>
 
 namespace CLAL {
 
@@ -18,18 +19,19 @@ namespace CLAL {
 
 	}
 
+
 	CLDevice::~CLDevice() {
 	}
 
-	std::string const & CLDevice::getName() const {
+	const std::string& CLDevice::getName() const {
 		return name;
 	}
 
-	std::string const & CLDevice::getVendor() const {
+	const std::string& CLDevice::getVendor() const {
 		return vendor;
 	}
 
-	std::string const & CLDevice::getVersion() const {
+	const std::string& CLDevice::getVersion() const {
 		return version;
 	}
 
@@ -39,6 +41,30 @@ namespace CLAL {
 
 	cl_device_id CLDevice::getID() const {
 		return *this;
+	}
+
+
+
+
+
+
+
+	// for std::string
+	template <>
+	void CLDevice::getDeviceInfoWithParameter<std::string>(cl_device_id id, cl_device_info param, std::string& value) {
+
+		size_t length = 0;
+
+		// get length
+		cl_int status = clGetDeviceInfo(id, param, 0, nullptr, &length);
+		ThrowIfCL(status != CL_SUCCESS, status, "clGetDeviceInfo failed");
+
+		// init buffer (perhpas we can use the reference directly ?)
+		std::vector<char> buffer(length);
+		clGetDeviceInfo(id, param, length, buffer.data(), nullptr);
+		ThrowIfCL(status != CL_SUCCESS, status, "clGetDeviceInfo failed");
+
+		value = buffer.data();
 	}
 
 
