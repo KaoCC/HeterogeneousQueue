@@ -3,6 +3,12 @@
 
 namespace CLAL {
 
+	// static function for Named Constructor Idiom & Factory Model
+	CLDevice CLDevice::Create(cl_device_id id) {
+		return CLDevice(id);
+	}
+
+
 	CLDevice::CLDevice() {
 	}
 
@@ -13,6 +19,9 @@ namespace CLAL {
 		//TODO: more here !!!
 
 
+		getDeviceInfoWithParameter(*this, CL_DEVICE_NAME, name);
+		getDeviceInfoWithParameter(*this, CL_DEVICE_VENDOR, vendor);
+		getDeviceInfoWithParameter(*this, CL_DEVICE_VERSION, version);
 		// ...
 		getDeviceInfoWithParameter(*this, CL_DEVICE_TYPE, type);
 		// ...

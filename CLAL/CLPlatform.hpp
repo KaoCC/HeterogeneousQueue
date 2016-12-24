@@ -11,14 +11,15 @@
 
 namespace CLAL {
 
-	// TODO : CLPlatfrom has no deleter !!!
-	// need to customize the Reference counter
 	class CLPlatform : public ReferenceCount<cl_platform_id, nullptr, nullptr> {
 
 	public:
 
-		//TODO: impl.
-		static void CreateAllPlatforms(std::vector<CLPlatform>& platforms);
+		// KAOCC: type is not used at the current impl.
+		static CLPlatform Create(cl_platform_id id, cl_device_type type = CL_DEVICE_TYPE_ALL);
+
+		// TODO: impl.
+		static void createAllPlatforms(std::vector<CLPlatform>& platforms);
 
 
 		const std::string& getName() const;
@@ -27,15 +28,20 @@ namespace CLAL {
 
 
 
+		CLDevice getDevice(size_t index) const;
 		size_t getDeviceCount() const;
+
 
 		virtual ~CLPlatform();
 
 	private:
 
+		// wrapper
+		CLPlatform(cl_platform_id id);
+
 		// TODO: make a universal template
 		void getPlatformInfoWithParameter(cl_platform_id id, cl_platform_info param, std::string& result);
-
+		void initDeviceList(cl_device_type type) const;
 
 		// basic info of a platform
 		std::string name;
@@ -45,7 +51,12 @@ namespace CLAL {
 
 
 		// store the device list
-		std::vector<CLDevice> devices;
+		//must be mutable since we used it from const member functions
+		mutable std::vector<CLDevice> devices;
+
+		// by default, we use all devices
+		// tmp
+		const cl_device_type INIT_DEVICE_TYPE = CL_DEVICE_TYPE_ALL;
 	};
 
 

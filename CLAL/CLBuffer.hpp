@@ -11,6 +11,15 @@ namespace CLAL {
 
 
 
+
+
+
+		size_t getElementCount();
+
+		virtual ~CLBuffer();
+
+		size_t elementCount;
+
 	};
 
 

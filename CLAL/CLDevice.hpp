@@ -14,6 +14,11 @@ namespace CLAL {
 
 	public:
 
+		//Named Constructor Idiom for future extensions
+		static CLDevice Create(cl_device_id id);
+
+
+
 		CLDevice();
 
 		
