@@ -18,6 +18,7 @@ namespace CLAL {
 
 		virtual ~CLBuffer();
 
+	private:
 		size_t elementCount;
 
 	};

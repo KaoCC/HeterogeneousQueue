@@ -16,7 +16,7 @@ namespace CLAL {
 	public:
 
 		// KAOCC: type is not used at the current impl.
-		static CLPlatform Create(cl_platform_id id, cl_device_type type = CL_DEVICE_TYPE_ALL);
+		static CLPlatform create(cl_platform_id id, cl_device_type type = CL_DEVICE_TYPE_ALL);
 
 		// TODO: impl.
 		static void createAllPlatforms(std::vector<CLPlatform>& platforms);

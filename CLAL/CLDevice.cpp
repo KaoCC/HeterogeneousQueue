@@ -4,7 +4,7 @@
 namespace CLAL {
 
 	// static function for Named Constructor Idiom & Factory Model
-	CLDevice CLDevice::Create(cl_device_id id) {
+	CLDevice CLDevice::create(cl_device_id id) {
 		return CLDevice(id);
 	}
 

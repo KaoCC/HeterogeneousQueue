@@ -10,7 +10,7 @@
 namespace CLAL {
 
 
-	CLPlatform CLPlatform::Create(cl_platform_id id, cl_device_type type) {
+	CLPlatform CLPlatform::create(cl_platform_id id, cl_device_type type) {
 		return CLPlatform(id);
 	}
 
