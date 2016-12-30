@@ -76,7 +76,7 @@ namespace CLAL {
 
 		// store to platforms !
 		std::transform(validIds.cbegin(), validIds.cend(), std::back_inserter(platforms),
-			std::bind(&CLPlatform::Create, std::placeholders::_1, CL_DEVICE_TYPE_ALL));
+			std::bind(&CLPlatform::create, std::placeholders::_1, CL_DEVICE_TYPE_ALL));
 	}
 
 
@@ -158,7 +158,7 @@ namespace CLAL {
 
 		// store the device list
 		for (cl_uint i = 0; i < numDevices; ++i) {
-			devices.push_back(CLDevice::Create(deviceIds[i]));
+			devices.push_back(CLDevice::create(deviceIds[i]));
 		}
 
 	}

@@ -5,14 +5,23 @@
 #include "CLReferenceCount.hpp"
 
 
+#include "CLDevice.hpp"
+#include "CLContext.hpp"
+
+
 
 namespace CLAL {
 
-
+//	class CLDevice;
+	class CLContext;
 
 	class CLCommandQueue : public ReferenceCount<cl_command_queue, clRetainCommandQueue, clReleaseCommandQueue> {
 
 	public:
+
+		static CLCommandQueue create(CLDevice device, CLContext context);
+		static CLCommandQueue create(cl_command_queue cq);
+
 		CLCommandQueue();
 
 		virtual ~CLCommandQueue();
@@ -41,3 +50,5 @@ namespace CLAL {
 
 
 #endif
+
+
