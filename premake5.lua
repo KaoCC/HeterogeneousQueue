@@ -52,7 +52,7 @@ workspace "HeterogeneousQueue"
         kind "StaticLib"
         --defines {CLAL_STATIC_LIBRARY}
 
-        
+        includedirs {"CLAL/include"}
         files {"CLAL/**.cpp", "CLAL/**.hpp"}
 
 
@@ -63,8 +63,9 @@ workspace "HeterogeneousQueue"
 
         kind "StaticLib"
         --defines {"CE_STATIC_LIBRARY"}
-
-        includedirs "CE/include"
+        
+        links "CLAL"
+        includedirs {"CE/include", "CLAL/include"}
         files  {"CE/**.cpp", "CE/**.hpp"}
 
 
