@@ -5,21 +5,22 @@
 #include "CLReferenceCount.hpp"
 
 
-#include "CLDevice.hpp"
-#include "CLContext.hpp"
+//#include "CLDevice.hpp"
+//#include "CLContext.hpp"
 
 
 
 namespace CLAL {
 
-//	class CLDevice;
+	class CLDevice;
 	class CLContext;
 
 	class CLCommandQueue : public ReferenceCount<cl_command_queue, clRetainCommandQueue, clReleaseCommandQueue> {
 
 	public:
 
-		static CLCommandQueue create(CLDevice device, CLContext context);
+		// KAOCC: to const reference ?
+		static CLCommandQueue create(const CLDevice& device, const CLContext& context);
 		static CLCommandQueue create(cl_command_queue cq);
 
 		CLCommandQueue();

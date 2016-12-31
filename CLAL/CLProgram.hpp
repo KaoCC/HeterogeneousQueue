@@ -16,6 +16,7 @@ namespace CLAL {
 
 	public:
 
+		// KAOCC: TODO: create kernel from source or files
 
 		size_t getKernelCount() const;
 		CLKernel GetKernel(std::string const& funcName) const;

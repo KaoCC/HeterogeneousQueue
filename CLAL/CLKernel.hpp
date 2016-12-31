@@ -11,7 +11,14 @@ namespace CLAL {
 
 
 	public:
+
+		// note: used internally, need to release it manually
+		static CLKernel create(cl_kernel kernel);
 		virtual ~CLKernel();
+
+
+		// Set kernel arguments
+		virtual void setArg(unsigned int index, size_t size, void* ptr);
 
 	private:
 

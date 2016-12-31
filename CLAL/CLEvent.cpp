@@ -3,7 +3,15 @@
 
 namespace CLAL {
 
-	CLEvent::CLEvent(cl_event event): ReferenceCount<cl_event, clRetainEvent, clReleaseEvent>(event) {
+	CLEvent::CLEvent(cl_event event) :
+		ReferenceCount<cl_event, clRetainEvent, clReleaseEvent>(event) {
+	}
+
+	// KAOCC: note: release it manually
+	CLEvent CLEvent::create(cl_event evt) {
+		CLEvent retEvent(evt);
+		clReleaseEvent(evt);
+		return retEvent;
 	}
 
 	CLEvent::CLEvent() {
@@ -24,7 +32,7 @@ namespace CLAL {
 	cl_int CLEvent::getCommandExecutionStatus() const {
 
 
-		cl_int status; 
+		cl_int status;
 		cl_int cmdStatus;
 
 		status = clGetEventInfo(*this, CL_EVENT_COMMAND_EXECUTION_STATUS, sizeof(cl_int), &cmdStatus, nullptr);

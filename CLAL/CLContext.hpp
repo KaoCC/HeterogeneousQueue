@@ -31,7 +31,7 @@ namespace CLAL {
 		static CLContext create(const std::vector<CLDevice>& devices, cl_context_properties* props = nullptr);
 
 		// For OpenCL primitive function
-		static CLContext create(cl_context context, cl_device_id* primDevices, cl_command_queue* primCQs, int numDevices);
+		static CLContext create(cl_context context, cl_device_id* primDevices, cl_command_queue* primCQs, size_t numDevices);
 
 		// KAOCC: do we need public ctor with no parameter?
 		// CLContext();
@@ -48,11 +48,13 @@ namespace CLAL {
 
 		// KAOCC: write / read  buffers ?
 
-		// program and execution
 
-		// KAOCC: setup parameter
-		CLProgram createProgram();
+
+		// For program and execution
+
+		CLProgram createProgram(const std::vector<char>& sourceCode, char const* buildOpts = nullptr);
 		CLEvent execute1D(unsigned int idx, size_t globalSize, size_t localSize, cl_kernel kernel);
+		CLEvent execute1D(unsigned int idx, size_t globalSize, size_t localSize, cl_kernel kernel, CLEvent depEvent);
 
 
 		// For C.Q.
@@ -75,13 +77,17 @@ namespace CLAL {
 		// private ctors
 		// wrap cl_context
 		CLContext(cl_context context, const std::vector<CLDevice>& devices, const std::vector<CLCommandQueue>& cqs);
-		CLContext(cl_context context, const std::vector<CLDevice>&);
+
+		// Pass by value ! Let the compiler decides.
+		CLContext(cl_context context, std::vector<CLDevice> devices);
+
+		//CLContext(cl_context context, const std::vector<CLDevice>& devices);
 
 
 		// Create C.Q. for each devices
 		void createCQs();
 
-		std::vector<CLDevice>       devices;
+		std::vector<CLDevice> devices;
 		std::vector<CLCommandQueue> commandQueues;
 
 	};

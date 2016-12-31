@@ -1,4 +1,5 @@
 #include "CLCommandQueue.hpp"
+#include "CLContext.hpp"
 
 namespace CLAL {
 
@@ -6,9 +7,7 @@ namespace CLAL {
 		return CLCommandQueue(cq);
 	}
 
-	CLCommandQueue CLCommandQueue::create(CLDevice device, CLContext context) {
-
-
+	CLCommandQueue CLCommandQueue::create(const CLDevice& device, const CLContext& context) {
 
 		cl_int status = CL_SUCCESS;
 		cl_command_queue cq = clCreateCommandQueue(context, device, CL_QUEUE_PROFILING_ENABLE, &status);

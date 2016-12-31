@@ -11,8 +11,9 @@ namespace CLAL {
 
 	public:
 
-
-		//static CLEvent create(cl_event);
+		// wrap cl_event
+		// need to release it manually since we used it internally in this layer
+		static CLEvent create(cl_event evt);
 
 
 		CLEvent();
@@ -25,7 +26,7 @@ namespace CLAL {
 		virtual ~CLEvent();
 
 	private:
-		CLEvent(cl_event program);
+		CLEvent(cl_event evt);
 
 
 	};
