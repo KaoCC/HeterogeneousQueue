@@ -1,5 +1,8 @@
 #include "CLContext.hpp"
 #include "CLCommandQueue.hpp"
+#include "CLDevice.hpp"
+#include "CLCommandQueue.hpp"
+#include "CLProgram.hpp"
 
 #include <algorithm>
 

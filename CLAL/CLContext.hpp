@@ -5,16 +5,17 @@
 #include <vector>
 
 #include "CLReferenceCount.hpp"
-#include "CLDevice.hpp"
-//#include "CLCommandQueue.hpp"
+
 
 #include "CLEvent.hpp"
-#include "CLProgram.hpp"
+//#include "CLProgram.hpp"
 #include "CLBuffer.hpp"
 
 namespace CLAL {
 
 	class CLCommandQueue;
+	class CLDevice;
+	class CLProgram;
 
 	class CLContext : public ReferenceCount<cl_context, clRetainContext, clReleaseContext> {
 
@@ -44,7 +45,7 @@ namespace CLAL {
 		// For Buffer
 
 		// KAOCC: setup parameter
-		CLBuffer createBuffer();
+		template <typename T> CLBuffer<T> createBuffer(size_t elementCount, cl_mem_flags flags);
 
 		// KAOCC: write / read  buffers ?
 
@@ -93,6 +94,10 @@ namespace CLAL {
 	};
 
 
+	template<typename T>
+	CLBuffer<T> CLContext::createBuffer(size_t elementCount, cl_mem_flags flags) {
+		return CLBuffer<T>::create(*this, flags, elementCount);
+	}
 }
 
 

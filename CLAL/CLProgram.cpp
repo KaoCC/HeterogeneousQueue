@@ -1,6 +1,7 @@
 #include "CLProgram.hpp"
 #include "CLException.hpp"
 #include "CLContext.hpp"
+#include "CLDevice.hpp"
 
 #include <iostream>
 #include <fstream>
@@ -40,7 +41,7 @@ namespace CLAL {
 
 
 		// Build program
-		status = clBuildProgram(tmpProgram, context.getDeviceCount(), deviceIds.data(), buildopts, nullptr, nullptr);
+		status = clBuildProgram(tmpProgram, static_cast<cl_int>(context.getDeviceCount()), deviceIds.data(), buildopts, nullptr, nullptr);
 
 		// report the status and throw exceptions if failed
 		// KAOCC: need to double check

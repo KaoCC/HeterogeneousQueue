@@ -14,8 +14,8 @@ namespace CLAL {
 		return retEvent;
 	}
 
-	CLEvent::CLEvent() {
-	}
+	//CLEvent::CLEvent() {
+	//}
 
 	void CLEvent::wait() {
 		cl_event event = *this;

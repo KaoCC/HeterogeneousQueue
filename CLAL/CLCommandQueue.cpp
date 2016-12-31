@@ -1,5 +1,7 @@
 #include "CLCommandQueue.hpp"
 #include "CLContext.hpp"
+#include "CLException.hpp"
+#include "CLDevice.hpp"
 
 namespace CLAL {
 

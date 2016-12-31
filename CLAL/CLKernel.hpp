@@ -17,7 +17,7 @@ namespace CLAL {
 
 
 		// for CLProgram (kernelTable)
-		CLKernel() = delete;
+		CLKernel() = default;
 		CLKernel(const CLKernel&) = default;
 		//CLKernel(CLKernel&&) = default;
 		CLKernel& operator= (CLKernel&&) = default;

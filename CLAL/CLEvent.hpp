@@ -16,7 +16,7 @@ namespace CLAL {
 		static CLEvent create(cl_event evt);
 
 
-		CLEvent();
+		CLEvent() = delete;
 
 		void  wait();
 		float getDuration() const;
