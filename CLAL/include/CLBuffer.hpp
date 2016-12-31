@@ -3,6 +3,8 @@
 #define _CLAL_CLBUFFER_HPP_
 
 #include "CLReferenceCount.hpp"
+#include "CLEvent.hpp"
+#include "CLCommandQueue.hpp"
 
 
 namespace CLAL {
@@ -17,6 +19,11 @@ namespace CLAL {
 		static CLBuffer<T> create(cl_context context, cl_mem_flags flags, size_t elementCount);
 
 
+		// Read and Write
+		CLEvent writeDeviceBuffer(CLCommandQueue cmdQueue, T const* hostBuffer, size_t elemCount);
+		CLEvent readDeviceBuffer(CLCommandQueue cmdQueue, T* hostBuffer, size_t elemCount);
+
+
 		size_t getElementCount() const;
 
 		virtual ~CLBuffer();
@@ -24,7 +31,7 @@ namespace CLAL {
 	private:
 
 		// wrap cl_mem
-		CLBuffer(cl_mem buffer, size_t elementCount);
+		CLBuffer(cl_mem buffer, size_t eleCount);
 
 		size_t elementCount;
 
@@ -61,6 +68,29 @@ namespace CLAL {
 	}
 
 
+
+	template<typename T>
+	CLEvent CLBuffer<T>::writeDeviceBuffer(CLCommandQueue cmdQueue, T const * hostBuffer, size_t elemCount) {
+
+		cl_event event = nullptr;
+		cl_int status = clEnqueueWriteBuffer(cmdQueue, *this, false, 0, sizeof(T) * elemCount, hostBuffer, 0, nullptr, &event);
+
+		ThrowIfCL(status != CL_SUCCESS, status, "clEnqueueWriteBuffer failed");
+
+		return CLEvent::create(event);
+	}
+
+	template<typename T>
+	CLEvent CLBuffer<T>::readDeviceBuffer(CLCommandQueue cmdQueue, T * hostBuffer, size_t elemCount) {
+
+		cl_event event = nullptr;
+		cl_int status = clEnqueueReadBuffer(cmdQueue, *this, false, 0, sizeof(T) * elemCount, hostBuffer, 0, nullptr, &event);
+
+		ThrowIfCL(status != CL_SUCCESS, status, "clEnqueueWriteBuffer failed");
+
+		return CLEvent::create(event);
+	}
+
 	template <typename T>
 	size_t CLBuffer<T>::getElementCount() const {
 		return this->elementCount;
@@ -68,6 +98,11 @@ namespace CLAL {
 
 	template <typename T>
 	CLBuffer<T>::~CLBuffer() {
+	}
+
+	template<typename T>
+	CLBuffer<T>::CLBuffer(cl_mem buffer, size_t eleCount) : ReferenceCount<cl_mem, clRetainMemObject, clReleaseMemObject>(buffer)
+		, elementCount(eleCount) {
 	}
 
 
