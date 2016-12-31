@@ -93,11 +93,11 @@ namespace CLAL {
 
 	};
 
-
 	template<typename T>
 	CLBuffer<T> CLContext::createBuffer(size_t elementCount, cl_mem_flags flags) {
 		return CLBuffer<T>::create(*this, flags, elementCount);
 	}
+
 }
 
 

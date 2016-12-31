@@ -18,7 +18,7 @@ namespace CE {
 		return Platform::kMix;
 	}
 
-	// YET TO BE DONE !
+	// YET TO BE DONE !!!
 	Buffer * CE::DeviceSequential::createBuffer(size_t size, size_t flags) {
 		return nullptr;
 	}

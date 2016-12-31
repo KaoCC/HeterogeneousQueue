@@ -11,8 +11,11 @@ namespace CE {
 	{
 	public:
 
-		virtual size_t getSize() = 0;
+		virtual size_t getSize() const = 0;
 
+		Buffer() = default;
+		Buffer(Buffer const&) = delete;
+		Buffer& operator = (Buffer const&) = delete;
 	};
 
 }

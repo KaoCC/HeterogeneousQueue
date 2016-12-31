@@ -17,7 +17,7 @@ namespace CLAL {
 		static CLBuffer<T> create(cl_context context, cl_mem_flags flags, size_t elementCount);
 
 
-		size_t getElementCount();
+		size_t getElementCount() const;
 
 		virtual ~CLBuffer();
 
@@ -32,6 +32,7 @@ namespace CLAL {
 
 
 
+
 	template<typename T>
 	CLBuffer<T> CLBuffer<T>::createFromBufferCL(cl_mem buffer) {
 
@@ -41,7 +42,7 @@ namespace CLAL {
 		cl_int status = clGetMemObjectInfo(buffer, CL_MEM_SIZE, sizeof(bufferSize), &bufferSize, nullptr);
 		ThrowIfCL(status != CL_SUCCESS, status, "clGetMemObjectInfo failed");
 
-		return CLWBuffer(buffer, bufferSize / sizeof(T));
+		return CLBuffer(buffer, bufferSize / sizeof(T));
 	}
 
 	template<typename T>
@@ -61,14 +62,13 @@ namespace CLAL {
 
 
 	template <typename T>
-	size_t CLBuffer<T>::getElementCount() {
+	size_t CLBuffer<T>::getElementCount() const {
 		return this->elementCount;
 	}
 
 	template <typename T>
 	CLBuffer<T>::~CLBuffer() {
 	}
-
 
 
 
