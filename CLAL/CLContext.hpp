@@ -52,7 +52,7 @@ namespace CLAL {
 
 		// For program and execution
 
-		CLProgram createProgram(const std::vector<char>& sourceCode, char const* buildOpts = nullptr);
+		CLProgram createProgram(const std::vector<char>& sourceCode, char const* buildOpts = nullptr) const;
 		CLEvent execute1D(unsigned int idx, size_t globalSize, size_t localSize, cl_kernel kernel);
 		CLEvent execute1D(unsigned int idx, size_t globalSize, size_t localSize, cl_kernel kernel, CLEvent depEvent);
 
@@ -60,7 +60,7 @@ namespace CLAL {
 		// For C.Q.
 		void finish(size_t index);
 		void flush(size_t index);
-		CLCommandQueue getCommandQueue(size_t index);
+		CLCommandQueue getCommandQueue(size_t index) const;
 
 
 

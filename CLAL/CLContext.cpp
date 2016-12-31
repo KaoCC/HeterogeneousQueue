@@ -57,6 +57,10 @@ namespace CLAL {
 
 
 
+	CLProgram CLContext::createProgram(const std::vector<char>& sourceCode, char const * buildOpts) const {
+		return CLProgram::createFromSource(*this, sourceCode.data(), sourceCode.size(), buildOpts);
+	}
+
 	CLEvent CLContext::execute1D(unsigned int index, size_t globalSize, size_t localSize, cl_kernel kernel) {
 
 		cl_event event = nullptr;
@@ -89,7 +93,7 @@ namespace CLAL {
 		ThrowIfCL(status != CL_SUCCESS, status, "clFlush failed");
 	}
 
-	CLCommandQueue CLContext::getCommandQueue(size_t index) {
+	CLCommandQueue CLContext::getCommandQueue(size_t index) const {
 
 		// KAOCC: lazy binding or throw exception
 

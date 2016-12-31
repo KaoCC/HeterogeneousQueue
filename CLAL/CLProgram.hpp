@@ -11,12 +11,16 @@
 
 namespace CLAL {
 
+	class CLContext;
+
 	class CLProgram : public ReferenceCount<cl_program, clRetainProgram, clReleaseProgram> {
 
 
 	public:
 
 		// KAOCC: TODO: create kernel from source or files
+		static CLProgram createFromSource(const CLContext& context, char const* sourcecode, size_t sourcesize, char const* buildopts);
+		static CLProgram createFromFileName(const CLContext& context, char const* filename, char const* buildopts);
 
 		size_t getKernelCount() const;
 		CLKernel GetKernel(std::string const& funcName) const;
@@ -30,7 +34,7 @@ namespace CLAL {
 
 
 
-		std::map<std::string, CLKernel> kernels;
+		std::map<std::string, CLKernel> kernelTable;
 
 	};
 
