@@ -18,9 +18,10 @@ namespace CLAL {
 		// KAOCC: type is not used at the current impl.
 		static CLPlatform create(cl_platform_id id, cl_device_type type = CL_DEVICE_TYPE_ALL);
 
-		// TODO: impl.
 		static void createAllPlatforms(std::vector<CLPlatform>& platforms);
 
+
+		CLPlatform() = delete;
 
 		const std::string& getName() const;
 		const std::string& getProfile() const;
@@ -55,7 +56,7 @@ namespace CLAL {
 		mutable std::vector<CLDevice> devices;
 
 		// by default, we use all devices
-		// tmp
+		// tmp Impl.
 		const cl_device_type INIT_DEVICE_TYPE = CL_DEVICE_TYPE_ALL;
 	};
 

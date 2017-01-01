@@ -1,5 +1,6 @@
 #include "CLKernel.hpp"
 #include "CLException.hpp"
+#include "CLParameter.hpp"
 
 namespace CLAL {
 
@@ -24,6 +25,10 @@ namespace CLAL {
 
 		cl_int status = clSetKernelArg(*this, index, size, ptr);
 		ThrowIfCL(status != CL_SUCCESS, status, "clSetKernelArg failed");
+	}
+
+	void CLKernel::setArg(unsigned int index, Parameter param) {
+		Parameter::setArg(*this, index, param);
 	}
 
 }

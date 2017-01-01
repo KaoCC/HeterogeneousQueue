@@ -5,7 +5,7 @@
 #include "CLReferenceCount.hpp"
 #include "CLEvent.hpp"
 #include "CLCommandQueue.hpp"
-
+#include "CLParameter.hpp"
 
 namespace CLAL {
 
@@ -25,6 +25,13 @@ namespace CLAL {
 
 
 		size_t getElementCount() const;
+
+
+		// convert to Parameter
+		operator Parameter() const {
+			// cast to type cl_mem
+			return Parameter(static_cast<cl_mem>(*this));
+		}
 
 		virtual ~CLBuffer();
 

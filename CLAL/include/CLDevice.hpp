@@ -19,10 +19,10 @@ namespace CLAL {
 
 
 
-		CLDevice();
+		CLDevice() = delete;
 
 		
-
+		// Get methods
 		const std::string& getName() const;
 		const std::string& getVendor() const;
 		const std::string& getVersion() const;

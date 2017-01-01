@@ -35,7 +35,7 @@ namespace CLAL {
 		static CLContext create(cl_context context, cl_device_id* primDevices, cl_command_queue* primCQs, size_t numDevices);
 
 		// KAOCC: do we need public ctor with no parameter?
-		// CLContext();
+		CLContext() = delete;
 
 
 		size_t getDeviceCount() const;
@@ -79,7 +79,7 @@ namespace CLAL {
 		// wrap cl_context
 		CLContext(cl_context context, const std::vector<CLDevice>& devices, const std::vector<CLCommandQueue>& cqs);
 
-		// Pass by value ! Let the compiler decides.
+		// Pass by value (vector) !! Let the compiler decides.
 		CLContext(cl_context context, std::vector<CLDevice> devices);
 
 		//CLContext(cl_context context, const std::vector<CLDevice>& devices);
