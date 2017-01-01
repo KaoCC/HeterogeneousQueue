@@ -52,6 +52,25 @@ namespace CLAL {
 			return *this;
 		}
 
+		// move assignment ?
+		BaseType& operator= (BaseType&& rhs) {
+
+			if (&rhs != this) {
+				// Release what we had before
+				ReleaseComponent();
+
+				// Steal the component from rhs !
+				component = rhs.component;
+				//RetainComponent();  // no need !!!
+
+				// Set rhs to default state
+				//rhs.ReleaseComponent();  // no need !!!
+				rhs.component = nullptr;
+
+			}
+
+			return *this;
+		}
 
 		// convert
 		operator T() const {

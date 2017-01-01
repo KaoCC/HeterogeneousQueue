@@ -20,6 +20,7 @@ namespace CLAL {
 
 
 		CLDevice() = delete;
+		//CLDevice& operator=(CLDevice&&) = default;
 
 		
 		// Get methods

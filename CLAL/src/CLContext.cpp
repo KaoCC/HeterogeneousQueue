@@ -40,6 +40,7 @@ namespace CLAL {
 		std::vector<CLCommandQueue> localCQs;
 
 		for (size_t i = 0; i < numDevices; ++i) {
+			// KAOCC: check if they are moveable !!
 			localDevices[i] = CLDevice::create(primDeviecs[i]);
 			localCQs[i] = CLCommandQueue::create(primCQs[i]);
 		}

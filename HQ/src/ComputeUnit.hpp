@@ -21,7 +21,11 @@ namespace HQ {
 		void submit(CE::Function const* f, size_t globalSize);
 
 		//CE::Function* createSequentialFunction(const char* name, std::function<void(int)>&& f);
-		CE::Executable* createSequentialExecutable();
+
+		//KAOCC: this one should be move out from the class (static member func or global func)
+		// the interface for this class should be kept in a general form
+		
+		static CE::Executable* createSequentialExecutable(const ComputeUnit& cu);
 
 	private:
 

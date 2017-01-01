@@ -42,7 +42,8 @@ namespace HQ {
 	//}
 
 	HQAPI CE::Executable * CreateSequentialExecutableWithIndex(size_t index) {
-		CE::Executable* exec = hq->getPlatfrom().getComputeUnit(index)->createSequentialExecutable();
+		// This impl. should be changed
+		CE::Executable* exec = ComputeUnit::createSequentialExecutable(*(hq->getPlatfrom().getComputeUnit(index)));
 		return exec;
 	}
 

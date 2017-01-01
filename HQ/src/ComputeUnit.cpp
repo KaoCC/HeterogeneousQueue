@@ -46,14 +46,14 @@ namespace HQ {
 		pool.enqueue(std::bind(&CE::Device::execute, device, f, 0, globalSize, 0));
 	}
 
-	CE::Executable * ComputeUnit::createSequentialExecutable() {
+	CE::Executable * ComputeUnit::createSequentialExecutable(const ComputeUnit& cu) {
 
 		CE::Executable* program = nullptr;
 
 		CE::DeviceSpec spec;
-		device->GetSpec(spec);
+		cu.device->GetSpec(spec);
 		if (spec.type == CE::DeviceType::kSequential) {
-			program = CreateSequentialExecutable(device);
+			program = CreateSequentialExecutable(cu.device);
 		}
 
 		return program;

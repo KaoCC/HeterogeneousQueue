@@ -118,7 +118,7 @@ namespace CLAL {
 		ThrowIfCL(status != CL_SUCCESS, status, "clCreateKernelsInProgram failed");
 
 		// Store in KernelTable
-		std::for_each(kernels.begin(), kernels.end(), [this](cl_kernel ker) {
+		std::for_each(kernels.cbegin(), kernels.cend(), [this](cl_kernel ker) {
 
 			size_t size = 0;
 			// get size
@@ -131,7 +131,7 @@ namespace CLAL {
 			ThrowIfCL(res != CL_SUCCESS, res, "clGetKernelInfo failed");
 
 			std::string funcName(temp.begin(), temp.end() - 1);
-			kernelTable[funcName] = std::move(CLKernel::create(ker));
+			kernelTable[funcName] = CLKernel::create(ker);
 		});
 
 	}
