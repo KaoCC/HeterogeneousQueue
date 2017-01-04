@@ -13,6 +13,9 @@ namespace CE {
 
 	public:
 
+		FunctionCLImpl(CLAL::CLKernel kern);
+
+
 		// Inherited via Function
 		virtual void setArg(size_t idx, size_t arg_size, void * arg) override;
 

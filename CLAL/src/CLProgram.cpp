@@ -2,6 +2,7 @@
 #include "CLException.hpp"
 #include "CLContext.hpp"
 #include "CLDevice.hpp"
+#include "CLKernel.hpp"
 
 #include <iostream>
 #include <fstream>
@@ -81,7 +82,7 @@ namespace CLAL {
 		return kernelTable.size();
 	}
 
-	CLKernel CLProgram::GetKernel(std::string const & funcName) const {
+	CLKernel CLProgram::getKernel(std::string const & funcName) const {
 
 		auto iter = kernelTable.find(funcName);
 

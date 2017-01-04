@@ -5,13 +5,14 @@
 #define _CLAL_CLPROGRAM_HPP_
 
 #include "CLReferenceCount.hpp"
-#include "CLKernel.hpp"
+//#include "CLKernel.hpp"
 
 #include <map>
 
 namespace CLAL {
 
 	class CLContext;
+	class CLKernel;
 
 	class CLProgram : public ReferenceCount<cl_program, clRetainProgram, clReleaseProgram> {
 
@@ -23,7 +24,7 @@ namespace CLAL {
 		static CLProgram createFromFileName(const CLContext& context, char const* filename, char const* buildopts);
 
 		size_t getKernelCount() const;
-		CLKernel GetKernel(std::string const& funcName) const;
+		CLKernel getKernel(std::string const& funcName) const;
 
 		virtual ~CLProgram();
 
