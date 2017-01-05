@@ -21,7 +21,9 @@ namespace CLAL {
 
 		// Read and Write
 		CLEvent writeDeviceBuffer(CLCommandQueue cmdQueue, T const* hostBuffer, size_t elemCount);
+		CLEvent writeDeviceBuffer(CLCommandQueue cmdQueue, T const* hostBuffer, size_t offset, size_t elemCount);
 		CLEvent readDeviceBuffer(CLCommandQueue cmdQueue, T* hostBuffer, size_t elemCount);
+		CLEvent readDeviceBiffer(CLCommandQueue cmdQueue, T* hostBuffer, size_t offset, size_t elemCount);
 
 
 		size_t getElementCount() const;
@@ -76,22 +78,60 @@ namespace CLAL {
 
 
 
+	//template<typename T>
+	//CLEvent CLBuffer<T>::writeDeviceBuffer(CLCommandQueue cmdQueue, T const * hostBuffer, size_t elemCount) {
+
+	//	cl_event event = nullptr;
+	//	cl_int status = clEnqueueWriteBuffer(cmdQueue, *this, false, 0, sizeof(T) * elemCount, hostBuffer, 0, nullptr, &event);
+
+	//	ThrowIfCL(status != CL_SUCCESS, status, "clEnqueueWriteBuffer failed");
+
+	//	return CLEvent::create(event);
+	//}
+
+
 	template<typename T>
 	CLEvent CLBuffer<T>::writeDeviceBuffer(CLCommandQueue cmdQueue, T const * hostBuffer, size_t elemCount) {
 
-		cl_event event = nullptr;
-		cl_int status = clEnqueueWriteBuffer(cmdQueue, *this, false, 0, sizeof(T) * elemCount, hostBuffer, 0, nullptr, &event);
+		return writeDeviceBuffer(cmdQueue, hostBuffer, 0, elemCount);
+	}
 
-		ThrowIfCL(status != CL_SUCCESS, status, "clEnqueueWriteBuffer failed");
+	template<typename T>
+	CLEvent CLAL::CLBuffer<T>::writeDeviceBuffer(CLCommandQueue cmdQueue, T const * hostBuffer, size_t offset, size_t elemCount) {
+
+		cl_event event = nullptr;
+		cl_int status = clEnqueueWriteBuffer(cmdQueue, *this, false, sizeof(T) * offset, sizeof(T) * elemCount, hostBuffer, 0, nullptr, &event);
+
+		ThrowIf(status != CL_SUCCESS, status, "clEnqueueWriteBuffer (offset) failed");
 
 		return CLEvent::create(event);
 	}
 
+
+
+	//template<typename T>
+	//CLEvent CLBuffer<T>::readDeviceBuffer(CLCommandQueue cmdQueue, T * hostBuffer, size_t elemCount) {
+
+	//	cl_event event = nullptr;
+	//	cl_int status = clEnqueueReadBuffer(cmdQueue, *this, false, 0, sizeof(T) * elemCount, hostBuffer, 0, nullptr, &event);
+
+	//	ThrowIfCL(status != CL_SUCCESS, status, "clEnqueueWriteBuffer failed");
+
+	//	return CLEvent::create(event);
+	//}
+
 	template<typename T>
 	CLEvent CLBuffer<T>::readDeviceBuffer(CLCommandQueue cmdQueue, T * hostBuffer, size_t elemCount) {
 
+
+		return readDeviceBuffer(cmdQueue, hostBuffer, 0, elemCount);
+	}
+
+	template<typename T>
+	CLEvent CLAL::CLBuffer<T>::readDeviceBiffer(CLCommandQueue cmdQueue, T * hostBuffer, size_t offset, size_t elemCount) {
+	
 		cl_event event = nullptr;
-		cl_int status = clEnqueueReadBuffer(cmdQueue, *this, false, 0, sizeof(T) * elemCount, hostBuffer, 0, nullptr, &event);
+		cl_int status = clEnqueueReadBuffer(cmdQueue, *this, false, sizeof(T) * offset, sizeof(T) * elemCount, hostBuffer, 0, nullptr, &event);
 
 		ThrowIfCL(status != CL_SUCCESS, status, "clEnqueueWriteBuffer failed");
 

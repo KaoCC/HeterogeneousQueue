@@ -4,7 +4,7 @@
 
 namespace CE {
 
-	void CE::DeviceSequential::GetSpec(DeviceSpec & spec) {
+	void CE::DeviceSequential::getSpec(DeviceSpec & spec) {
 
 		spec.name = "Sequential Device";
 		spec.vendor = "KAOCC";
@@ -14,7 +14,7 @@ namespace CE {
 
 
 	// this one needs to be changed.
-	Platform CE::DeviceSequential::GetPlatform() const {
+	Platform CE::DeviceSequential::getPlatform() const {
 		return Platform::kMix;
 	}
 
@@ -56,6 +56,24 @@ namespace CE {
 
 	Executable * DeviceSequential::createExecutable() {
 		return new ExecutableSequential();
+	}
+
+	void DeviceSequential::readBuffer(Buffer const * buffer, size_t queue, size_t offset, size_t size, void * dst, Event ** e) const {
+	}
+
+	void DeviceSequential::writeBuffer(Buffer const * buffer, size_t queue, size_t offset, size_t size, void * src, Event ** e) {
+	}
+
+	void DeviceSequential::deleteExecutable(Executable * executable) {
+	}
+
+	void DeviceSequential::waitForEvent(Event * e) {
+	}
+
+	void DeviceSequential::flush(size_t queue) {
+	}
+
+	void DeviceSequential::finish(size_t queue) {
 	}
 
 

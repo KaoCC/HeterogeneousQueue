@@ -1,5 +1,6 @@
 #include "FunctionCLImpl.hpp"
 #include "ExceptionCLImpl.hpp"
+#include "BufferCLImpl.hpp"
 #include "CLException.hpp"
 
 namespace CE {
@@ -21,6 +22,17 @@ namespace CE {
 
 	void FunctionCLImpl::setArg(size_t idx, Buffer const * arg) {
 		// YET TO BE DONE !!
+
+		try {
+
+			const BufferCLImpl* buffCL = static_cast<const BufferCLImpl*>(arg);
+			kernel.setArg(idx, buffCL->getData());
+
+		} catch (CLAL::CLException& e) {
+			throw ExceptionCLImpl(e.what());
+
+		}
+
 	}
 
 }

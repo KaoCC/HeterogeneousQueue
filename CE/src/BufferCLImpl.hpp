@@ -9,12 +9,17 @@ namespace CE {
 
 	class BufferCLImpl : public Buffer {
 	public:
-		BufferCLImpl(CLAL::CLBuffer<char> buf) : buffer(std::move(buf)) {}
+		BufferCLImpl(CLAL::CLBuffer<char> buf) : buffer(std::move(buf)) {
+		}
 		//~BufferCLImpl() override {};
 
-		size_t getSize() const override { return buffer.getElementCount(); }
+		size_t getSize() const override {
+			return buffer.getElementCount(); 
+		}
 
-		CLAL::CLBuffer<char> getData() const { return buffer; }
+		CLAL::CLBuffer<char> getData() const { 
+			return buffer; 
+		}
 
 	private:
 		CLAL::CLBuffer<char> buffer;

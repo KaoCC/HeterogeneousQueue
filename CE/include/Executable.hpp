@@ -12,6 +12,10 @@ namespace CE {
 	class CE_API Executable {
 
 	public:
+
+		// KAOCC: check?
+		virtual ~Executable() = default;
+
 		virtual Function* createFunction(char const* name) = 0;
 		virtual void deleteFunction(Function* func) = 0;
 

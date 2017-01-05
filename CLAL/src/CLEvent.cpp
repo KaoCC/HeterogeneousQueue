@@ -31,11 +31,8 @@ namespace CLAL {
 
 	cl_int CLEvent::getCommandExecutionStatus() const {
 
-
-		cl_int status;
 		cl_int cmdStatus;
-
-		status = clGetEventInfo(*this, CL_EVENT_COMMAND_EXECUTION_STATUS, sizeof(cl_int), &cmdStatus, nullptr);
+		cl_int status = clGetEventInfo(*this, CL_EVENT_COMMAND_EXECUTION_STATUS, sizeof(cl_int), &cmdStatus, nullptr);
 		ThrowIfCL(status != CL_SUCCESS, status, "clGetEventInfo failed");
 
 		return cmdStatus;

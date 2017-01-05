@@ -16,6 +16,10 @@ namespace CE {
 		Buffer() = default;
 		Buffer(Buffer const&) = delete;
 		Buffer& operator = (Buffer const&) = delete;
+
+		// check this !
+		virtual ~Buffer() = default;
+
 	};
 
 }

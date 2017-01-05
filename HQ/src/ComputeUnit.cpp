@@ -13,7 +13,7 @@ namespace HQ {
 		device = ce->createDevice(index);
 
 		CE::DeviceSpec spec;
-		device->GetSpec(spec);
+		device->getSpec(spec);
 		//if (spec.type == CE::DeviceType::kSequential) {
 		//	
 		//	// put it here or user space ?
@@ -51,7 +51,7 @@ namespace HQ {
 		CE::Executable* program = nullptr;
 
 		CE::DeviceSpec spec;
-		cu.device->GetSpec(spec);
+		cu.device->getSpec(spec);
 		if (spec.type == CE::DeviceType::kSequential) {
 			program = CreateSequentialExecutable(cu.device);
 		}

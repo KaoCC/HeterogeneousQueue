@@ -10,7 +10,7 @@ namespace CE {
 	class Buffer;
 	class Executable;
 	class Function;
-
+	class Event;
 
 
 	//struct DeviceSpec {
@@ -44,17 +44,22 @@ namespace CE {
 		virtual ~Device() = default;
 
 		// Device Properties
-		virtual void GetSpec(DeviceSpec& spec) = 0;
-		virtual Platform GetPlatform() const = 0;
+		virtual void getSpec(DeviceSpec& spec) = 0;
+		virtual Platform getPlatform() const = 0;
 
+		// Buffers
 		virtual Buffer* createBuffer(size_t size, size_t flags) = 0;
 		virtual Buffer* createBuffer(size_t size, size_t flags, void* data) = 0;
 		virtual void deleteBuffer(Buffer* buffer) = 0;
 
+		// Read Write for Buffers (void pointers)
+		virtual void readBuffer(Buffer const* buffer, size_t queue, size_t offset, size_t size, void* dst, Event** e) const = 0;
+		virtual void writeBuffer(Buffer const* buffer, size_t queue, size_t offset, size_t size, void* src, Event** e) = 0;
 
 
+		// Executable
 		virtual Executable* compileExecutable(char const* source_code, size_t size, char const* options) = 0;
-
+		virtual void deleteExecutable(Executable* executable) = 0;
 
 		//virtual void execute(Function const* func, size_t queue, size_t global_size, size_t local_size, Event** e) = 0;
 		virtual void execute(Function const* func, size_t queue, size_t global_size, size_t local_size) = 0;
@@ -62,6 +67,13 @@ namespace CE {
 
 		//TODO: add more function here
 
+
+		// Event 
+		virtual void waitForEvent(Event* e) = 0;
+
+
+		virtual void flush(size_t queue) = 0;
+		virtual void finish(size_t queue) = 0;
 
 		// remove copy & assignment
 		Device(Device const&) = delete;
