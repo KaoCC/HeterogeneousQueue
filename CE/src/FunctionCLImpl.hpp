@@ -22,6 +22,9 @@ namespace CE {
 		virtual void setArg(size_t idx, Buffer const * arg) override;
 
 
+		// Get Kernel
+		CLAL::CLKernel getKernel() const;
+
 	private:
 		CLAL::CLKernel kernel;
 

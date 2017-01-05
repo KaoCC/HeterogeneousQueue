@@ -11,8 +11,8 @@
 
 namespace CLAL {
 
-
-	static void LoadFromFile(const std::string fileName, std::vector<char>& outputBuffer) {
+	// helper
+	static void LoadFromFile(const std::string& fileName, std::vector<char>& outputBuffer) {
 
 		// KAOCC: binary mode as default
 		std::ifstream file(fileName, std::ios::binary);

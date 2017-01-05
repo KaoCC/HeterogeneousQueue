@@ -2,15 +2,16 @@
 #include "BufferCLImpl.hpp"
 #include "ExceptionCLImpl.hpp"
 #include "ExecutableCLImpl.hpp"
+#include "FunctionCLImpl.hpp"
 #include "CLBuffer.hpp"
 #include "Event.hpp"
 
 namespace CE {
 
-	///// YET TO BE DONE !!!!
+	///// Need TO CHECK !!!!
 
 	void CE::DeviceCLImpl::getSpec(DeviceSpec & spec) {
-		//
+		// MORE HERE !!!!!!
 	}
 
 	Platform CE::DeviceCLImpl::getPlatform() const {
@@ -18,7 +19,6 @@ namespace CE {
 	}
 
 	Buffer * CE::DeviceCLImpl::createBuffer(size_t size, size_t flags) {
-
 
 		try {
 
@@ -41,13 +41,38 @@ namespace CE {
 		}
 	}
 
-	Executable * CE::DeviceCLImpl::compileExecutable(char const * source_code, size_t size, char const * options) {
-		// KAOCC: yet to be done
-		return nullptr;
+	Executable * CE::DeviceCLImpl::compileExecutable(char const * source, size_t size, char const * options) {
+
+		std::string buildopts = options ? options : "";
+
+		// OpenCL 2.0 & include dir
+		buildopts.append(" -cl-std=CL2.0 -I . ");
+
+
+		try {
+
+			return new ExecutableCLImpl(CLAL::CLProgram::createFromSource(context, source, size, buildopts.c_str()));
+		} catch (CLAL::CLException& e) {
+			throw ExceptionCLImpl(e.what());
+		}
+
 	}
 
-	void CE::DeviceCLImpl::execute(Function const * func, size_t queue, size_t global_size, size_t local_size) {
 
+	void CE::DeviceCLImpl::execute(Function const * func, size_t queue, size_t globalSize, size_t localSize) {
+
+
+		const FunctionCLImpl* functionCL = static_cast<const FunctionCLImpl*>(func);
+
+		try {
+
+			CLAL::CLEvent evt = context.execute1D(queue, globalSize, localSize, functionCL->getKernel());
+
+			// ignore the Event ????
+
+		} catch (CLAL::CLException& e) {
+			throw ExceptionCLImpl(e.what());
+		}
 
 
 	}
@@ -69,12 +94,15 @@ namespace CE {
 
 		try {
 
-			CLAL::CLEvent event = context.readBuffer(queue, bufferCL->getData(), static_cast<char*>(dst), offset, size);
+			CLAL::CLEvent evt = context.readBuffer(queue, bufferCL->getData(), static_cast<char*>(dst), offset, size);
 
+
+			if (e) {
+				// KAOCC: More here for event handling ...
+				// Yet to be done!
+			}
 
 		} catch (CLAL::CLException& e) {
-
-
 			throw ExceptionCLImpl(e.what());
 		}
 
@@ -84,7 +112,21 @@ namespace CE {
 
 	void DeviceCLImpl::writeBuffer(Buffer const * buffer, size_t queue, size_t offset, size_t size, void * src, Event ** e) {
 
+		const BufferCLImpl* bufferCL = static_cast<const BufferCLImpl*>(buffer);
 
+		try {
+
+			CLAL::CLEvent event = context.writeBuffer(queue, bufferCL->getData(), static_cast<char*>(src), offset, size);
+
+
+			if (e) {
+				// KAOCC: More here for event handling ...
+				// Yet to be done!
+			}
+
+		} catch (CLAL::CLException& e) {
+			throw ExceptionCLImpl(e.what());
+		}
 
 	}
 
@@ -95,7 +137,6 @@ namespace CE {
 	void DeviceCLImpl::waitForEvent(Event * e) {
 		e->wait();
 	}
-
 
 
 
@@ -116,7 +157,7 @@ namespace CE {
 	}
 
 
-	///// YET TO BE DONE !!!!
+	///// Need TO CHECK !!!!
 
 
 

@@ -21,7 +21,6 @@ namespace CE {
 	}
 
 	void FunctionCLImpl::setArg(size_t idx, Buffer const * arg) {
-		// YET TO BE DONE !!
 
 		try {
 
@@ -33,6 +32,10 @@ namespace CE {
 
 		}
 
+	}
+
+	CLAL::CLKernel FunctionCLImpl::getKernel() const {
+		return kernel;
 	}
 
 }
