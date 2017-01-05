@@ -47,9 +47,11 @@ namespace CLAL {
 		// KAOCC: setup parameter
 		template <typename T> CLBuffer<T> createBuffer(size_t elementCount, cl_mem_flags flags);
 
-		// KAOCC: write / read  buffers ?
+		// write / read  buffers
 		template <typename T> CLEvent  writeBuffer(unsigned int index, CLBuffer<T> buffer, T const* hostBuffer, size_t elemCount) const;
+		template <typename T> CLEvent  writeBuffer(unsigned int index, CLBuffer<T> buffer, T const* hostBuffer, size_t offset, size_t elemCount) const;
 		template <typename T> CLEvent  readBuffer(unsigned int index, CLBuffer<T> buffer, T* hostBuffer, size_t elemCount) const;
+		template <typename T> CLEvent  readBuffer(unsigned int index, CLBuffer<T> buffer, T* hostBuffer, size_t offset, size_t elemCount) const;
 
 		// For program and execution
 
@@ -105,11 +107,20 @@ namespace CLAL {
 	}
 
 	template<typename T>
+	CLEvent CLAL::CLContext::writeBuffer(unsigned int index, CLBuffer<T> buffer, T const * hostBuffer, size_t offset, size_t elemCount) const {
+		return buffer.writeDeviceBuffer(commandQueues[index], hostBuffer, offset, elemCount);
+	}
+
+
+	template<typename T>
 	CLEvent CLContext::readBuffer(unsigned int index, CLBuffer<T> buffer, T * hostBuffer, size_t elemCount) const {
 		return buffer.readDeviceBuffer(commandQueues[index], hostBuffer, elemCount);
 	}
 
-
+	template<typename T>
+	CLEvent CLAL::CLContext::readBuffer(unsigned int index, CLBuffer<T> buffer, T * hostBuffer, size_t offset, size_t elemCount) const {
+		return buffer.readDeviceBuffer(commandQueues[index], hostBuffer, offset, elemCount);
+	}
 
 }
 

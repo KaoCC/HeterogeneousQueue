@@ -74,6 +74,8 @@ namespace CE {
 
 		} catch (CLAL::CLException& e) {
 
+
+			throw ExceptionCLImpl(e.what());
 		}
 
 
