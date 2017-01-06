@@ -28,6 +28,7 @@ namespace CE {
 	private:
 		CLAL::CLEvent event;
 
+		// to check if it is a valid event instance
 		bool validFlag = false;
 
 	};

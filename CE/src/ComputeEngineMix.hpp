@@ -26,6 +26,8 @@ namespace CE {
 		// default: sequential CPU + all GPU in CL
 		// KAOCC: we should NOT store the actual device instances !!!!!!!
 		// TODO: change to device info.
+
+		// KAOCC: subject to change or delete
 		Device* deviceList[NUM_OF_DEVICE];
 
 	};

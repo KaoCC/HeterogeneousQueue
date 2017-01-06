@@ -1,7 +1,7 @@
 
 
-#ifndef _FUNCTIONCLIMPL_HPP_
-#define _FUNCTIONCLIMPL_HPP_
+#ifndef _CE_FUNCTIONCLIMPL_HPP_
+#define _CE_FUNCTIONCLIMPL_HPP_
 
 #include "Function.hpp"
 #include "CLKernel.hpp"

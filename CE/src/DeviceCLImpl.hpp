@@ -14,6 +14,8 @@ namespace CE {
 	// KAOCC: NOTE: CL device is not reentry-able
 	// CQ has no threading protection
 
+	class EventCLImpl;
+
 	class DeviceCLImpl : public DeviceCL {
 
 	public:
@@ -58,15 +60,27 @@ namespace CE {
 
 		~DeviceCLImpl();
 
+
+
+	protected:
+
+		// Event Pool Operations
+		EventCLImpl* createEventCL() const;
+		void releaseEventCL(EventCLImpl* e) const ;
+
+
 	private:
 
 		CLAL::CLContext context;
 		CLAL::CLDevice device;
 
+		// Event Pool
 		void initEventPool();
-
 		static const size_t INIT_EVENT_POOL_SIZE = 10;
-		std::queue<Event*> eventPool;
+		mutable std::queue<EventCLImpl*> eventPool;  // for const member function
+
+
+		// Mem / data Pool ????
 
 	};
 

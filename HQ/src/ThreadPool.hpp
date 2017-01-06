@@ -1,7 +1,7 @@
 
 
-#ifndef _THREADPOOL_H_
-#define _THREADPOOL_H_
+#ifndef _HQ_THREADPOOL_H_
+#define _HQ_THREADPOOL_H_
 
 #include <condition_variable>
 #include <atomic>

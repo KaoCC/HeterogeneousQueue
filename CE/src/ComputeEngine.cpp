@@ -1,7 +1,7 @@
 
 #include "ComputeEngine.hpp"
 #include "ComputeEngineMix.hpp"
-
+#include "ComputeEngineCL.hpp"
 
 
 namespace CE {
@@ -15,8 +15,18 @@ namespace CE {
 
 		ComputeEngine* ret = nullptr;
 
-		if (type == CE::kMix) {
+
+		switch (type) {
+		case CE::kMix:
 			ret = new CE::ComputeEngineMix();
+			break;
+		case CE::kOpenCL:
+			ret = new CE::ComputeEngineCL();
+			break;
+
+		default:
+			ret = nullptr;
+			break;
 		}
 
 
@@ -25,9 +35,7 @@ namespace CE {
 	}
 
 	void DeleteComputeEngine(ComputeEngine* ce) {
-		if (ce) {
-			delete ce;
-		}
+		delete ce;
 	}
 
 }

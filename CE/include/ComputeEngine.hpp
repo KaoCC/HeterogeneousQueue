@@ -15,6 +15,8 @@ namespace CE {
     public:
 
 
+		// KAOCC: FIXME: get platform spec ??
+
 		virtual Device* createDevice(size_t index) = 0;
 		virtual void deleteDevice(Device* device) = 0;
 		virtual size_t getDeviceCount() const = 0;
@@ -22,7 +24,8 @@ namespace CE {
 
 		virtual PlatformType getPlatformType() const = 0;
 
-        virtual ~ComputeEngine() = 0;
+        virtual ~ComputeEngine();
+
 
 
     };

@@ -80,7 +80,9 @@ namespace CE {
 			// KAOCC: FIXME: Event handling 
 
 			if (e) {
-
+				EventCLImpl* evtCL = createEventCL();
+				evtCL->setEvent(evt);
+				*e = evtCL;
 			}
 
 		} catch (CLAL::CLException& e) {
@@ -111,8 +113,9 @@ namespace CE {
 
 
 			if (e) {
-				// KAOCC: More here for event handling ...
-				// Yet to be done!
+				EventCLImpl* evtCL = createEventCL();
+				evtCL->setEvent(evt);
+				*e = evtCL;
 			}
 
 		} catch (CLAL::CLException& e) {
@@ -129,12 +132,14 @@ namespace CE {
 
 		try {
 
-			CLAL::CLEvent event = context.writeBuffer(queue, bufferCL->getData(), static_cast<char*>(src), offset, size);
+			CLAL::CLEvent evt = context.writeBuffer(queue, bufferCL->getData(), static_cast<char*>(src), offset, size);
 
 
 			if (e) {
-				// KAOCC: More here for event handling ...
-				// Yet to be done!
+
+				EventCLImpl* evtCL = createEventCL();
+				evtCL->setEvent(evt);
+				*e = evtCL;
 			}
 
 		} catch (CLAL::CLException& e) {
@@ -173,10 +178,31 @@ namespace CE {
 
 	DeviceCLImpl::~DeviceCLImpl() {
 		while (!eventPool.empty()) {
-			auto event = eventPool.front();
+			EventCLImpl* event = eventPool.front();
 			eventPool.pop();
 			delete event;
 		}
+	}
+
+	EventCLImpl * DeviceCLImpl::createEventCL() const {
+
+
+		EventCLImpl* eventCL = nullptr;
+
+		if (eventPool.empty()) {
+			eventCL = new EventCLImpl();
+		} else {
+			eventCL = eventPool.front();
+			eventPool.pop();
+		}
+
+		return eventCL;
+
+	}
+
+	void DeviceCLImpl::releaseEventCL(EventCLImpl * e) const {
+
+		eventPool.push(e);
 	}
 
 	void DeviceCLImpl::initEventPool() {
