@@ -8,7 +8,7 @@
 namespace HQ {
 
 
-	ComputeUnit::ComputeUnit(CE::ComputeEngine* ce, size_t index) {
+	ComputeUnit::ComputeUnit(CE::ComputeEngine* ce, size_t index) : ceRef(ce) {
 		// tmp
 		device = ce->createDevice(index);
 
@@ -27,7 +27,7 @@ namespace HQ {
 	}
 
 	ComputeUnit::~ComputeUnit() {
-		// delete ?
+		ceRef->deleteDevice(device);
 	}
 
 	// should be removed

@@ -6,6 +6,7 @@
 #include "CLBuffer.hpp"
 #include "EventCLImpl.hpp"
 
+
 namespace CE {
 
 	///// Need TO CHECK !!!!

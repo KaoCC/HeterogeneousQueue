@@ -7,15 +7,20 @@
 #include <algorithm>
 
 namespace CLAL {
+	CLContext CLContext::create(CLDevice dev, cl_context_properties * props) {
 
+		std::vector<CLDevice> devs;
+		devs.push_back(dev);
+		return CLContext::create(devs, props);
+
+	}
 	CLContext CLContext::create(const std::vector<CLDevice>& devices, cl_context_properties * props) {
 
 
 		std::vector<cl_device_id> deviceIDs;
 
 		std::for_each(devices.cbegin(), devices.cend(),
-			[&deviceIDs](CLDevice const& device)
-		{
+			[&deviceIDs](CLDevice const& device) {
 			deviceIDs.push_back(device);
 		});
 
@@ -119,6 +124,12 @@ namespace CLAL {
 	//}
 
 
+	CLContext::CLContext(cl_context context, const std::vector<CLDevice>& devs, const std::vector<CLCommandQueue>& cqs) :
+		ReferenceCount<cl_context, clRetainContext, clReleaseContext>(context),
+		devices(devs),
+		commandQueues(cqs) {
+	}
+
 	// Copy by value !
 	CLContext::CLContext(cl_context context, std::vector<CLDevice> devs) :
 		ReferenceCount<cl_context, clRetainContext, clReleaseContext>(context)
@@ -130,8 +141,8 @@ namespace CLAL {
 	void CLContext::createCQs() {
 
 
-		std::for_each(devices.cbegin(), devices.cend(), 
-			[this](const CLDevice& dev ) {
+		std::for_each(devices.cbegin(), devices.cend(),
+			[this](const CLDevice& dev) {
 
 			// KAOCC: ERROR: need CLCommandQueue(CLDevice, CLContext);
 			// FIXED 

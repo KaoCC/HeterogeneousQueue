@@ -27,4 +27,8 @@ namespace CLAL {
 	CLAL::CLCommandQueue::~CLCommandQueue() {
 	}
 
+	CLCommandQueue::CLCommandQueue(cl_command_queue cmdQueue) : ReferenceCount<cl_command_queue, clRetainCommandQueue, clReleaseCommandQueue>(cmdQueue) {
+
+	}
+
 }

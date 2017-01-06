@@ -31,6 +31,11 @@ namespace HQ {
 		CE::Device* device {nullptr};
 		//CE::Executable* program {nullptr};
 
+
+		// ref to ComputeEngine
+		CE::ComputeEngine* const & ceRef;
+
+
 		ThreadPool pool;
 
 	};

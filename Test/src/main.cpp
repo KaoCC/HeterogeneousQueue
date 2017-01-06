@@ -42,12 +42,12 @@ public:
 
 
 	TestTask() {
-		program = CreateSequentialExecutableWithIndex(0);
-		runF = CreateSequentialFunction(program, "test", std::move(fff));
+		program[0] = CreateSequentialExecutableWithIndex(0);
+		runF[0] = CreateSequentialFunction(program[0], "test", std::move(fff));
 	}
 
     CE::Function const* getRunFunction(size_t index) override {
-        return runF;
+        return runF[index];
     }
 
     TaskParameter* getTaskParameter() override {
@@ -72,10 +72,17 @@ public:
 
 private:
 	//CE::Function const* runF { CreateSequentialFunctionWithIndex(0, "test", std::move(fff) )};
-	CE::Function* runF;
-	CE::Executable* program;
+
+
+	static const size_t NUM_OF_INSTANCE = 2;
+
+	CE::Function* runF[NUM_OF_INSTANCE];
+	CE::Executable* program[NUM_OF_INSTANCE];
 	TestTaskParameter p;
     Event* event {nullptr};
+
+
+
 
 };
 
