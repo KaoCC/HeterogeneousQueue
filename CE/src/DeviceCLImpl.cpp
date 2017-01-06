@@ -59,7 +59,7 @@ namespace CE {
 	}
 
 
-	void CE::DeviceCLImpl::execute(Function const * func, size_t queue, size_t globalSize, size_t localSize) {
+	void CE::DeviceCLImpl::execute(Function const * func, size_t queue, size_t globalSize, size_t localSize, Event** e) {
 
 
 		const FunctionCLImpl* functionCL = static_cast<const FunctionCLImpl*>(func);
@@ -69,6 +69,7 @@ namespace CE {
 			CLAL::CLEvent evt = context.execute1D(queue, globalSize, localSize, functionCL->getKernel());
 
 			// ignore the Event ????
+			// KAOCC: FIXME: Event handling 
 
 		} catch (CLAL::CLException& e) {
 			throw ExceptionCLImpl(e.what());

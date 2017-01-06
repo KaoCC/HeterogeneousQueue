@@ -62,7 +62,7 @@ namespace CE {
 		virtual void deleteExecutable(Executable* executable) = 0;
 
 		//virtual void execute(Function const* func, size_t queue, size_t global_size, size_t local_size, Event** e) = 0;
-		virtual void execute(Function const* func, size_t queue, size_t globalSize, size_t localSize) = 0;
+		virtual void execute(Function const* func, size_t queue, size_t globalSize, size_t localSize, Event** e) = 0;
 
 
 		//TODO: add more function here

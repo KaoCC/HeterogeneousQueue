@@ -43,7 +43,8 @@ namespace HQ {
 		//tmp
 		//device->execute(f, 0, globalSize, 0);
 
-		pool.enqueue(std::bind(&CE::Device::execute, device, f, 0, globalSize, 0));
+		// KAOCC: need to change the Event parameter !!!
+		pool.enqueue(std::bind(&CE::Device::execute, device, f, 0, globalSize, 0, nullptr));
 	}
 
 	CE::Executable * ComputeUnit::createSequentialExecutable(const ComputeUnit& cu) {

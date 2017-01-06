@@ -24,7 +24,6 @@ namespace HQ {
 
 		//KAOCC: this one should be move out from the class (static member func or global func)
 		// the interface for this class should be kept in a general form
-		
 		static CE::Executable* createSequentialExecutable(const ComputeUnit& cu);
 
 	private:

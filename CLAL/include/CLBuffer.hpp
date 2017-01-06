@@ -97,7 +97,7 @@ namespace CLAL {
 		cl_event event = nullptr;
 		cl_int status = clEnqueueWriteBuffer(cmdQueue, *this, false, sizeof(T) * offset, sizeof(T) * elemCount, hostBuffer, 0, nullptr, &event);
 
-		ThrowIf(status != CL_SUCCESS, status, "clEnqueueWriteBuffer (offset) failed");
+		ThrowIfCL(status != CL_SUCCESS, status, "clEnqueueWriteBuffer (offset) failed");
 
 		return CLEvent::create(event);
 	}

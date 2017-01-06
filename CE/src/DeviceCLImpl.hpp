@@ -21,7 +21,7 @@ namespace CE {
 		virtual Buffer * createBuffer(size_t size, size_t flags, void * data) override;
 		virtual void deleteBuffer(Buffer * buffer) override;
 		virtual Executable * compileExecutable(char const * source, size_t size, char const * options) override;
-		virtual void execute(Function const * func, size_t queue, size_t globalSize, size_t localSize) override;
+		virtual void execute(Function const * func, size_t queue, size_t globalSize, size_t localSize, Event** e) override;
 
 
 		virtual Buffer * createBuffer(cl_mem buffer) override;
