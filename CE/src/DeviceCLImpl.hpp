@@ -29,7 +29,7 @@ namespace CE {
 
 
 		// Inherited via DeviceCL
-		virtual void getSpec(DeviceSpec & spec) override;
+		virtual DeviceSpec getSpec(void) override;
 		virtual PlatformType getPlatformType() const override;
 		virtual Buffer * createBuffer(size_t size, size_t flags) override;
 		virtual Buffer * createBuffer(size_t size, size_t flags, void * data) override;

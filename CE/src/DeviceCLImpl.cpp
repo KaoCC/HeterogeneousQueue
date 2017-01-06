@@ -21,8 +21,12 @@ namespace CE {
 		initEventPool();
 	}
 
-	void CE::DeviceCLImpl::getSpec(DeviceSpec & spec) {
+	DeviceSpec CE::DeviceCLImpl::getSpec(void) {
 		// MORE HERE !!!!!!
+
+		DeviceSpec spec;
+
+		return spec;
 	}
 
 	PlatformType CE::DeviceCLImpl::getPlatformType() const {

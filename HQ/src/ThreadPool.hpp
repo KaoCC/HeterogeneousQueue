@@ -20,7 +20,7 @@ namespace HQ {
 
 	public:
 
-		ThreadPool();
+		ThreadPool(unsigned numOfThread = 0);
 		
 		void enqueue(std::function<void()>&& f);
 		size_t getSize() const;

@@ -4,12 +4,17 @@
 
 namespace CE {
 
-	void CE::DeviceSequential::getSpec(DeviceSpec & spec) {
+	DeviceSpec CE::DeviceSequential::getSpec(void) {
+
+		DeviceSpec spec;
 
 		spec.name = "Sequential Device";
 		spec.vendor = "KAOCC";
 		spec.type = DeviceType::kSequential;
+		spec.isThreadSafe = true;
 
+
+		return spec;
 	}
 
 

@@ -8,12 +8,18 @@
 namespace HQ {
 
 
-	ComputeUnit::ComputeUnit(CE::ComputeEngine* ce, size_t index) : ceRef(ce) {
-		// tmp
-		device = ce->createDevice(index);
+	ComputeUnit::ComputeUnit(CE::ComputeEngine* ce, size_t index) :
+		ceRef ( ce ),
+		device( ce->createDevice(index) ), 
+		spec(device->getSpec()),
+		pool(spec.isThreadSafe ? 0 : 1) {
+		// KAOCC: NOTE: 0 for auto-test
 
-		CE::DeviceSpec spec;
-		device->getSpec(spec);
+		// tmp
+		//device = ce->createDevice(index);
+
+		//CE::DeviceSpec spec;
+		//device->getSpec(spec);
 		//if (spec.type == CE::DeviceType::kSequential) {
 		//	
 		//	// put it here or user space ?
@@ -51,8 +57,7 @@ namespace HQ {
 
 		CE::Executable* program = nullptr;
 
-		CE::DeviceSpec spec;
-		cu.device->getSpec(spec);
+		CE::DeviceSpec spec = cu.device->getSpec();
 		if (spec.type == CE::DeviceType::kSequential) {
 			program = CreateSequentialExecutable(cu.device);
 		}
@@ -60,6 +65,20 @@ namespace HQ {
 		return program;
 
 
+	}
+
+	// tmp  impl.
+	CE::Executable * ComputeUnit::compileExecutableFromFile(const ComputeUnit & cu, char const * filename, char const * options) {
+		
+
+		CE::Executable* program = nullptr;
+
+		CE::DeviceSpec spec = cu.device->getSpec();
+		if (spec.type == CE::DeviceType::kGpu) {
+			program = cu.device->compileExecutable(filename, nullptr, 0, options);
+		}
+
+		return program;
 	}
 
 	//CE::Function* ComputeUnit::createSequentialFunction(const char* name, std::function<void(int)>&& f) {

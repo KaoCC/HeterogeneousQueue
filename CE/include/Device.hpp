@@ -33,6 +33,7 @@ namespace CE {
 		const char* name;
 		const char* vendor;
 		DeviceType  type;
+		bool isThreadSafe;
 	};
 
 
@@ -44,7 +45,7 @@ namespace CE {
 		virtual ~Device() = default;
 
 		// Device Properties
-		virtual void getSpec(DeviceSpec& spec) = 0;
+		virtual DeviceSpec getSpec(void) = 0;
 		virtual PlatformType getPlatformType() const = 0;
 
 		// Buffers

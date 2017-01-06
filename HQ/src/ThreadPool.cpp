@@ -7,9 +7,13 @@
 namespace HQ {
 
 
-	ThreadPool::ThreadPool() {
+	ThreadPool::ThreadPool(unsigned numberOfThreads) {
 
-		unsigned numberOfThreads = std::thread::hardware_concurrency();
+
+		if (numberOfThreads != 0) {
+			numberOfThreads = std::thread::hardware_concurrency();
+		}
+
 		if (!numberOfThreads) {
 			numberOfThreads = 4;
 		}

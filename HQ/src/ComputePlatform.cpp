@@ -16,6 +16,7 @@ namespace HQ {
 		ce = CE::CreateComputeEngine(CE::kMix);
 
 		// TODO: may need to change the ctor
+		// Thread ?
 		for (size_t i = 0; i < NUM_OF_UNITS; ++i) {
 			computeUnits.push_back(new ComputeUnit(ce, i));
 		}

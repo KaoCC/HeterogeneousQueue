@@ -95,12 +95,8 @@ namespace CLAL {
 
 
 		} else {
-			createFromSource(context, source.data(), source.size(), buildopts);
+			return createFromSource(context, source.data(), source.size(), buildopts);
 		}
-
-
-
-
 	}
 
 

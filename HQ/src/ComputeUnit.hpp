@@ -26,16 +26,22 @@ namespace HQ {
 		// the interface for this class should be kept in a general form
 		static CE::Executable* createSequentialExecutable(const ComputeUnit& cu);
 
-	private:
+		static CE::Executable* compileExecutableFromFile(const ComputeUnit& cu, char const* filename, char const* options);
 
-		CE::Device* device {nullptr};
-		//CE::Executable* program {nullptr};
+
+	private:
 
 
 		// ref to ComputeEngine
 		CE::ComputeEngine* const & ceRef;
 
+		CE::Device* device {nullptr};
+		//CE::Executable* program {nullptr};
 
+		// KAOCC: test
+		CE::DeviceSpec spec;
+
+		// KAOCC: is the device thread safe ? We need to check in advance
 		ThreadPool pool;
 
 	};
