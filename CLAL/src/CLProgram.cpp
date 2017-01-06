@@ -77,6 +77,32 @@ namespace CLAL {
 		return createFromSource(context, source.data(), source.size(), buildopts);
 	}
 
+	CLProgram CLProgram::createFromFileName(const CLContext & context, char const * filename, char const ** headernames, size_t numheaders, char const * buildopts) {
+
+
+		std::vector<char> source;
+		LoadFromFile(filename, source);
+
+		std::vector<std::vector<char> > headers;
+		std::vector<char const*> headerStrings;
+		std::vector<size_t> headerSizes;
+
+
+		if (numheaders > 0) {
+
+			// YET TO BE DONE
+			throw "createFromFileName: yet to be done";
+
+
+		} else {
+			createFromSource(context, source.data(), source.size(), buildopts);
+		}
+
+
+
+
+	}
+
 
 	size_t CLProgram::getKernelCount() const {
 		return kernelTable.size();

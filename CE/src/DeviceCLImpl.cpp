@@ -67,6 +67,24 @@ namespace CE {
 
 	}
 
+	Executable * DeviceCLImpl::compileExecutable(char const * filename, char const ** headernames, size_t numheaders, char const * options) {
+
+
+		std::string buildopts = options ? options : "";
+
+		// OpenCL 2.0 & include dir
+		buildopts.append(" -cl-std=CL2.0 -I . ");
+
+		try {
+
+			return new ExecutableCLImpl(CLAL::CLProgram::createFromFileName(context, filename, headernames, numheaders, options));
+
+		} catch (CLAL::CLException& e) {
+			throw ExceptionCLImpl(e.what());
+		}
+
+	}
+
 
 	void CE::DeviceCLImpl::execute(Function const * func, size_t queue, size_t globalSize, size_t localSize, Event** e) {
 
@@ -211,6 +229,8 @@ namespace CE {
 			eventPool.push(new EventCLImpl());
 		}
 	}
+
+
 
 
 	///// Need TO CHECK !!!!

@@ -45,6 +45,10 @@ namespace CE {
 		// members ?
 
 
+
+		// Inherited via Device
+		virtual Executable * compileExecutable(char const * fileName, char const ** headerNames, size_t numheaders, char const * options) override;
+
 	};
 
 

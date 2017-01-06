@@ -58,6 +58,10 @@ namespace CE {
 		return new ExecutableSequential();
 	}
 
+	Executable * DeviceSequential::compileExecutable(char const * fileName, char const ** headerNames, size_t numheaders, char const * options) {
+		return nullptr;
+	}
+
 	void DeviceSequential::readBuffer(Buffer const * buffer, size_t queue, size_t offset, size_t size, void * dst, Event ** e) const {
 	}
 

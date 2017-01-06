@@ -59,6 +59,7 @@ namespace CE {
 
 		// Executable
 		virtual Executable* compileExecutable(char const* source, size_t size, char const* options) = 0;
+		virtual Executable* compileExecutable(char const* fileName, char const** headerNames, size_t numheaders, char const* options) = 0;
 		virtual void deleteExecutable(Executable* executable) = 0;
 
 		//virtual void execute(Function const* func, size_t queue, size_t global_size, size_t local_size, Event** e) = 0;
