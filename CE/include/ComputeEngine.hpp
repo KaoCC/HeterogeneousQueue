@@ -20,7 +20,7 @@ namespace CE {
 		virtual size_t getDeviceCount() const = 0;
 
 
-		virtual Platform getPlatform() const = 0;
+		virtual PlatformType getPlatformType() const = 0;
 
         virtual ~ComputeEngine() = 0;
 
@@ -30,7 +30,7 @@ namespace CE {
 
 
 
-	CE_API ComputeEngine* CreateComputeEngine(CE::Platform type);
+	CE_API ComputeEngine* CreateComputeEngine(CE::PlatformType type);
 	CE_API void DeleteComputeEngine(ComputeEngine* ce);
 
 

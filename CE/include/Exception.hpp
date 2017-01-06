@@ -15,7 +15,8 @@ namespace CE {
 	public:
 		// primitive type for interface...
 		virtual char const* what() const = 0;
-		virtual ~Exception() = 0;
+		virtual ~Exception() = default;
+
 	};
 
 }

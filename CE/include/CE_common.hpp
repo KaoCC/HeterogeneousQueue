@@ -26,7 +26,7 @@
 
 namespace CE {
 
-	enum Platform
+	enum PlatformType
 	{
 		kOpenCL = (1 << 0),
 		kVulkan = (1 << 1),

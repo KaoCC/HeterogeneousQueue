@@ -11,7 +11,7 @@ namespace CE {
 
 
 
-	ComputeEngine* CreateComputeEngine(CE::Platform type) {
+	ComputeEngine* CreateComputeEngine(CE::PlatformType type) {
 
 		ComputeEngine* ret = nullptr;
 

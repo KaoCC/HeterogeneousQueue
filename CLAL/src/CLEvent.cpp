@@ -14,6 +14,7 @@ namespace CLAL {
 		return retEvent;
 	}
 
+	// for empty wraper
 	//CLEvent::CLEvent() {
 	//}
 

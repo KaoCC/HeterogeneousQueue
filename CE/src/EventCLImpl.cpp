@@ -4,11 +4,22 @@
 #include "CLException.hpp"
 
 namespace CE {
+	EventCLImpl::EventCLImpl() {
+
+	}
+
+	EventCLImpl::~EventCLImpl() {
+	}
 
 	void EventCLImpl::wait() {
 
 		try {
-			event.wait();
+
+			if (validFlag) {
+				event.wait();
+			} else {
+				throw "invald event ID";
+			}
 
 		} catch (CLAL::CLException& e) {
 			throw ExceptionCLImpl(e.what());
@@ -20,12 +31,22 @@ namespace CE {
 
 
 		try {
-			return event.getCommandExecutionStatus() == CL_COMPLETE;
+
+			if (validFlag) {
+				return event.getCommandExecutionStatus() == CL_COMPLETE;
+			} else {
+				throw "invald event ID";
+			}
 
 		} catch (CLAL::CLException& e) {
 			throw ExceptionCLImpl(e.what());
 		}
 
+	}
+
+	void EventCLImpl::setEvent(CLAL::CLEvent evt) {
+		this->event = evt;
+		validFlag = true;
 	}
 
 }

@@ -15,8 +15,8 @@ namespace CLAL {
 		// need to release it manually since we used it internally in this layer
 		static CLEvent create(cl_event evt);
 
-
-		CLEvent() = delete;
+		// For high-level event
+		CLEvent() = default;
 
 		void  wait();
 		float getDuration() const;

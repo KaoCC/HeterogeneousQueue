@@ -21,8 +21,8 @@ namespace CE {
 		return NUM_OF_DEVICE;
 	}
 
-	Platform ComputeEngineMix::getPlatform() const {
-		return Platform::kMix;
+	PlatformType ComputeEngineMix::getPlatformType() const {
+		return PlatformType::kMix;
 	}
 
 	Device* ComputeEngineMix::createDevice(size_t index) {

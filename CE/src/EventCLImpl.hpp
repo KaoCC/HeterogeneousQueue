@@ -10,17 +10,25 @@ namespace CE {
 
 	class EventCLImpl : public Event {
 
-
-
 	public:
+
+		EventCLImpl();
+
+		~EventCLImpl();
 
 		// Inherited via Event
 		virtual void wait() override;
 
 		virtual bool isComplete() const override;
 
+
+		void setEvent(CLAL::CLEvent evt);
+
+
 	private:
 		CLAL::CLEvent event;
+
+		bool validFlag = false;
 
 	};
 

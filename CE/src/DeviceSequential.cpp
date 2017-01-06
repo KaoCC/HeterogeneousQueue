@@ -14,8 +14,8 @@ namespace CE {
 
 
 	// this one needs to be changed.
-	Platform CE::DeviceSequential::getPlatform() const {
-		return Platform::kMix;
+	PlatformType CE::DeviceSequential::getPlatformType() const {
+		return PlatformType::kMix;
 	}
 
 	// YET TO BE DONE !!!
@@ -29,9 +29,7 @@ namespace CE {
 
 	void CE::DeviceSequential::deleteBuffer(Buffer * buffer) {
 
-		if (buffer) {
-			delete buffer;
-		}
+		delete buffer;
 	}
 
 	Executable * CE::DeviceSequential::compileExecutable(char const * source_code, size_t size, char const * options) {

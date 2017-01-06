@@ -45,7 +45,7 @@ namespace CE {
 
 		// Device Properties
 		virtual void getSpec(DeviceSpec& spec) = 0;
-		virtual Platform getPlatform() const = 0;
+		virtual PlatformType getPlatformType() const = 0;
 
 		// Buffers
 		virtual Buffer* createBuffer(size_t size, size_t flags) = 0;

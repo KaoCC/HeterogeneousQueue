@@ -12,7 +12,7 @@ namespace CE {
 
 		size_t getDeviceCount() const override;
 
-		Platform getPlatform() const override;
+		PlatformType getPlatformType() const override;
 
 		// Inherited via ComputeEngine
 		virtual Device * createDevice(size_t index) override;

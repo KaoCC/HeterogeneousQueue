@@ -4,18 +4,28 @@
 #include "ExecutableCLImpl.hpp"
 #include "FunctionCLImpl.hpp"
 #include "CLBuffer.hpp"
-#include "Event.hpp"
+#include "EventCLImpl.hpp"
 
 namespace CE {
 
 	///// Need TO CHECK !!!!
 
+	DeviceCLImpl::DeviceCLImpl(CLAL::CLDevice dev) : device(std::move(dev)), context(CLAL::CLContext::create(dev)) {
+		initEventPool();
+	}
+
+	DeviceCLImpl::DeviceCLImpl(CLAL::CLDevice dev, CLAL::CLContext ctx) :
+		device(std::move(dev)), context(std::move(ctx)) {
+
+		initEventPool();
+	}
+
 	void CE::DeviceCLImpl::getSpec(DeviceSpec & spec) {
 		// MORE HERE !!!!!!
 	}
 
-	Platform CE::DeviceCLImpl::getPlatform() const {
-		return Platform::kOpenCL;;
+	PlatformType CE::DeviceCLImpl::getPlatformType() const {
+		return PlatformType::kOpenCL;;
 	}
 
 	Buffer * CE::DeviceCLImpl::createBuffer(size_t size, size_t flags) {
@@ -36,9 +46,7 @@ namespace CE {
 	}
 
 	void CE::DeviceCLImpl::deleteBuffer(Buffer * buffer) {
-		if (buffer) {
-			delete buffer;
-		}
+		delete buffer;
 	}
 
 	Executable * CE::DeviceCLImpl::compileExecutable(char const * source, size_t size, char const * options) {
@@ -70,6 +78,10 @@ namespace CE {
 
 			// ignore the Event ????
 			// KAOCC: FIXME: Event handling 
+
+			if (e) {
+
+			}
 
 		} catch (CLAL::CLException& e) {
 			throw ExceptionCLImpl(e.what());
@@ -135,6 +147,8 @@ namespace CE {
 		delete executable;
 	}
 
+
+	// KAOCC: we need to redesign this API ...
 	void DeviceCLImpl::waitForEvent(Event * e) {
 		e->wait();
 	}
@@ -154,6 +168,20 @@ namespace CE {
 			context.finish(queue);
 		} catch (CLAL::CLException& e) {
 			throw ExceptionCLImpl(e.what());
+		}
+	}
+
+	DeviceCLImpl::~DeviceCLImpl() {
+		while (!eventPool.empty()) {
+			auto event = eventPool.front();
+			eventPool.pop();
+			delete event;
+		}
+	}
+
+	void DeviceCLImpl::initEventPool() {
+		for (size_t i = 0; i < INIT_EVENT_POOL_SIZE; ++i) {
+			eventPool.push(new EventCLImpl());
 		}
 	}
 
