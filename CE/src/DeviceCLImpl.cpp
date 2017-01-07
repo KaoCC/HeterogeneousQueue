@@ -26,6 +26,9 @@ namespace CE {
 
 		DeviceSpec spec;
 
+
+		spec.isThreadSafe = false;
+
 		return spec;
 	}
 
@@ -47,7 +50,15 @@ namespace CE {
 
 	Buffer * CE::DeviceCLImpl::createBuffer(size_t size, size_t flags, void * data) {
 		// KAOCC: Yet to be done
-		return nullptr;
+
+		try {
+
+			// KAOCC: FIXME: use flags and change CL_MEM_READ_WRITE
+			return new BufferCLImpl(context.createBuffer<char>(size, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR, data));
+		} catch (CLAL::CLException& e) {
+			throw ExceptionCLImpl(e.what());
+
+		}
 	}
 
 	void CE::DeviceCLImpl::deleteBuffer(Buffer * buffer) {

@@ -17,6 +17,7 @@ namespace CLAL {
 
 		static CLBuffer<T> createFromBufferCL(cl_mem buffer);
 		static CLBuffer<T> create(cl_context context, cl_mem_flags flags, size_t elementCount);
+		static CLBuffer<T> create(cl_context context, cl_mem_flags flags, size_t elementCount, void* data);
 
 
 		// Read and Write
@@ -77,6 +78,24 @@ namespace CLAL {
 	}
 
 
+	template<typename T>
+	CLBuffer<T> CLBuffer<T>::create(cl_context context, cl_mem_flags flags, size_t elementCount, void * data) {
+
+
+		cl_int status = CL_SUCCESS;
+
+		// KAOCC: check the flag !
+		cl_mem deviceBuffer = clCreateBuffer(context, flags, elementCount * sizeof(T), data, &status);
+
+		ThrowIfCL(status != CL_SUCCESS, status, "clCreateBuffer failed");
+
+		CLBuffer<T> buffer(deviceBuffer, elementCount);
+
+		clReleaseMemObject(deviceBuffer);
+
+		return buffer;
+
+	}
 
 	//template<typename T>
 	//CLEvent CLBuffer<T>::writeDeviceBuffer(CLCommandQueue cmdQueue, T const * hostBuffer, size_t elemCount) {

@@ -45,7 +45,8 @@ namespace CLAL {
 		// For Buffer
 
 		// KAOCC: setup parameter
-		template <typename T> CLBuffer<T> createBuffer(size_t elementCount, cl_mem_flags flags);
+		template <typename T> CLBuffer<T> createBuffer(size_t elementCount, cl_mem_flags flags) const;
+		template <typename T> CLBuffer<T> createBuffer(size_t elementCount, cl_mem_flags flags, void* data) const;
 
 		// write / read  buffers
 		template <typename T> CLEvent  writeBuffer(unsigned int index, CLBuffer<T> buffer, T const* hostBuffer, size_t elemCount) const;
@@ -96,10 +97,15 @@ namespace CLAL {
 	};
 
 	template<typename T>
-	CLBuffer<T> CLContext::createBuffer(size_t elementCount, cl_mem_flags flags) {
+	CLBuffer<T> CLContext::createBuffer(size_t elementCount, cl_mem_flags flags) const {
 		return CLBuffer<T>::create(*this, flags, elementCount);
 	}
 
+
+	template<typename T>
+	CLBuffer<T> CLContext::createBuffer(size_t elementCount, cl_mem_flags flags, void * data) const {
+		return CLBuffer<T>::create(*this, flags, elementCount, data);
+	}
 
 	template<typename T>
 	CLEvent CLContext::writeBuffer(unsigned int index, CLBuffer<T> buffer, T const * hostBuffer, size_t elemCount) const {
