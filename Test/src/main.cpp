@@ -44,6 +44,9 @@ public:
 	TestTask() {
 		program[0] = CreateSequentialExecutableWithIndex(0);
 		runF[0] = CreateSequentialFunction(program[0], "test", std::move(fff));
+
+		// CL ?
+
 	}
 
     CE::Function const* getRunFunction(size_t index) override {

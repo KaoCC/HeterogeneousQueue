@@ -17,7 +17,12 @@ namespace HQ {
 
 		// TODO: may need to change the ctor
 		// Thread ?
-		for (size_t i = 0; i < NUM_OF_UNITS; ++i) {
+
+		// tmp solution
+
+		size_t deviceCount = ce->getDeviceCount();
+
+		for (size_t i = 0; i < deviceCount; ++i) {
 			computeUnits.push_back(new ComputeUnit(ce, i));
 		}
 
@@ -32,7 +37,7 @@ namespace HQ {
 
 
 		// clear
-		futures.clear();
+		futures.clear();  // is this thread safe ???
 
 		size_t gs = task->getGlobalSize();
 		const size_t partial = gs / computeUnits.size();
@@ -50,6 +55,7 @@ namespace HQ {
 			// TODO: need to set up the offset
 			// TODO: need to be a thread pool model
 			// TODO: sync ?
+			// KAOCC: Offset ???
 			futures.push_back(std::async(dispatch, computeUnits[i], task->getRunFunction(i), sz, partial * i));
 		}
 
@@ -63,7 +69,7 @@ namespace HQ {
 	// should be removed
 	ComputeUnit * ComputePlatform::getComputeUnit(size_t index) const {
 
-		if (index < NUM_OF_UNITS) {
+		if (index < computeUnits.size()) {
 			return computeUnits[index];
 		} else {
 			// throw ?
@@ -78,7 +84,7 @@ namespace HQ {
 
 
 	ComputePlatform::~ComputePlatform() {
-		for (size_t i = 0; i < NUM_OF_UNITS; ++i) {
+		for (size_t i = 0; i < computeUnits.size(); ++i) {
 			delete computeUnits[i];
 		}
 

@@ -26,7 +26,8 @@ namespace CE {
 
 		DeviceSpec spec;
 
-
+		spec.name = device.getName().c_str();
+		// ...
 		spec.isThreadSafe = false;
 
 		return spec;

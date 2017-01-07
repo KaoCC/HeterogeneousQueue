@@ -47,6 +47,17 @@ namespace HQ {
 		return exec;
 	}
 
+	HQAPI CE::Executable * CompileExecutableWithIndex(size_t index, const char* filename, const char* options) {
+
+		CE::Executable* exec = ComputeUnit::compileExecutableFromFile(*(hq->getPlatfrom().getComputeUnit(index)), filename, options);
+
+		return exec;
+	}
+
+	HQAPI size_t HQ::GetNumberOfUnits() {
+		return hq->getNumberOfUnitOnPlatform();
+	}
+
 
     Task::~Task() {
     }

@@ -23,7 +23,6 @@ namespace CE {
 
 		// Inherited via ComputeEngine
 		virtual Device * createDevice(size_t index) override;
-
 		virtual void deleteDevice(Device * device) override;
 
 		virtual size_t getDeviceCount() const override;

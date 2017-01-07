@@ -29,7 +29,7 @@ namespace HQ {
 
 		~ThreadPool();
 
-		const int sleepTime = 20;
+		const int sleepTime = 10;
 
 	private:
 

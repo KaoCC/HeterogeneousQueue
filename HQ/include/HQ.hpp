@@ -79,9 +79,17 @@ namespace HQ {
 
 	//HQAPI CE::Function const* CreateSequentialFunctionWithIndex(size_t index, const char* name, std::function<void(int)>&& f);
 	HQAPI CE::Executable* CreateSequentialExecutableWithIndex(size_t index);
+	HQAPI CE::Executable* CompileExecutableWithIndex(size_t index, const char* filename, const char* options);
+
+	// KAOCC: Need to delete the Executable !!!
 
 
-//for testing
+
+	HQAPI size_t GetNumberOfUnits();
+
+
+	//KAOCC: for testing
+	// the Event system needs to be redesigned
     HQAPI Event* CreateEvent();
     HQAPI void DestroyEvent(Event* event);
 

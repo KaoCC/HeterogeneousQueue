@@ -49,15 +49,17 @@ namespace HQ {
 		static void dispatch(ComputeUnit* cu, CE::Function const* func, size_t globalSize, size_t offset);
 
 		// test
-		static const size_t NUM_OF_UNITS = 1;
+		//static const size_t NUM_OF_UNITS = 1;
 
-		std::vector<ComputeUnit*> computeUnits;	
-		CE::ComputeEngine* ce {nullptr};
+		std::vector<ComputeUnit*> computeUnits;
+		CE::ComputeEngine* ce{ nullptr };
 
 		//TODO: add sync support
 
 		// tmp
 		// for async
+
+		// KAOCC: check for thread safe ?
 		std::vector<std::future<void>> futures;
 
 	};
