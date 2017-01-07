@@ -78,6 +78,8 @@ namespace HQ {
 
     HQAPI void EnqueueHeterogeneousQueue(Task* task);
 
+	HQAPI size_t GetNumberOfUnits();
+
 	//HQAPI CE::Function const* CreateSequentialFunctionWithIndex(size_t index, const char* name, std::function<void(int)>&& f);
 	HQAPI CE::Executable* CreateSequentialExecutableWithIndex(size_t index);
 	HQAPI CE::Executable* CompileExecutableWithIndex(size_t index, const char* filename, const char* options);
@@ -88,7 +90,12 @@ namespace HQ {
 
 	// KAOCC: Need to delete Buffers
 
-	HQAPI size_t GetNumberOfUnits();
+
+	// Buffer Read /Write ?
+
+	HQAPI void WriteBufferWithIndex(size_t index, CE::Buffer const* buffer, size_t offset, size_t size, void* src);
+	HQAPI void ReadBufferWithIndex(size_t index, CE::Buffer const* buffer, size_t offset, size_t size, void* dst);
+
 
 
 	//KAOCC: for testing
@@ -100,3 +107,5 @@ namespace HQ {
 
 
 #endif
+
+

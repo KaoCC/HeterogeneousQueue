@@ -60,7 +60,7 @@ namespace HQ {
 		// for async
 
 		// KAOCC: check for thread safe ?
-		std::vector<std::future<void>> futures;
+		//std::vector<std::future<void>> futures;
 
 	};
 

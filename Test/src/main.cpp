@@ -43,7 +43,7 @@ public:
 
 	TestTask() {
 		program[0] = CreateSequentialExecutableWithIndex(0);
-		runF[0] = CreateSequentialFunction(program[0], "test", std::move(fff));
+		runF[0] = CreateSequentialFunction(program[0], "add", std::move(fff));
 
 		// CL ?
 		program[1] = CompileExecutableWithIndex(1, "test.cl", nullptr);

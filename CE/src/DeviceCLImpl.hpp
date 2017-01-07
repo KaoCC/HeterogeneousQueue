@@ -72,6 +72,8 @@ namespace CE {
 
 	private:
 
+		// KAOCC: do we need mutex for thread safe ???
+
 		CLAL::CLContext context;
 		CLAL::CLDevice device;
 

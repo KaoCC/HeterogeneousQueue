@@ -62,6 +62,24 @@ namespace HQ {
 		return buffer;
 	}
 
+	HQAPI void WriteBufferWithIndex(size_t index, CE::Buffer const * buffer, size_t offset, size_t size, void * src) {
+
+		CE::Device* dev = hq->getPlatfrom().getComputeUnit(index)->getDevice();
+
+		// KAOCC: need to check if the Event can be nullptr
+		// Need to check the index of CQ
+		dev->writeBuffer(buffer, 0, offset, size, src, nullptr);
+	}
+
+	HQAPI void ReadBufferWithIndex(size_t index, CE::Buffer const * buffer, size_t offset, size_t size, void * dst) {
+
+		CE::Device* dev = hq->getPlatfrom().getComputeUnit(index)->getDevice();
+
+		// KAOCC: need to check if the Event can be nullptr
+		// Need to check the index of CQ
+		dev->readBuffer(buffer, 0, offset, size, dst, nullptr);
+	}
+
 	HQAPI size_t HQ::GetNumberOfUnits() {
 		return hq->getNumberOfUnitOnPlatform();
 	}

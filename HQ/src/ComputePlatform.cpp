@@ -10,10 +10,11 @@
 
 namespace HQ {
 
-	ComputePlatform::ComputePlatform() {
+	ComputePlatform::ComputePlatform() : 
+		ce (CE::CreateComputeEngine(CE::kMix)) {
 
 		// kMix for sequential & CL
-		ce = CE::CreateComputeEngine(CE::kMix);
+		//ce = CE::CreateComputeEngine(CE::kMix);
 
 		// TODO: may need to change the ctor
 		// Thread ?
@@ -37,7 +38,7 @@ namespace HQ {
 
 
 		// clear
-		futures.clear();  // is this thread safe ???
+		std::vector<std::future<void>> futures; 
 
 		size_t gs = task->getGlobalSize();
 		const size_t partial = gs / computeUnits.size();
@@ -97,6 +98,7 @@ namespace HQ {
 	void ComputePlatform::dispatch(ComputeUnit * cu, CE::Function const* func, size_t globalSz, size_t offset) {
 
 		// tmp
+		// KAOCC: offset ?
 		cu->submit(func, globalSz);
 	}
 
