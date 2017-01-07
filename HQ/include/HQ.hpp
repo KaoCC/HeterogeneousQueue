@@ -28,6 +28,7 @@
 #endif
 
 #include "Executable.hpp"
+#include "Function.hpp"
 
 namespace HQ {
 
@@ -83,7 +84,9 @@ namespace HQ {
 
 	// KAOCC: Need to delete the Executable !!!
 
+	HQAPI CE::Buffer* CreateBufferWithIndex(size_t index, size_t size);
 
+	// KAOCC: Need to delete Buffers
 
 	HQAPI size_t GetNumberOfUnits();
 

@@ -74,7 +74,7 @@ namespace HQ {
 		CE::Executable* program = nullptr;
 
 		CE::DeviceSpec spec = cu.device->getSpec();
-		if (spec.type == CE::DeviceType::kGpu) {
+		if (spec.type == CE::DeviceType::kGpu || spec.type == CE::DeviceType::kCpu) {
 			program = cu.device->compileExecutable(filename, nullptr, 0, options);
 		}
 

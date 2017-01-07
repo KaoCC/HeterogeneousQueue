@@ -46,6 +46,10 @@ public:
 		runF[0] = CreateSequentialFunction(program[0], "test", std::move(fff));
 
 		// CL ?
+		program[1] = CompileExecutableWithIndex(1, "test.cl", nullptr);
+		runF[1] = program[1]->createFunction("add");
+
+		//set argument ?
 
 	}
 

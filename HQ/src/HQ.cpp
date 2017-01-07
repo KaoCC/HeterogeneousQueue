@@ -54,6 +54,14 @@ namespace HQ {
 		return exec;
 	}
 
+	HQAPI CE::Buffer * CreateBufferWithIndex(size_t index, size_t size) {
+		CE::Device* dev = hq->getPlatfrom().getComputeUnit(index)->getDevice();
+		CE::Buffer* buffer = dev->createBuffer(size, 0); // note: flag is currently not in used
+
+
+		return buffer;
+	}
+
 	HQAPI size_t HQ::GetNumberOfUnits() {
 		return hq->getNumberOfUnitOnPlatform();
 	}
