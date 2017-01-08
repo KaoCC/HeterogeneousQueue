@@ -87,15 +87,17 @@ namespace HQ {
 	// KAOCC: Need to delete the Executable !!!
 
 	HQAPI CE::Buffer* CreateBufferWithIndex(size_t index, size_t size);
+	HQAPI CE::Buffer* CreateBufferWithIndex(size_t index, size_t size, void* initData);
 
 	// KAOCC: Need to delete Buffers
 
 
-	// Buffer Read /Write ?
+	// Buffer Read /Write / Map ?
 
 	HQAPI void WriteBufferWithIndex(size_t index, CE::Buffer const* buffer, size_t offset, size_t size, void* src);
 	HQAPI void ReadBufferWithIndex(size_t index, CE::Buffer const* buffer, size_t offset, size_t size, void* dst);
-
+	HQAPI void MapBufferWithIndex(size_t index, CE::Buffer const* buffer, size_t offset, size_t size, void** mapdata);
+	HQAPI void UnmapBufferWithIndex(size_t index, CE::Buffer const* buffer, void* mapdata);
 
 
 	//KAOCC: for testing

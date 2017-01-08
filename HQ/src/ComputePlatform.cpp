@@ -8,6 +8,9 @@
 #include <thread>
 #include <array>
 
+// for testing
+#include <iostream>
+
 namespace HQ {
 
 	ComputePlatform::ComputePlatform() : 
@@ -28,6 +31,7 @@ namespace HQ {
 		}
 
 
+		std::cerr << "Number of CUs:" << deviceCount << std::endl;
 	}
 
 
@@ -57,6 +61,8 @@ namespace HQ {
 			// TODO: need to be a thread pool model
 			// TODO: sync ?
 			// KAOCC: Offset ???
+
+			std::cerr << "Size: " << sz << std::endl;
 			futures.push_back(std::async(dispatch, computeUnits[i], task->getRunFunction(i), sz, partial * i));
 		}
 

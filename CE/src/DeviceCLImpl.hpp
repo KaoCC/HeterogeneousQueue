@@ -42,9 +42,14 @@ namespace CE {
 
 		virtual Buffer * createBuffer(cl_mem buffer) override;
 
+
+		// read / write
 		virtual void readBuffer(Buffer const * buffer, size_t queue, size_t offset, size_t size, void * dst, Event ** e) const override;
 		virtual void writeBuffer(Buffer const * buffer, size_t queue, size_t offset, size_t size, void * src, Event ** e) override;
 
+		// map / unmap
+		virtual void mapBuffer(Buffer const * buffer, size_t queue, size_t offset, size_t size, size_t map_type, void ** mapdata, Event ** e) override;
+		virtual void unmapBuffer(Buffer const * buffer, size_t queue, void * mapdata, Event ** e) override;
 
 		virtual Executable * compileExecutable(char const * source, size_t size, char const * options) override;
 		virtual Executable * compileExecutable(char const * filename, char const ** headernames, size_t numheaders, char const * options) override;
@@ -84,7 +89,6 @@ namespace CE {
 
 
 		// Mem / data Pool ????
-
 
 	};
 

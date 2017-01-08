@@ -62,6 +62,13 @@ namespace HQ {
 		return buffer;
 	}
 
+	HQAPI CE::Buffer * CreateBufferWithIndex(size_t index, size_t size, void * initData) {
+		CE::Device* dev = hq->getPlatfrom().getComputeUnit(index)->getDevice();
+		CE::Buffer* buffer = dev->createBuffer(size, 0, initData); // note: flag is currently not in used
+
+		return buffer;
+	}
+
 	HQAPI void WriteBufferWithIndex(size_t index, CE::Buffer const * buffer, size_t offset, size_t size, void * src) {
 
 		CE::Device* dev = hq->getPlatfrom().getComputeUnit(index)->getDevice();
@@ -78,6 +85,23 @@ namespace HQ {
 		// KAOCC: need to check if the Event can be nullptr
 		// Need to check the index of CQ
 		dev->readBuffer(buffer, 0, offset, size, dst, nullptr);
+	}
+
+	HQAPI void MapBufferWithIndex(size_t index, CE::Buffer const * buffer, size_t offset, size_t size, void ** mapdata) {
+		CE::Device* dev = hq->getPlatfrom().getComputeUnit(index)->getDevice();
+
+		// KAOCC: mapType is set to Zero !
+		// KAOCC: Event is set to nullptr !
+		dev->mapBuffer(buffer, 0, offset, size, 0, mapdata, nullptr);
+
+	}
+
+	HQAPI void UnmapBufferWithIndex(size_t index, CE::Buffer const * buffer, void * mapdata) {
+		CE::Device* dev = hq->getPlatfrom().getComputeUnit(index)->getDevice();
+
+		// KAOCC: mapType is set to Zero !
+		// KAOCC: Event is set to nullptr !
+		dev->unmapBuffer(buffer, 0, mapdata, nullptr);
 	}
 
 	HQAPI size_t HQ::GetNumberOfUnits() {

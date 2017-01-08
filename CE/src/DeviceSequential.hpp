@@ -49,6 +49,11 @@ namespace CE {
 		// Inherited via Device
 		virtual Executable * compileExecutable(char const * fileName, char const ** headerNames, size_t numheaders, char const * options) override;
 
+
+		// Inherited via Device
+		virtual void mapBuffer(Buffer const * buffer, size_t queue, size_t offset, size_t size, size_t map_type, void ** mapdata, Event ** e) override;
+		virtual void unmapBuffer(Buffer const * buffer, size_t queue, void * mapdata, Event ** e) override;
+
 	};
 
 

@@ -67,22 +67,36 @@ namespace CE {
 		return nullptr;
 	}
 
+	void DeviceSequential::mapBuffer(Buffer const * buffer, size_t queue, size_t offset, size_t size, size_t map_type, void ** mapdata, Event ** e) {
+		throw "Yet to be done";
+	}
+
+	void DeviceSequential::unmapBuffer(Buffer const * buffer, size_t queue, void * mapdata, Event ** e) {
+		throw "Yet to be done";
+	}
+
 	void DeviceSequential::readBuffer(Buffer const * buffer, size_t queue, size_t offset, size_t size, void * dst, Event ** e) const {
+		throw "Yet to be done";
 	}
 
 	void DeviceSequential::writeBuffer(Buffer const * buffer, size_t queue, size_t offset, size_t size, void * src, Event ** e) {
+		throw "Yet to be done";
 	}
 
 	void DeviceSequential::deleteExecutable(Executable * executable) {
+		delete executable;
 	}
 
 	void DeviceSequential::waitForEvent(Event * e) {
+		throw "Yet to be done";
 	}
 
 	void DeviceSequential::flush(size_t queue) {
+		throw "Yet to be done";
 	}
 
 	void DeviceSequential::finish(size_t queue) {
+		throw "Yet to be done";
 	}
 
 

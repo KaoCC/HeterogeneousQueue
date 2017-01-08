@@ -26,6 +26,13 @@ namespace CLAL {
 		CLEvent readDeviceBuffer(CLCommandQueue cmdQueue, T* hostBuffer, size_t elemCount);
 		CLEvent readDeviceBuffer(CLCommandQueue cmdQueue, T* hostBuffer, size_t offset, size_t elemCount);
 
+		// Map / Unmap buffer
+		CLEvent mapDeviceBuffer(CLCommandQueue cmdQueue, cl_map_flags flags, T** mappedData);
+		CLEvent mapDeviceBuffer(CLCommandQueue cmdQueue, cl_map_flags flags, size_t offset, size_t elemCount, T** mappedData);
+		CLEvent unmapDeviceBuffer(CLCommandQueue cmdQueue, T* mappedData);
+
+
+
 
 		size_t getElementCount() const;
 
@@ -84,8 +91,8 @@ namespace CLAL {
 
 		cl_int status = CL_SUCCESS;
 
-		// KAOCC: check the flag !
-		cl_mem deviceBuffer = clCreateBuffer(context, flags, elementCount * sizeof(T), data, &status);
+		// KAOCC: TODO: check the flag !
+		cl_mem deviceBuffer = clCreateBuffer(context, flags | CL_MEM_COPY_HOST_PTR, elementCount * sizeof(T), data, &status);
 
 		ThrowIfCL(status != CL_SUCCESS, status, "clCreateBuffer failed");
 
@@ -156,6 +163,46 @@ namespace CLAL {
 		cl_int status = clEnqueueReadBuffer(cmdQueue, *this, false, sizeof(T) * offset, sizeof(T) * elemCount, hostBuffer, 0, nullptr, &event);
 
 		ThrowIfCL(status != CL_SUCCESS, status, "clEnqueueWriteBuffer failed");
+
+		return CLEvent::create(event);
+	}
+
+	template<typename T>
+	CLEvent CLBuffer<T>::mapDeviceBuffer(CLCommandQueue cmdQueue, cl_map_flags flags, T ** mappedData) {
+
+		cl_int status = CL_SUCCESS;
+		cl_event event = nullptr;
+
+		T* data = static_cast<T*>(clEnqueueMapBuffer(cmdQueue, *this, false, flags, 0, sizeof(T) * elementCount_, 0, nullptr, &event, &status));
+		ThrowIfCL(status != CL_SUCCESS, status, "clEnqueueMapBuffer failed");
+
+		*mappedData = data;
+
+		return CLEvent::create(event);
+
+
+	}
+
+	template<typename T>
+	CLEvent CLBuffer<T>::mapDeviceBuffer(CLCommandQueue cmdQueue, cl_map_flags flags, size_t offset, size_t elemCount, T ** mappedData) {
+
+		cl_int status = CL_SUCCESS;
+		cl_event event = nullptr;
+
+		T* data = static_cast<T*>(clEnqueueMapBuffer(cmdQueue, *this, false, flags, sizeof(T) * offset, sizeof(T)*elemCount, 0, nullptr, &event, &status));
+		ThrowIfCL(status != CL_SUCCESS, status, "clEnqueueMapBuffer (offset) failed");
+
+		*mappedData = data;
+
+		return CLEvent::create(event);
+	}
+
+	template<typename T>
+	CLEvent CLBuffer<T>::unmapDeviceBuffer(CLCommandQueue cmdQueue, T * mappedData) {
+
+		cl_event event = nullptr;
+		cl_int status = clEnqueueUnmapMemObject(cmdQueue, *this, mappedData, 0, nullptr, &event);
+		ThrowIfCL(status != CL_SUCCESS, status, "clEnqueueUnmapMemObject failed");
 
 		return CLEvent::create(event);
 	}

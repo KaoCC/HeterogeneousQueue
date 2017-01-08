@@ -9,6 +9,12 @@
 
 namespace CE {
 
+
+	static DeviceType ConvertToEngineDeviceType(cl_device_type type);
+
+
+
+
 	///// Need TO CHECK !!!!
 
 	DeviceCLImpl::DeviceCLImpl(CLAL::CLDevice dev) : device(std::move(dev)), context(CLAL::CLContext::create(dev)) {
@@ -27,6 +33,7 @@ namespace CE {
 		DeviceSpec spec;
 
 		spec.name = device.getName().c_str();
+		spec.type = ConvertToEngineDeviceType(device.getType());
 		// ...
 		spec.isThreadSafe = false;
 
@@ -119,6 +126,8 @@ namespace CE {
 				evtCL->setEvent(evt);
 				*e = evtCL;
 			}
+
+			
 
 		} catch (CLAL::CLException& e) {
 			throw ExceptionCLImpl(e.what());
@@ -246,11 +255,69 @@ namespace CE {
 		}
 	}
 
+	void DeviceCLImpl::mapBuffer(Buffer const * buffer, size_t queue, size_t offset, size_t size, size_t mapType, void ** mapdata, Event ** e) {
+
+		auto bufferCL = static_cast<BufferCLImpl const*>(buffer);
+
+		try {
+
+			// KAOCC: check the flag (mapType) <=> (CL_MAP_READ | CL_MAP_WRITE)!
+			// KAOCC: BUG: (CL_MAP_READ | CL_MAP_WRITE) is wrong
+			CLAL::CLEvent evt = context.mapBuffer(queue, bufferCL->getData(), CL_MAP_READ | CL_MAP_WRITE, offset, size, reinterpret_cast<char**>(mapdata));
+
+			if (e) {
+				EventCLImpl* evtCL = createEventCL();
+				evtCL->setEvent(evt);
+				*e = evtCL;
+			}
+
+		} catch (CLAL::CLException& e) {
+			throw ExceptionCLImpl(e.what());
+		}
+
+	}
+
+	void DeviceCLImpl::unmapBuffer(Buffer const * buffer, size_t queue, void * mapdata, Event ** e) {
+
+		auto bufferCL = static_cast<BufferCLImpl const*>(buffer);
+
+		try {
+			CLAL::CLEvent evt = context.unmapBuffer(queue, bufferCL->getData(), static_cast<char*>(mapdata));
+
+			if (e) {
+				EventCLImpl* evtCL = createEventCL();
+				evtCL->setEvent(evt);
+				*e = evtCL;
+			}
+		} catch (CLAL::CLException& e) {
+			throw ExceptionCLImpl(e.what());
+		}
+
+	}
+
 
 
 
 	///// Need TO CHECK !!!!
 
 
+
+	// helper
+	static DeviceType ConvertToEngineDeviceType(cl_device_type type) {
+		DeviceType res = DeviceType::kUnknown;
+		switch (type) {
+		case CL_DEVICE_TYPE_CPU:
+			res = DeviceType::kCpu;
+			break;
+		case CL_DEVICE_TYPE_GPU:
+			res = DeviceType::kGpu;
+			break;
+		case CL_DEVICE_TYPE_ACCELERATOR:
+			res = DeviceType::kAccelerator;
+			break;
+		}
+
+		return res;
+	}
 
 }

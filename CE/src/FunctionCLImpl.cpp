@@ -12,7 +12,7 @@ namespace CE {
 
 		try {
 
-			kernel.setArg(idx, arg_size, arg);
+			kernel.setArg(static_cast<unsigned int>(idx), arg_size, arg);
 
 		} catch (CLAL::CLException& e) {
 			throw ExceptionCLImpl(e.what());
@@ -25,7 +25,7 @@ namespace CE {
 		try {
 
 			const BufferCLImpl* buffCL = static_cast<const BufferCLImpl*>(arg);
-			kernel.setArg(idx, buffCL->getData());
+			kernel.setArg(static_cast<unsigned int>(idx), buffCL->getData());
 
 		} catch (CLAL::CLException& e) {
 			throw ExceptionCLImpl(e.what());

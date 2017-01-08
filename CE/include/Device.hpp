@@ -58,6 +58,10 @@ namespace CE {
 		virtual void writeBuffer(Buffer const* buffer, size_t queue, size_t offset, size_t size, void* src, Event** e) = 0;
 
 
+		// Buffer mapping 
+		virtual void mapBuffer(Buffer const* buffer, size_t queue, size_t offset, size_t size, size_t map_type, void** mapdata, Event** e) = 0;
+		virtual void unmapBuffer(Buffer const* buffer, size_t queue, void* mapdata, Event** e) = 0;
+
 		// Executable
 		virtual Executable* compileExecutable(char const* source, size_t size, char const* options) = 0;
 		virtual Executable* compileExecutable(char const* fileName, char const** headerNames, size_t numheaders, char const* options) = 0;

@@ -49,10 +49,17 @@ namespace CLAL {
 		template <typename T> CLBuffer<T> createBuffer(size_t elementCount, cl_mem_flags flags, void* data) const;
 
 		// write / read  buffers
-		template <typename T> CLEvent  writeBuffer(unsigned int index, CLBuffer<T> buffer, T const* hostBuffer, size_t elemCount) const;
-		template <typename T> CLEvent  writeBuffer(unsigned int index, CLBuffer<T> buffer, T const* hostBuffer, size_t offset, size_t elemCount) const;
-		template <typename T> CLEvent  readBuffer(unsigned int index, CLBuffer<T> buffer, T* hostBuffer, size_t elemCount) const;
-		template <typename T> CLEvent  readBuffer(unsigned int index, CLBuffer<T> buffer, T* hostBuffer, size_t offset, size_t elemCount) const;
+		template <typename T> CLEvent writeBuffer(unsigned int index, CLBuffer<T> buffer, T const* hostBuffer, size_t elemCount) const;
+		template <typename T> CLEvent writeBuffer(unsigned int index, CLBuffer<T> buffer, T const* hostBuffer, size_t offset, size_t elemCount) const;
+		template <typename T> CLEvent readBuffer(unsigned int index, CLBuffer<T> buffer, T* hostBuffer, size_t elemCount) const;
+		template <typename T> CLEvent readBuffer(unsigned int index, CLBuffer<T> buffer, T* hostBuffer, size_t offset, size_t elemCount) const;
+		
+
+		// Map / Unmap buffers
+		template <typename T> CLEvent mapBuffer(unsigned int idx, CLBuffer<T> buffer, cl_map_flags flags, T** mappedData) const;
+		template <typename T> CLEvent mapBuffer(unsigned int idx, CLBuffer<T> buffer, cl_map_flags flags, size_t offset, size_t elemCount, T** mappedData) const;
+		template <typename T> CLEvent unmapBuffer(unsigned int idx, CLBuffer<T> buffer, T* mappedData) const;
+
 
 		// For program and execution
 
@@ -127,6 +134,28 @@ namespace CLAL {
 	CLEvent CLAL::CLContext::readBuffer(unsigned int index, CLBuffer<T> buffer, T * hostBuffer, size_t offset, size_t elemCount) const {
 		return buffer.readDeviceBuffer(commandQueues[index], hostBuffer, offset, elemCount);
 	}
+
+	template<typename T>
+	CLEvent CLContext::mapBuffer(unsigned int index, CLBuffer<T> buffer, cl_map_flags flags, T ** mappedData) const {
+
+		return buffer.mapDeviceBuffer(commandQueues[index], flags, mappedData);
+	}
+
+	template<typename T>
+	CLEvent CLContext::mapBuffer(unsigned int index, CLBuffer<T> buffer, cl_map_flags flags, size_t offset, size_t elemCount, T ** mappedData) const {
+
+		return buffer.mapDeviceBuffer(commandQueues[index], flags, offset, elemCount, mappedData);
+	}
+
+	template<typename T>
+	CLEvent CLContext::unmapBuffer(unsigned int idx, CLBuffer<T> buffer, T * mappedData) const {
+		return buffer.unmapDeviceBuffer(commandQueues[idx], mappedData);
+	}
+
+
+
+
+
 
 }
 

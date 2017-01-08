@@ -50,7 +50,10 @@ namespace HQ {
 		//device->execute(f, 0, globalSize, 0);
 
 		// KAOCC: need to change the Event parameter !!!
-		pool.enqueue(std::bind(&CE::Device::execute, device, f, 0, globalSize, 0, nullptr));
+		// Check the local size
+
+		const size_t tmpLocalSize = 64;
+		pool.enqueue(std::bind(&CE::Device::execute, device, f, 0, globalSize, tmpLocalSize, nullptr));
 	}
 
 	CE::Executable * ComputeUnit::createSequentialExecutable(const ComputeUnit& cu) {
