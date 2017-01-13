@@ -82,7 +82,7 @@ namespace HQ {
 
 		// get a CU (index);
 		// temp !!!
-		int index = 0;
+		int index = 1;
 
 		// get the device from CU
 
@@ -109,8 +109,8 @@ namespace HQ {
 
 			// create buffers based on the parameters
 
-			// KAO: flag is not used
-			buffers[i] = dev->createBuffer(taskParam->getSize(), 0, taskParam->getData());
+			// KAOCC: flag is not used
+			buffers[i] = dev->createBuffer(taskParam->getSizeInByte(), 0, taskParam->getData());
 
 			// copy buffers (kernel set Args ?)
 
@@ -127,8 +127,16 @@ namespace HQ {
 
 		// dispatch the task
 		
+		// KAOCC: The design of the event system is wrong !
+
 		CE::Event* evt = nullptr;
-		computeUnits[index]->submit(func, task->getGlobalSize(), &evt);
+
+		// This will be wrong: The issue caused by Event System
+		//computeUnits[index]->submit(func, task->getGlobalSize(), &evt);
+
+		// tmp
+		const size_t LOCAL_SZ = 64;
+		dev->execute(func, 0, task->getGlobalSize(), LOCAL_SZ, &evt);
 
 		// when done...
 
@@ -142,7 +150,7 @@ namespace HQ {
 
 			// KAOCC: Queue index is always 0 in the current impl.
 			// KAOCC: Event is set to nullptr
-			dev->readBuffer(buffers[i], 0, 0, taskParam->getSize(), taskParam->getData(), nullptr);
+			dev->readBuffer(buffers[i], 0, 0, taskParam->getSizeInByte(), taskParam->getData(), nullptr);
 
 		}
 
@@ -154,6 +162,11 @@ namespace HQ {
 
 		// destroy buffers
 
+		// ???
+
+		for (size_t i = 0; i < numOfParams; ++i) {
+			dev->deleteBuffer(buffers[i]);
+		}
 
 	}
 

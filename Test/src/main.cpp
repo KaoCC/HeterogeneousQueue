@@ -20,15 +20,15 @@ public:
 	}
 
 	// Inherited via TaskParameter
-	virtual size_t getSize() override {
+	virtual size_t getSizeInByte() override {
 		return TestTaskParameter::SIZE * sizeof(int);
 	}
 	virtual void * getData() override {
-		return nullptr;
+		return a;
 	}
 
 
-	static const size_t SIZE = 500;
+	static const size_t SIZE = 1000;
 	int a[SIZE];
 
 	std::string name{ "test" };
@@ -69,8 +69,8 @@ public:
 
 		// init buffer array
 		bufferArray = new int[MAX_NDR_SIZE];
-
 		std::fill(bufferArray, bufferArray + MAX_NDR_SIZE, 0);
+
 
 		// bind it !
 		std::function<void(int)> testFunc = std::bind(ffff, std::placeholders::_1, bufferArray);
@@ -78,9 +78,13 @@ public:
 		program[0] = CreateSequentialExecutableWithIndex(0);
 		runF[0] = CreateSequentialFunction(program[0], "add", std::move(testFunc));
 
+		// init params
+
+		int* tmpArray = getPtrArray();
+		std::fill(tmpArray, tmpArray + MAX_NDR_SIZE, 0);
 
 		// CL ?
-		buffer = CreateBufferWithIndex(1, MAX_NDR_SIZE * sizeof(int), bufferArray);
+		//buffer = CreateBufferWithIndex(1, MAX_NDR_SIZE * sizeof(int), bufferArray);
 
 		// KAOCC: check the location of the CL source
 		program[1] = CompileExecutableWithIndex(1, "test.cl", nullptr);
@@ -90,7 +94,7 @@ public:
 		//MapBufferWithIndex(1, buffer, 0, MAX_NDR_SIZE * sizeof(int), (void**)&bufferArray);
 
 		//set argument ?
-		runF[1]->setArg(0, buffer);
+		//runF[1]->setArg(0, buffer);
 
 
 	}
@@ -100,7 +104,7 @@ public:
 	}
 
 	TaskParameter* getTaskParameter(size_t index) override {
-		return &param[index];
+		return &param;
 	}
 
 	size_t getGlobalSize() override {
@@ -117,7 +121,7 @@ public:
 
 	// for testing only
 	int* getPtrArray() {
-		return bufferArray;
+		return static_cast<int*>(param.getData());
 	}
 
 	// for testing only
@@ -129,7 +133,7 @@ public:
 
 	// Inherited via Task
 	virtual size_t getNumOfParameters() override {
-		return numberOfParams;
+		return NUM_OF_PARAMS;
 	}
 
 	~TestTask() {
@@ -147,8 +151,8 @@ private:
 	CE::Executable* program[NUM_OF_INSTANCE];
 
 	// TEST!
-	TestTaskParameter param[2];
-	size_t numberOfParams = 2;
+	TestTaskParameter param;
+	static const size_t NUM_OF_PARAMS = 1;
 
 	Event* event {nullptr};
 
@@ -187,13 +191,14 @@ int main() {
 	//WriteBufferWithIndex(1, testTask->getBuffer(), 0, testTask->getGlobalSize() * sizeof(int), ptr);
 
 	// Task with Event
+	std::cout << "enqueue Task One" << std::endl;
 	HQ::EnqueueHeterogeneousQueue(testTask);
 	testTask->getEvent()->wait();
 
 	// KAOCC: NOTE: the Event system here is currently broken ...
 
 	//test
-	_sleep(10000);
+	_sleep(5000);
 
 	std::cout << "Task 1 complete" << std::endl;
 
@@ -215,7 +220,7 @@ int main() {
 	TestTask testTaskB;
 	HQ::EnqueueHeterogeneousQueue(&testTaskB);
 
-	_sleep(10000);
+	_sleep(5000);
 
 	std::cout << "Task 2 complete" << std::endl;
 
