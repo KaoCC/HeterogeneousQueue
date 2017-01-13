@@ -262,7 +262,7 @@ namespace CE {
 		try {
 
 			// KAOCC: check the flag (mapType) <=> (CL_MAP_READ | CL_MAP_WRITE)!
-			// KAOCC: BUG: (CL_MAP_READ | CL_MAP_WRITE) is wrong
+			// KAOCC: BUG: (CL_MAP_READ | CL_MAP_WRITE) ?
 			CLAL::CLEvent evt = context.mapBuffer(queue, bufferCL->getData(), CL_MAP_READ | CL_MAP_WRITE, offset, size, reinterpret_cast<char**>(mapdata));
 
 			if (e) {

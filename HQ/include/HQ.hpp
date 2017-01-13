@@ -50,6 +50,9 @@ namespace HQ {
 
     public:
 
+		virtual size_t getSize() = 0;
+		virtual void* getData() = 0;
+
             // test only
         virtual ~TaskParameter() = 0;
     };
@@ -60,9 +63,11 @@ namespace HQ {
     public:
         //using RunFunctionType = std::function<void(TaskParameter*)>;
 
-        virtual CE::Function const* getRunFunction(size_t index) = 0;
-        virtual TaskParameter* getTaskParameter() = 0;
+        virtual CE::Function* getRunFunction(size_t index) = 0;
+        virtual TaskParameter* getTaskParameter(size_t index) = 0;
 
+
+		virtual size_t getNumOfParameters() = 0;
 
 		virtual size_t getGlobalSize() = 0;
 

@@ -18,7 +18,7 @@ namespace HQ {
 		// KAOCC: this should be removed
 		CE::Device* getDevice() const;
 
-		void submit(CE::Function const* f, size_t globalSize);
+		void submit(CE::Function const* f, size_t globalSize, CE::Event** evt);
 
 		//CE::Function* createSequentialFunction(const char* name, std::function<void(int)>&& f);
 

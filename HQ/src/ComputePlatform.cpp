@@ -5,6 +5,9 @@
 
 #include "ComputeEngine.hpp"
 
+
+#include "Event.hpp"
+
 #include <thread>
 #include <array>
 
@@ -34,7 +37,7 @@ namespace HQ {
 		std::cerr << "Number of CUs:" << deviceCount << std::endl;
 	}
 
-
+	// NOTE: multi-thread
 	void ComputePlatform::enqueue(Task * task) {
 
 		// tmp
@@ -42,33 +45,114 @@ namespace HQ {
 
 
 		// clear
-		std::vector<std::future<void>> futures; 
+		//std::vector<std::future<void>> futures; 
 
-		size_t gs = task->getGlobalSize();
-		const size_t partial = gs / computeUnits.size();
-
-
-		size_t sz = partial;
-		for (size_t i = 0; i < computeUnits.size(); ++i) {
-
-			if (i == computeUnits.size() - 1) {
-				// add the rest
-				sz += gs - (partial * computeUnits.size());
-			}
+		//size_t gs = task->getGlobalSize();
+		//const size_t partial = gs / computeUnits.size();
 
 
-			// TODO: need to set up the offset
-			// TODO: need to be a thread pool model
-			// TODO: sync ?
-			// KAOCC: Offset ???
+		//size_t sz = partial;
+		//for (size_t i = 0; i < computeUnits.size(); ++i) {
 
-			std::cerr << "Size: " << sz << std::endl;
-			futures.push_back(std::async(dispatch, computeUnits[i], task->getRunFunction(i), sz, partial * i));
+		//	if (i == computeUnits.size() - 1) {
+		//		// add the rest
+		//		sz += gs - (partial * computeUnits.size());
+		//	}
+
+
+		//	// TODO: need to set up the offset
+		//	// TODO: need to be a thread pool model
+		//	// TODO: sync ?
+		//	// KAOCC: Offset ???
+
+		//	std::cerr << "Size: " << sz << std::endl;
+		//	futures.push_back(std::async(dispatch, computeUnits[i], task->getRunFunction(i), sz, partial * i));
+		//}
+
+		//for (auto& f : futures) {
+		//	f.get();
+		//}
+
+
+		// we will first implement a very simple dispatching algorithm to demo the effectiveness
+
+
+
+		//NOTE: MAKE SURE EVERYTHING HERE CAN BE EXECUTED IN PARALLEL !!!!!!!
+
+		// get a CU (index);
+		// temp !!!
+		int index = 0;
+
+		// get the device from CU
+
+		CE::Device* dev = computeUnits[index]->getDevice();
+
+		// get the function from task
+
+		CE::Function* func = task->getRunFunction(index);
+
+
+		// get number of parameters
+
+		size_t numOfParams = task->getNumOfParameters();
+
+		// records for buffers
+
+		std::vector<CE::Buffer*> buffers(numOfParams);
+
+		for (size_t i = 0; i < numOfParams; ++i) {
+
+			// get Task parameters from the task
+
+			TaskParameter* taskParam = task->getTaskParameter(i);
+
+			// create buffers based on the parameters
+
+			// KAO: flag is not used
+			buffers[i] = dev->createBuffer(taskParam->getSize(), 0, taskParam->getData());
+
+			// copy buffers (kernel set Args ?)
+
+			// Seems like we dont need to write ?
+			//dev->writeBuffer();
+
+			// kernel set Args 
+			func->setArg(i, buffers[i]);
 		}
 
-		for (auto& f : futures) {
-			f.get();
+
+		// Setup Event ?
+
+
+		// dispatch the task
+		
+		CE::Event* evt = nullptr;
+		computeUnits[index]->submit(func, task->getGlobalSize(), &evt);
+
+		// when done...
+
+		evt->wait();
+
+		// copy the buffer back to host
+
+		for (size_t i = 0; i < numOfParams; ++i) {
+
+			TaskParameter* taskParam = task->getTaskParameter(i);
+
+			// KAOCC: Queue index is always 0 in the current impl.
+			// KAOCC: Event is set to nullptr
+			dev->readBuffer(buffers[i], 0, 0, taskParam->getSize(), taskParam->getData(), nullptr);
+
 		}
+
+
+		// relese event
+
+		// ???
+
+
+		// destroy buffers
 
 
 	}
@@ -100,13 +184,27 @@ namespace HQ {
 
 
 	// helper function
-	//TODO: we may return Event later on
-	void ComputePlatform::dispatch(ComputeUnit * cu, CE::Function const* func, size_t globalSz, size_t offset) {
+	// TODO: we may return Event later on
+	// perhaps we don't need this anymore
+	//void ComputePlatform::dispatch(ComputeUnit * cu, CE::Function const* func, size_t globalSz, size_t offset) {
 
-		// tmp
-		// KAOCC: offset ?
-		cu->submit(func, globalSz);
-	}
+
+	//	// copy buffer?
+
+
+	//	// tmp
+	//	// KAOCC: offset ?
+	//	cu->submit(func, globalSz);
+
+
+	//	// event ?
+
+	//	// copy to host ?
+
+
+	//	// cleanup or update state
+
+	//}
 
 }
 

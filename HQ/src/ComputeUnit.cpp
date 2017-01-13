@@ -41,7 +41,7 @@ namespace HQ {
 		return device;
 	}
 
-	void ComputeUnit::submit(CE::Function const* f, size_t globalSize) {
+	void ComputeUnit::submit(CE::Function const* f, size_t globalSize, CE::Event** evt) {
 
 		//auto runFunction = std::bind(&CE::Device::execute, device , f, 0, globalSize, 0);
 
@@ -53,7 +53,7 @@ namespace HQ {
 		// Check the local size
 
 		const size_t tmpLocalSize = 64;
-		pool.enqueue(std::bind(&CE::Device::execute, device, f, 0, globalSize, tmpLocalSize, nullptr));
+		pool.enqueue(std::bind(&CE::Device::execute, device, f, 0, globalSize, tmpLocalSize, evt));
 	}
 
 	CE::Executable * ComputeUnit::createSequentialExecutable(const ComputeUnit& cu) {

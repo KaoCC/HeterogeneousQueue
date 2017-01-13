@@ -27,8 +27,16 @@ namespace HQ {
 	// helper function
 	void HeterogeneousQueue::submitTask(ComputePlatform& platform, Task * task) {
 
+
+		// more here !
+
 		platform.enqueue(task);
 
+
+
+
+
+		// Need to change the Event system
 		Event* event = task->getEvent();
 		if (event) {
 			event->signal();

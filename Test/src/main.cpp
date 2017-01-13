@@ -19,8 +19,20 @@ public:
 
 	}
 
+	// Inherited via TaskParameter
+	virtual size_t getSize() override {
+		return TestTaskParameter::SIZE * sizeof(int);
+	}
+	virtual void * getData() override {
+		return nullptr;
+	}
+
+
+	static const size_t SIZE = 500;
+	int a[SIZE];
 
 	std::string name{ "test" };
+	
 };
 
 
@@ -83,12 +95,12 @@ public:
 
 	}
 
-	CE::Function const* getRunFunction(size_t index) override {
+	CE::Function* getRunFunction(size_t index) override {
 		return runF[index];
 	}
 
-	TaskParameter* getTaskParameter() override {
-		return &p;
+	TaskParameter* getTaskParameter(size_t index) override {
+		return &param[index];
 	}
 
 	size_t getGlobalSize() override {
@@ -113,6 +125,13 @@ public:
 		return buffer;
 	}
 
+
+
+	// Inherited via Task
+	virtual size_t getNumOfParameters() override {
+		return numberOfParams;
+	}
+
 	~TestTask() {
 		delete[] bufferArray;
 	}
@@ -126,12 +145,17 @@ private:
 
 	CE::Function* runF[NUM_OF_INSTANCE];
 	CE::Executable* program[NUM_OF_INSTANCE];
-	TestTaskParameter p;
+
+	// TEST!
+	TestTaskParameter param[2];
+	size_t numberOfParams = 2;
+
 	Event* event {nullptr};
 
 
 	CE::Buffer* buffer;
 	int* bufferArray = nullptr;
+
 
 
 };
@@ -160,7 +184,7 @@ int main() {
 
 	int* ptr = testTask->getPtrArray();
 
-	WriteBufferWithIndex(1, testTask->getBuffer(), 0, testTask->getGlobalSize() * sizeof(int), ptr);
+	//WriteBufferWithIndex(1, testTask->getBuffer(), 0, testTask->getGlobalSize() * sizeof(int), ptr);
 
 	// Task with Event
 	HQ::EnqueueHeterogeneousQueue(testTask);
@@ -175,7 +199,7 @@ int main() {
 
 
 	// KAOCC: how do you know which part of the buffer should be loaded ?
-	ReadBufferWithIndex(1, testTask->getBuffer(), 0, (testTask->getGlobalSize() * sizeof(int)) / 2, ptr + 500);
+	//ReadBufferWithIndex(1, testTask->getBuffer(), 0, (testTask->getGlobalSize() * sizeof(int)) / 2, ptr + 500);
 
 	std::cerr << "Result" << std::endl;
 
