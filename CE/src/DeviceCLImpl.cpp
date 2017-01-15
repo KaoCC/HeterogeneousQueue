@@ -109,7 +109,7 @@ namespace CE {
 	}
 
 
-	void CE::DeviceCLImpl::execute(Function const * func, size_t queue, size_t globalSize, size_t localSize, Event** e) {
+	CE::Event* CE::DeviceCLImpl::execute(Function const * func, size_t queue, size_t globalSize, size_t localSize, Event** e) {
 
 
 		const FunctionCLImpl* functionCL = static_cast<const FunctionCLImpl*>(func);
@@ -128,6 +128,7 @@ namespace CE {
 			}
 
 			
+			return *e;
 
 		} catch (CLAL::CLException& e) {
 			throw ExceptionCLImpl(e.what());

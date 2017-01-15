@@ -43,7 +43,7 @@ namespace CE {
 
 
 	// TODO: for loop ?
-	void CE::DeviceSequential::execute(Function const * func, size_t queue, size_t global_size, size_t local_size, Event** e) {
+	CE::Event* CE::DeviceSequential::execute(Function const * func, size_t queue, size_t global_size, size_t local_size, Event** e) {
 
 		//KAOCC: dynamic cast?
 		const FunctionSequential* funcSeq = static_cast<const FunctionSequential*>(func);
@@ -56,6 +56,8 @@ namespace CE {
 
 		// KAOCC: FIXME: Event handling
 
+		// tmp
+		return *e;
 	}
 
 

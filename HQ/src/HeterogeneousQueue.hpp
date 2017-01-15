@@ -28,7 +28,7 @@ namespace HQ {
 		static void submitTask(ComputePlatform& platform, Task* task);
 
 		ComputePlatform platform;
-		ThreadPool threadPool;
+		ThreadPool<void> threadPool;
 	};
 
 

@@ -7,6 +7,7 @@
 
 #include <functional>
 
+
 namespace HQ {
 
 	class ComputeUnit {
@@ -18,7 +19,7 @@ namespace HQ {
 		// KAOCC: this should be removed
 		CE::Device* getDevice() const;
 
-		void submit(CE::Function const* f, size_t globalSize, CE::Event** evt);
+		std::future<CE::Event*> submit(CE::Function const* f, size_t globalSize, CE::Event** evt);
 
 		//CE::Function* createSequentialFunction(const char* name, std::function<void(int)>&& f);
 
@@ -42,7 +43,7 @@ namespace HQ {
 		CE::DeviceSpec spec;
 
 		// KAOCC: is the device thread safe ? We need to check in advance
-		ThreadPool pool;
+		ThreadPool<CE::Event*> pool;
 
 	};
 

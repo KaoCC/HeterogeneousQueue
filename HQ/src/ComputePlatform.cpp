@@ -134,12 +134,21 @@ namespace HQ {
 		// This will be wrong: The issue caused by Event System
 		//computeUnits[index]->submit(func, task->getGlobalSize(), &evt);
 
+
+		// try the std::future mechanism to wrap the Event
+
+		//std::promise<CE::Event*> eventProducer;
+		//std::future<CE::Event*> eventConsumer = eventProducer.get_future();
+
 		// tmp
 		const size_t LOCAL_SZ = 64;
-		dev->execute(func, 0, task->getGlobalSize(), LOCAL_SZ, &evt);
+		//dev->execute(func, 0, task->getGlobalSize(), LOCAL_SZ, &evt);
+		
+		std::future<CE::Event*> eventConsumer = computeUnits[index]->submit(func, task->getGlobalSize(), &evt);
 
 		// when done...
 
+		evt = eventConsumer.get();
 		evt->wait();
 
 		// copy the buffer back to host
