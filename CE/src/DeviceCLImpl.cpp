@@ -205,6 +205,9 @@ namespace CE {
 		e->wait();
 	}
 
+	void DeviceCLImpl::deleteEvent(Event * e) {
+		releaseEventCL(static_cast<EventCLImpl*>(e));
+	}
 
 
 	void DeviceCLImpl::flush(size_t queue) {
@@ -257,6 +260,7 @@ namespace CE {
 			eventPool.push(new EventCLImpl());
 		}
 	}
+
 
 	void DeviceCLImpl::mapBuffer(Buffer const * buffer, size_t queue, size_t offset, size_t size, size_t mapType, void ** mapdata, Event ** e) {
 

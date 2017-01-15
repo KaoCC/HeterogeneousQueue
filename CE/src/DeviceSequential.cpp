@@ -82,6 +82,10 @@ namespace CE {
 		throw "Yet to be done";
 	}
 
+	void DeviceSequential::deleteEvent(Event * e) {
+		throw "Yet to be done";
+	}
+
 	void DeviceSequential::readBuffer(Buffer const * buffer, size_t queue, size_t offset, size_t size, void * dst, Event ** e) const {
 		throw "Yet to be done";
 	}

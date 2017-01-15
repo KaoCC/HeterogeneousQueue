@@ -76,7 +76,7 @@ namespace CE {
 
 		// Event 
 		virtual void waitForEvent(Event* e) = 0;
-
+		virtual void deleteEvent(Event* e) = 0;
 
 		virtual void flush(size_t queue) = 0;
 		virtual void finish(size_t queue) = 0;

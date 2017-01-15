@@ -79,37 +79,32 @@ namespace HQ {
 
 
 		//NOTE: MAKE SURE EVERYTHING HERE CAN BE EXECUTED IN PARALLEL !!!!!!!
+		// ex: Createbuffer, Read, Write, Exec with CL Queue
 
 		// get a CU (index);
 		// temp !!!
+		// NOTE: index = 1 for GPU on CL
 		int index = 1;
 
 		// get the device from CU
-
 		CE::Device* dev = computeUnits[index]->getDevice();
 
 		// get the function from task
-
 		CE::Function* func = task->getRunFunction(index);
 
-
 		// get number of parameters
-
 		size_t numOfParams = task->getNumOfParameters();
 
 		// records for buffers
-
 		std::vector<CE::Buffer*> buffers(numOfParams);
 
 		for (size_t i = 0; i < numOfParams; ++i) {
 
 			// get Task parameters from the task
-
 			TaskParameter* taskParam = task->getTaskParameter(i);
 
 			// create buffers based on the parameters
-
-			// KAOCC: flag is not used
+			// KAOCC: flag is not used (0)
 			buffers[i] = dev->createBuffer(taskParam->getSizeInByte(), 0, taskParam->getData());
 
 			// copy buffers (kernel set Args ?)
@@ -141,7 +136,7 @@ namespace HQ {
 		//std::future<CE::Event*> eventConsumer = eventProducer.get_future();
 
 		// tmp
-		const size_t LOCAL_SZ = 64;
+		//const size_t LOCAL_SZ = 64;
 		//dev->execute(func, 0, task->getGlobalSize(), LOCAL_SZ, &evt);
 		
 		std::future<CE::Event*> eventConsumer = computeUnits[index]->submit(func, task->getGlobalSize(), true);
@@ -152,7 +147,6 @@ namespace HQ {
 		evt->wait();
 
 		// copy the buffer back to host
-
 		for (size_t i = 0; i < numOfParams; ++i) {
 
 			TaskParameter* taskParam = task->getTaskParameter(i);
@@ -166,8 +160,7 @@ namespace HQ {
 
 		// relese event
 
-		// ???
-
+		dev->deleteEvent(evt);
 
 		// destroy buffers
 

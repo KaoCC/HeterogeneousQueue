@@ -58,7 +58,9 @@ namespace CE {
 
 
 		// KAOCC: we need to redesign this API ...
+		// Event
 		virtual void waitForEvent(Event * e) override;
+		virtual void deleteEvent(Event * e) override;
 
 
 		virtual void flush(size_t queue) override;
@@ -89,6 +91,8 @@ namespace CE {
 
 
 		// Mem / data Pool ????
+
+
 
 	};
 

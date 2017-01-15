@@ -28,7 +28,9 @@ namespace CE {
 
 		virtual void deleteExecutable(Executable * executable) override;
 
+		// Event
 		virtual void waitForEvent(Event * e) override;
+		virtual void deleteEvent(Event * e) override;
 
 		virtual void flush(size_t queue) override;
 		virtual void finish(size_t queue) override;
@@ -53,6 +55,8 @@ namespace CE {
 		// Inherited via Device
 		virtual void mapBuffer(Buffer const * buffer, size_t queue, size_t offset, size_t size, size_t map_type, void ** mapdata, Event ** e) override;
 		virtual void unmapBuffer(Buffer const * buffer, size_t queue, void * mapdata, Event ** e) override;
+
+
 
 	};
 
