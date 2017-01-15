@@ -37,7 +37,7 @@ namespace CE {
 
 
 
-		virtual CE::Event* execute(Function const * func, size_t queue, size_t globalSize, size_t localSize, Event** e) override;
+		virtual CE::Event* execute(Function const * func, size_t queue, size_t globalSize, size_t localSize, bool eventFlag) override;
 
 
 		virtual Buffer * createBuffer(cl_mem buffer) override;

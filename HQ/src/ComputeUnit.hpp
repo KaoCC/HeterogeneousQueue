@@ -19,7 +19,7 @@ namespace HQ {
 		// KAOCC: this should be removed
 		CE::Device* getDevice() const;
 
-		std::future<CE::Event*> submit(CE::Function const* f, size_t globalSize, CE::Event** evt);
+		std::future<CE::Event*> submit(CE::Function const* f, size_t globalSize, bool eventFlag);
 
 		//CE::Function* createSequentialFunction(const char* name, std::function<void(int)>&& f);
 
@@ -32,6 +32,11 @@ namespace HQ {
 
 	private:
 
+		// helper
+		static CE::Event* execution(CE::Device* device, CE::Function const* f, size_t globalSize, bool eventFlag) {
+			const size_t tmpLocalSize = 64;
+			return device->execute(f, 0, globalSize, tmpLocalSize, true);
+		}
 
 		// ref to ComputeEngine
 		CE::ComputeEngine* const & ceRef;

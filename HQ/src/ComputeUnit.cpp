@@ -41,7 +41,7 @@ namespace HQ {
 		return device;
 	}
 
-	std::future<CE::Event*> ComputeUnit::submit(CE::Function const* f, size_t globalSize, CE::Event** evt) {
+	std::future<CE::Event*> ComputeUnit::submit(CE::Function const* f, size_t globalSize, bool eventFlag) {
 
 		//auto runFunction = std::bind(&CE::Device::execute, device , f, 0, globalSize, 0);
 
@@ -52,8 +52,7 @@ namespace HQ {
 		// KAOCC: need to change the Event parameter !!!
 		// Check the local size
 
-		const size_t tmpLocalSize = 64;
-		auto eventFuture = pool.enqueue(std::bind(&CE::Device::execute, device, f, 0, globalSize, tmpLocalSize, evt));
+		auto eventFuture = pool.enqueue(std::bind(execution, device, f, globalSize, eventFlag));
 		return eventFuture;
 	}
 

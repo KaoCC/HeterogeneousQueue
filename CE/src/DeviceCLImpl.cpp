@@ -109,26 +109,28 @@ namespace CE {
 	}
 
 
-	CE::Event* CE::DeviceCLImpl::execute(Function const * func, size_t queue, size_t globalSize, size_t localSize, Event** e) {
+	Event* DeviceCLImpl::execute(Function const * func, size_t queue, size_t globalSize, size_t localSize, bool eventFlag) {
 
 
 		const FunctionCLImpl* functionCL = static_cast<const FunctionCLImpl*>(func);
 
 		try {
 
+			Event* retEvent = nullptr;
+
 			CLAL::CLEvent evt = context.execute1D(queue, globalSize, localSize, functionCL->getKernel());
 
 			// ignore the Event ????
 			// KAOCC: FIXME: Event handling 
 
-			if (e) {
+			if (eventFlag) {
 				EventCLImpl* evtCL = createEventCL();
 				evtCL->setEvent(evt);
-				*e = evtCL;
+				retEvent = evtCL;
 			}
 
 			
-			return *e;
+			return retEvent;
 
 		} catch (CLAL::CLException& e) {
 			throw ExceptionCLImpl(e.what());

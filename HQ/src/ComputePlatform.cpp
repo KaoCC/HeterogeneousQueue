@@ -129,7 +129,7 @@ namespace HQ {
 		
 		// KAOCC: The design of the event system is wrong !
 
-		CE::Event* evt = nullptr;
+		//CE::Event* evt = nullptr;
 
 		// This will be wrong: The issue caused by Event System
 		//computeUnits[index]->submit(func, task->getGlobalSize(), &evt);
@@ -144,11 +144,11 @@ namespace HQ {
 		const size_t LOCAL_SZ = 64;
 		//dev->execute(func, 0, task->getGlobalSize(), LOCAL_SZ, &evt);
 		
-		std::future<CE::Event*> eventConsumer = computeUnits[index]->submit(func, task->getGlobalSize(), &evt);
+		std::future<CE::Event*> eventConsumer = computeUnits[index]->submit(func, task->getGlobalSize(), true);
 
 		// when done...
 
-		evt = eventConsumer.get();
+		CE::Event* evt = eventConsumer.get();
 		evt->wait();
 
 		// copy the buffer back to host

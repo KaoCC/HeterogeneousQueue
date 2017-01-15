@@ -43,11 +43,13 @@ namespace CE {
 
 
 	// TODO: for loop ?
-	CE::Event* CE::DeviceSequential::execute(Function const * func, size_t queue, size_t global_size, size_t local_size, Event** e) {
+	CE::Event* CE::DeviceSequential::execute(Function const * func, size_t queue, size_t global_size, size_t local_size, bool eventFlag) {
 
 		//KAOCC: dynamic cast?
 		const FunctionSequential* funcSeq = static_cast<const FunctionSequential*>(func);
 		auto execFunc = funcSeq->getFunction();
+
+		Event* retEvent = nullptr;
 
 		// execute through the ND-Range sequentially
 		for (size_t i = 0; i < global_size; ++i) {
@@ -55,9 +57,12 @@ namespace CE {
 		}
 
 		// KAOCC: FIXME: Event handling
+		if (eventFlag) {
+			//retEvent = ...
+		}
 
 		// tmp
-		return *e;
+		return retEvent;
 	}
 
 
