@@ -50,7 +50,7 @@ namespace CLAL {
 			localCQs[i] = CLCommandQueue::create(primCQs[i]);
 		}
 
-		return CLContext::CLContext(context, localDevices, localCQs);
+		return CLContext(context, localDevices, localCQs);
 	}
 
 	size_t CLContext::getDeviceCount() const {

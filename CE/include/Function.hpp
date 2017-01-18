@@ -17,6 +17,8 @@ namespace CE {
 		virtual void setArg(size_t idx, Buffer const* arg) = 0;
 		//virtual void setArg(size_t idx, size_t size, SharedMemory shmem) = 0;
 
+
+		virtual ~Function() = default;
 	};
 
 }

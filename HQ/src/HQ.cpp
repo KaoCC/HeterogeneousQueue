@@ -104,7 +104,7 @@ namespace HQ {
 	//	dev->unmapBuffer(buffer, 0, mapdata, nullptr);
 	//}
 
-	HQAPI size_t HQ::GetNumberOfUnits() {
+	HQAPI size_t GetNumberOfUnits() {
 		return hq->getNumberOfUnitOnPlatform();
 	}
 

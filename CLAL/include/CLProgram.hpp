@@ -5,14 +5,14 @@
 #define _CLAL_CLPROGRAM_HPP_
 
 #include "CLReferenceCount.hpp"
-//#include "CLKernel.hpp"
+#include "CLKernel.hpp"
 
 #include <map>
 
 namespace CLAL {
 
 	class CLContext;
-	class CLKernel;
+	//class CLKernel;
 
 	class CLProgram : public ReferenceCount<cl_program, clRetainProgram, clReleaseProgram> {
 

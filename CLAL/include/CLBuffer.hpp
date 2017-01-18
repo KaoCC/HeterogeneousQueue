@@ -6,6 +6,7 @@
 #include "CLEvent.hpp"
 #include "CLCommandQueue.hpp"
 #include "CLParameter.hpp"
+#include "CLException.hpp"
 
 namespace CLAL {
 
@@ -173,7 +174,7 @@ namespace CLAL {
 		cl_int status = CL_SUCCESS;
 		cl_event event = nullptr;
 
-		T* data = static_cast<T*>(clEnqueueMapBuffer(cmdQueue, *this, false, flags, 0, sizeof(T) * elementCount_, 0, nullptr, &event, &status));
+		T* data = static_cast<T*>(clEnqueueMapBuffer(cmdQueue, *this, false, flags, 0, sizeof(T) * elementCount, 0, nullptr, &event, &status));
 		ThrowIfCL(status != CL_SUCCESS, status, "clEnqueueMapBuffer failed");
 
 		*mappedData = data;

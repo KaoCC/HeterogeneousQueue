@@ -23,6 +23,7 @@
 #endif
 
 #include <cstdint>
+#include <cstddef>
 
 namespace CE {
 
