@@ -33,7 +33,7 @@ workspace "HeterogeneousQueue"
 
 
     targetdir ("Build/Bin/%{prj.name}/%{cfg.buildcfg}/%{cfg.platform}")
-    objdir ("Build/Obj/%{prj.name}/%{cfg.buildcfg}/%{cfg.platfrom}")
+    objdir ("Build/Obj/%{prj.name}/%{cfg.buildcfg}/%{cfg.platform}")
 
 
     dofile ("./OpenCLSearch.lua" )
