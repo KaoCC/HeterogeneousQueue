@@ -1,6 +1,7 @@
 #include "DeviceSequential.hpp"
 #include "ExecutableSequential.hpp"
 #include "FunctionSequential.hpp"
+#include "BufferSequential.hpp"
 
 namespace CE {
 
@@ -29,7 +30,7 @@ namespace CE {
 	}
 
 	Buffer * CE::DeviceSequential::createBuffer(size_t size, size_t flags, void * data) {
-		return nullptr;
+		return new BufferSequential(data, size);
 	}
 
 	void CE::DeviceSequential::deleteBuffer(Buffer * buffer) {
