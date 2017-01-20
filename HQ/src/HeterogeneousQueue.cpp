@@ -36,11 +36,11 @@ namespace HQ {
 
 
 
-		// Need to change the Event system
-		Event* event = task->getEvent();
-		if (event) {
-			event->signal();
-		}
+		//// Need to change the Event system
+		//Event* event = task->getEvent();
+		//if (event) {
+		//	event->signal();
+		//}
 	}
 
 }

@@ -10,6 +10,8 @@
 
 namespace HQ {
 
+	class Task;
+
 	class ComputeUnit {
 
 	public:
@@ -19,7 +21,8 @@ namespace HQ {
 		// KAOCC: this should be removed
 		CE::Device* getDevice() const;
 
-		std::future<CE::Event*> submit(CE::Function const* f, size_t globalSize, bool eventFlag);
+		//std::future<CE::Event*> submit(CE::Function const* f, size_t globalSize, bool eventFlag);
+		std::future<CE::Event*> submit(Task* f);
 
 		//CE::Function* createSequentialFunction(const char* name, std::function<void(int)>&& f);
 
@@ -33,10 +36,17 @@ namespace HQ {
 	private:
 
 		// helper
-		static CE::Event* execution(CE::Device* device, CE::Function const* f, size_t globalSize, bool eventFlag) {
-			const size_t tmpLocalSize = 64;
-			return device->execute(f, 0, globalSize, tmpLocalSize, true);
-		}
+		//static CE::Event* execution(CE::Device* device, CE::Function const* f, size_t globalSize, bool eventFlag) {
+		//	const size_t tmpLocalSize = 64;
+		//	return device->execute(f, 0, globalSize, tmpLocalSize, true);
+		//}
+
+
+		static CE::Event* execution(const ComputeUnit& cu, Task* task);
+
+
+		// Index
+		size_t indexID;
 
 		// ref to ComputeEngine
 		CE::ComputeEngine* const & ceRef;
@@ -49,6 +59,7 @@ namespace HQ {
 
 		// KAOCC: is the device thread safe ? We need to check in advance
 		ThreadPool<CE::Event*> pool;
+
 
 	};
 

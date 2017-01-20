@@ -28,7 +28,7 @@ public:
 	}
 
 
-	static const size_t SIZE = 1000;
+	static const size_t SIZE = 10000;
 	int a[SIZE];
 
 	std::string name{ "test" };
@@ -144,7 +144,7 @@ private:
 	//CE::Function const* runF { CreateSequentialFunctionWithIndex(0, "test", std::move(fff) )};
 
 
-	static const size_t MAX_NDR_SIZE = 1000;
+	static const size_t MAX_NDR_SIZE = 10000;
 	static const size_t NUM_OF_INSTANCE = 2;
 
 	CE::Function* runF[NUM_OF_INSTANCE];
@@ -181,7 +181,7 @@ int main() {
 	HQ::CreateHeterogeneousQueue();
 
 	int tmp;
-	std::cin >> tmp;
+	//std::cin >> tmp;
 
 	TestTask* testTask = new TestTask();
 	testTask->setEvent(HQ::CreateEvent());
@@ -198,7 +198,7 @@ int main() {
 	// KAOCC: NOTE: the Event system here is currently broken ...
 
 	//test
-	_sleep(5000);
+	//_sleep(5000);
 
 	std::cout << "Task 1 complete" << std::endl;
 
