@@ -51,8 +51,10 @@ namespace HQ {
 		// test
 		//static const size_t NUM_OF_UNITS = 1;
 
-		std::vector<ComputeUnit*> computeUnits;
+
 		CE::ComputeEngine* ce{ nullptr };
+		std::vector<ComputeUnit*> computeUnits;
+
 
 		//TODO: add sync support
 

@@ -183,17 +183,17 @@ int main() {
 	int tmp;
 	//std::cin >> tmp;
 
-	TestTask* testTask = new TestTask();
-	testTask->setEvent(HQ::CreateEvent());
+	TestTask testTask;
+	testTask.setEvent(HQ::CreateEvent());
 
-	int* ptr = testTask->getPtrArray();
+	int* ptr = testTask.getPtrArray();
 
 	//WriteBufferWithIndex(1, testTask->getBuffer(), 0, testTask->getGlobalSize() * sizeof(int), ptr);
 
 	// Task with Event
 	std::cout << "enqueue Task One" << std::endl;
-	HQ::EnqueueHeterogeneousQueue(testTask);
-	testTask->getEvent()->wait();
+	HQ::EnqueueHeterogeneousQueue(&testTask);
+	testTask.getEvent()->wait();
 
 	// KAOCC: NOTE: the Event system here is currently broken ...
 
@@ -208,7 +208,7 @@ int main() {
 
 	std::cerr << "Result" << std::endl;
 
-	std::for_each(ptr, ptr + testTask->getGlobalSize(), [](const int& n) { std::cerr << n << std::endl; });
+	std::for_each(ptr, ptr + testTask.getGlobalSize(), [](const int& n) { std::cerr << n << std::endl; });
 	
 
 	std::cerr << "Result END" << std::endl;
@@ -217,17 +217,47 @@ int main() {
 	std::cin >> tmp;
 
 	// this will be non-blocking
-	TestTask testTaskB;
-	HQ::EnqueueHeterogeneousQueue(&testTaskB);
+	//TestTask testTaskB;
+	//HQ::EnqueueHeterogeneousQueue(&testTaskB);
 
-	_sleep(5000);
+	//_sleep(5000);
 
-	std::cout << "Task 2 complete" << std::endl;
+	//std::cout << "Task 2 complete" << std::endl;
 
-	HQ::DestroyEvent(testTask->getEvent());
+
+	const size_t ARRAY_SZ = 10;
+	TestTask taskArray[ARRAY_SZ];
+
+	for (size_t i = 0; i < ARRAY_SZ; ++i) {
+		taskArray[i].setEvent(HQ::CreateEvent());
+	}
+
+	for (size_t i = 0; i < ARRAY_SZ; ++i) {
+		HQ::EnqueueHeterogeneousQueue(&taskArray[i]);
+	}
+
+	for (size_t i = 0; i < ARRAY_SZ; ++i) {
+		taskArray[i].getEvent()->wait();
+	}
+
+	std::cout << "Task Array complete" << std::endl;
+
+	std::cin >> tmp;
+
+	std::cerr << "Result" << std::endl;
+	for (size_t i = 0; i < ARRAY_SZ; ++i) {
+		std::cerr << "--------------- Test Array: " << i << " --------------- " << std::endl;
+		//std::cin >> tmp;
+		int* ptr = taskArray[i].getPtrArray();
+		//std::for_each(ptr, ptr + taskArray[i].getGlobalSize(), [](const int& n) { std::cerr << n << std::endl; });
+	}
+
+	std::cerr << "Result END" << std::endl;
+
+	HQ::DestroyEvent(testTask.getEvent());
 	HQ::DestroyHeterogeneousQueue();
 
-	delete testTask;
+	//delete testTask;
 
 	return 0;
 }

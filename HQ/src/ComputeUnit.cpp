@@ -13,8 +13,8 @@ namespace HQ {
 
 	ComputeUnit::ComputeUnit(CE::ComputeEngine* ce, size_t index) :
 		indexID(index),
-		ceRef ( ce ),
-		device( ceRef->createDevice(index) ),
+		ceRefPtr ( ce ),
+		device(ceRefPtr->createDevice(index) ),
 		spec(device->getSpec()),
 		pool(spec.isThreadSafe ? 0 : 1) {
 		// KAOCC: NOTE: 0 for auto-test
@@ -37,7 +37,7 @@ namespace HQ {
 	}
 
 	ComputeUnit::~ComputeUnit() {
-		ceRef->deleteDevice(device);
+		ceRefPtr->deleteDevice(device);
 	}
 
 	// should be removed

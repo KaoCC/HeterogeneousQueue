@@ -49,7 +49,7 @@ namespace HQ {
 		size_t indexID;
 
 		// ref to ComputeEngine
-		CE::ComputeEngine* const & ceRef;
+		CE::ComputeEngine * const ceRefPtr;
 
 		CE::Device* device {nullptr};
 		//CE::Executable* program {nullptr};
