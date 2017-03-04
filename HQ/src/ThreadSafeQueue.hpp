@@ -47,6 +47,15 @@ namespace HQ {
             }
         }
 
+
+		void popWait(T& element) {
+			std::unique_lock<std::mutex> lock(queueMutex);
+			condition.wait(lock, [this]() { return !localQueue.empty(); });
+
+			element = std::move(localQueue.front());
+			localQueue.pop();
+		}
+
         size_t size() const {
             std::lock_guard<std::mutex> lock(queueMutex);
             return localQueue.size();
