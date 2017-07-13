@@ -4,21 +4,26 @@ The Heterogeneous Queuing Framework
 
 ## Build
 
-### Windows
-- Create Visual Studio 2015 Solution
 
-`./Tool/premake/win/premake5.exe vs2015`
+The following compilers are supported:
+
+- Visual Studio 2015 or 2017
+
+- GCC 5.4
+
+### Windows
+
+- Create Visual Studio 2017 Solution
+
+`./Tool/premake/win/premake5.exe vs2017`
 
 
 ### Linux
-On Ubuntu or Debian:
-install gcc (or clang):
 
-`sudo apt-get install g++`
+- Create the Makefile
 
-create the Makefile:
+`./Tool/premake/linux64/premake gmake`
 
-`./Tools/premake/linux64/premake5 gmake`
+- Build it !
 
-`make CXX=g++ CXXFLAGS=-std=c++11`
-
+`make config=release_x64`
