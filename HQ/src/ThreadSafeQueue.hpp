@@ -62,6 +62,11 @@ namespace HQ {
         }
 
 
+		void clear() {
+			std::lock_guard<std::mutex> lock(queueMutex);
+			std::queue<T>().swap(localQueue);
+		}
+
 
     private:
 
