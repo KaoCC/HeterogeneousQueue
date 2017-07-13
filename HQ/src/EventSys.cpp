@@ -14,12 +14,10 @@ namespace HQ {
 
 		std::unique_lock<std::mutex> lock(localMutex);
 
-		while (count == 0) {
-			localCondition.wait(lock);
-		}
+
+		localCondition.wait(lock, [this] {return count == 0; });
 
 		--count;
-
 	}
 
 
@@ -33,7 +31,7 @@ namespace HQ {
 
 
 	bool EventSys::isComplete() const {
-		throw "not yet supported";
+		throw std::runtime_error("not yet supported");
 	}
 
 
