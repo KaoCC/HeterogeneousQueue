@@ -59,7 +59,7 @@ namespace HQ {
 			std::for_each(workerThreads.begin(), workerThreads.end(), std::mem_fun_ref(&std::thread::join));
 		}
 
-		const int sleepTime = 10;
+		const int kSleepTime = 10;
 
 	private:
 
@@ -68,25 +68,28 @@ namespace HQ {
 
 			while (!done) {
 
-				if (taskQueue.pop(runFunction)) {
+				//if (taskQueue.pop(runFunction)) {
 
-					//auto& runFunction = task->getRunFunction();
-					//runFunction(task->getTaskParameter());
+				//	//auto& runFunction = task->getRunFunction();
+				//	//runFunction(task->getTaskParameter());
 
-					//platformRef.enqueue(task);
+				//	//platformRef.enqueue(task);
 
-					//TODO: check for event ?
+				//	//TODO: check for event ?
 
-					//Event* event = task->getEvent();
-					//if (event) {
-					//	event->signal();
-					//}
+				//	//Event* event = task->getEvent();
+				//	//if (event) {
+				//	//	event->signal();
+				//	//}
 
-					runFunction();
+				//	runFunction();
 
-				} else {
-					std::this_thread::sleep_for(std::chrono::milliseconds(sleepTime));
-				}
+				//} else {
+				//	std::this_thread::sleep_for(std::chrono::milliseconds(kSleepTime));
+				//}
+
+				taskQueue.popWait(runFunction);
+				runFunction();
 
 			}
 		}
