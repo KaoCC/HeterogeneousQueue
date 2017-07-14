@@ -27,5 +27,5 @@ add_subdirectory(Test)
 enable_testing()
 add_test(cl_test
     ${CMAKE_BINARY_DIR}/bin/Test
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/Test/src
     DEPENDS Test)
