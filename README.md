@@ -23,7 +23,7 @@ The following compilers are supported:
 1. Create your build directory `mkdir build`
 2. Run CMake `cmake ..` for development or `cmake -DCMAKE_BUILD_TYPE=Release` for a release build
 3. Compile by running `make`
-4. Run test case by `make test_run`
+4. Run test case by `make test`
 
 
 - Build it !
