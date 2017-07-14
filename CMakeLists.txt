@@ -28,7 +28,8 @@ add_subdirectory(Test)
 
 # Add test execution in Makefile for testing `make test_run`
 enable_testing()
-add_test(cl_test
-    ${CMAKE_BINARY_DIR}/bin/Test
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/Test/src
-    DEPENDS Test)
+add_test(NAME cl_test
+    COMMAND ${CMAKE_BINARY_DIR}/bin/Test
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/Test/src)
+set_tests_properties(cl_test PROPERTIES TIMEOUT 3)
+
