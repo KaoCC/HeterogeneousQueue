@@ -24,7 +24,8 @@ add_subdirectory(CLAL)
 add_subdirectory(Test)
 
 # Add test execution in Makefile for testing `make test_run`
-add_custom_target(test_run
+enable_testing()
+add_test(cl_test
     ${CMAKE_BINARY_DIR}/bin/Test
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
     DEPENDS Test)
