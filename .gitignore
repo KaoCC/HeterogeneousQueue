@@ -32,3 +32,5 @@
 
 Build/*
 Generated/*
+build
+build-debug
