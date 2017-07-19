@@ -29,10 +29,11 @@ namespace HQ {
 		//TODO: add enqueue member function
 		// param: Task ?
 
-		void enqueue(Task* task);
+		//void enqueue(Task* task);
 
 		// KAOCC: remove this, we should not expose the internal data
-		ComputeUnit* getComputeUnit(size_t index) const;
+		ComputeUnit& getComputeUnit(size_t index);
+		const ComputeUnit& getComputeUnit(size_t index) const;
 
 		size_t getNumberOfComputeUnit() const;
 
@@ -46,14 +47,14 @@ namespace HQ {
 
 
 		// a helper function for std::async
-		static void dispatch(ComputeUnit* cu, CE::Function const* func, size_t globalSize, size_t offset);
+		//static void dispatch(ComputeUnit* cu, CE::Function const* func, size_t globalSize, size_t offset);
 
 		// test
 		//static const size_t NUM_OF_UNITS = 1;
 
 
 		CE::ComputeEngine* ce{ nullptr };
-		std::vector<ComputeUnit*> computeUnits;
+		std::vector<std::unique_ptr<ComputeUnit>> computeUnits;
 
 
 		//TODO: add sync support
