@@ -43,13 +43,13 @@ namespace HQ {
 
 	HQAPI CE::Executable * CreateSequentialExecutableWithIndex(size_t index) {
 		// This impl. should be changed
-		CE::Executable* exec = ComputeUnit::createSequentialExecutable(*(hq->getPlatfrom().getComputeUnit(index)));
+		CE::Executable* exec = ComputeUnit::createSequentialExecutable(hq->getPlatfrom().getComputeUnit(index));
 		return exec;
 	}
 
 	HQAPI CE::Executable * CompileExecutableWithIndex(size_t index, const char* filename, const char* options) {
 
-		CE::Executable* exec = ComputeUnit::compileExecutableFromFile(*(hq->getPlatfrom().getComputeUnit(index)), filename, options);
+		CE::Executable* exec = ComputeUnit::compileExecutableFromFile(hq->getPlatfrom().getComputeUnit(index), filename, options);
 
 		return exec;
 	}

@@ -15,13 +15,27 @@ namespace CLAL {
 	static void LoadFromFile(const std::string& fileName, std::vector<char>& outputBuffer) {
 
 		// KAOCC: binary mode as default
-		std::ifstream file(fileName, std::ios::binary);
+		std::ifstream inputStream(fileName, std::ios::binary);
+
+		// temp, should fix this
+		if (!inputStream) {
+			throw std::runtime_error("Could not open file");;
+		}
 
 
-		// might cause performance issue
-		// should get the lengh of the file and reserve the size
-		outputBuffer.assign((std::istreambuf_iterator<char>(file)),
-			std::istreambuf_iterator<char>());
+		// check this
+		inputStream.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+
+
+		try {
+			// might cause performance issue
+			// should get the lengh of the file and reserve the size
+			outputBuffer.assign((std::istreambuf_iterator<char>(inputStream)),
+				std::istreambuf_iterator<char>());
+
+		} catch (std::ifstream::failure e) {
+			throw std::runtime_error(e.what());
+		}
 	}
 
 

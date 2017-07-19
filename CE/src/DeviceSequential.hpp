@@ -4,8 +4,11 @@
 
 #include "Device.hpp"
 
+#include <future>
+
 namespace CE {
 
+	class EventSequentialImpl;
 
 	class DeviceSequential : public Device {
 
@@ -37,7 +40,8 @@ namespace CE {
 
 
 
-
+		// Event
+		EventSequentialImpl* createEventSeq(std::future<void>&& fu) const;
 
 
 

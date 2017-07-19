@@ -18,7 +18,7 @@ namespace CE {
 			if (validFlag) {
 				event.wait();
 			} else {
-				throw "invald event ID";
+				throw std::runtime_error("invald event ID");
 			}
 
 		} catch (CLAL::CLException& e) {
@@ -35,7 +35,7 @@ namespace CE {
 			if (validFlag) {
 				return event.getCommandExecutionStatus() == CL_COMPLETE;
 			} else {
-				throw "invald event ID";
+				throw std::runtime_error("invald event ID");
 			}
 
 		} catch (CLAL::CLException& e) {
