@@ -35,3 +35,6 @@ Generated/*
 build
 build-debug
 install
+
+
+.DS_Store
