@@ -1,7 +1,11 @@
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.1)
 
 set(CMAKE_BUILD_TYPE debug)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
+
+# test
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14" CACHE STRING "compile flags" FORCE)
+
+set (CMAKE_CXX_STANDARD 14)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
@@ -19,6 +23,7 @@ message("CMAKE_BUILD_TYPE= ${CMAKE_BUILD_TYPE}")
 message("CMAKE_SOURCE_DIR= ${CMAKE_SOURCE_DIR}")
 message("CMAKE_BINARY_DIR= ${CMAKE_BINARY_DIR}")
 message("CMAKE_INSTALL_PREFIX= ${CMAKE_INSTALL_PREFIX}")
+message("CMAKE_CXX_STANDARD= ${CMAKE_CXX_STANDARD}")
 
 # Srouce dir is HQ and rename it to HQ
 add_subdirectory(HQ)

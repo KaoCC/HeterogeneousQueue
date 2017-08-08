@@ -1,10 +1,21 @@
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.1)
 
 # Project source dir changes after the project() definition
 project(CLAL)
 
+# tmp
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
+
+#message("CLAL: CMAKE_CXX_FLAGS= ${CMAKE_CXX_FLAGS}")
+
+#find_package(OpenCL REQUIRED)
+
 include_directories(${PROJECT_SOURCE_DIR}/include)
 include_directories(${PROJECT_SOURCE_DIR}/src)
+
+
+# OpenCL
+# include_directories(${OpenCL_INCLUDE_DIR})
 
 # Get files that should be installed to target prefix
 FILE(GLOB PUBLIC_HEADER_FILES ${PROJECT_SOURCE_DIR}/include/*)
