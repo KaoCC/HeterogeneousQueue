@@ -4,7 +4,10 @@
 #define _CLAL_CLREFERENCECOUNT_HPP_
 
 
-#ifdef WIN32
+#ifdef __APPLE__
+#define STDCALL
+#include <OpenCL/OpenCL.h>
+#elif WIN32
 #define STDCALL __stdcall
 #include <CL/cl.h>
 #else

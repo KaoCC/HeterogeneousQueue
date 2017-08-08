@@ -2,7 +2,11 @@
 #ifndef _CE_DEVICECL_HPP_
 #define _CE_DEVICECL_HPP_
 
+#ifdef __APPLE__
+#include <OpenCL/OpenCL.h>
+#else
 #include <CL/cl.h>
+#endif
 
 #include "Device.hpp"
 
