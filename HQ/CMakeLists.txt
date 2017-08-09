@@ -7,9 +7,10 @@ include_directories(${CE_DIR}/include)
 include_directories(${PROJECT_SOURCE_DIR}/include)
 include_directories(${PROJECT_SOURCE_DIR}/src)
 
-# add_definitions(-DHQ_STATIC_LIBRARY)
+add_definitions(-DHQ_STATIC_LIBRARY)
+add_definitions(-DCE_STATIC_LIBRARY)
 
-add_definitions(-DHQ_EXPORT_API)
+# add_definitions(-DHQ_EXPORT_API)
 
 # Get files that should be installed to target prefix
 FILE(GLOB PUBLIC_HEADER_FILES ${PROJECT_SOURCE_DIR}/include/*)
@@ -24,7 +25,21 @@ add_library(
     src/HQ.cpp
     )
 
+add_library(
+    HQ-static STATIC
+    src/ComputeUnit.cpp
+    src/HeterogeneousQueue.cpp
+    src/ComputePlatform.cpp
+    src/EventSys.cpp
+    src/HQ.cpp
+    )
+
+
 target_link_libraries(HQ CE)
+target_compile_definitions(HQ PUBLIC HQ_EXPORT_API)
+
+target_link_libraries(HQ-static CE-static)
+target_compile_definitions(HQ-static PUBLIC HQ_STATIC_LIBRARY)
 
 # Install target
 install(TARGETS HQ
