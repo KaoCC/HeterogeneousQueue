@@ -35,6 +35,7 @@ add_library(
     ./src/DeviceSequential.cpp
     ./src/ComputeEngineCL.cpp
     ./src/Function.cpp
+    ./src/EventSequentialImpl.cpp
     )
 
 # Install target
