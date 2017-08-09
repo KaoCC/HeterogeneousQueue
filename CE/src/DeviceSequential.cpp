@@ -62,6 +62,11 @@ namespace CE {
 			}} };
 
 
+
+		// KAOCC: this is not optimal.... 
+
+		// TODO: make this device a thread pool ..
+
 		task();
 
 		// KAOCC: FIXME: Event handling
@@ -88,11 +93,11 @@ namespace CE {
 	}
 
 	void DeviceSequential::mapBuffer(Buffer const * buffer, size_t queue, size_t offset, size_t size, size_t map_type, void ** mapdata, Event ** e) {
-		throw "Yet to be done";
+		throw std::runtime_error("Yet to be done");
 	}
 
 	void DeviceSequential::unmapBuffer(Buffer const * buffer, size_t queue, void * mapdata, Event ** e) {
-		throw "Yet to be done";
+		throw std::runtime_error("Yet to be done");
 	}
 
 	// check !!!
@@ -113,15 +118,15 @@ namespace CE {
 	}
 
 	void DeviceSequential::waitForEvent(Event * e) {
-		throw "Yet to be done";
+		throw std::runtime_error("Yet to be done");
 	}
 
 	void DeviceSequential::flush(size_t queue) {
-		throw "Yet to be done";
+		throw std::runtime_error("Yet to be done");
 	}
 
 	void DeviceSequential::finish(size_t queue) {
-		throw "Yet to be done";
+		throw std::runtime_error("Yet to be done");
 	}
 
 	EventSequentialImpl * DeviceSequential::createEventSeq(std::future<void>&& fu) const {
