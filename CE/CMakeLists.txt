@@ -9,6 +9,9 @@ include_directories(${PROJECT_SOURCE_DIR}/src)
 
 include_directories(${OpenCL_INCLUDE_DIR})
 
+# definition for static library
+add_definitions(-DCE_STATIC_LIBRARY)
+
 # Get files that should be installed to target prefix
 FILE(GLOB PUBLIC_HEADER_FILES ${PROJECT_SOURCE_DIR}/include/*)
 
