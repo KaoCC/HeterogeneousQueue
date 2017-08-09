@@ -10,7 +10,9 @@ include_directories(${PROJECT_SOURCE_DIR}/src)
 include_directories(${OpenCL_INCLUDE_DIR})
 
 # definition for static library
-add_definitions(-DCE_STATIC_LIBRARY)
+# add_definitions(-DCE_STATIC_LIBRARY)
+
+add_definitions(-DCE_EXPORT_API)
 
 # Get files that should be installed to target prefix
 FILE(GLOB PUBLIC_HEADER_FILES ${PROJECT_SOURCE_DIR}/include/*)
@@ -19,7 +21,7 @@ FILE(GLOB PUBLIC_HEADER_FILES ${PROJECT_SOURCE_DIR}/include/*)
 # set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wno-deprecated -Wno-deprecated-declarations")
 
 add_library(
-    CE STATIC
+    CE SHARED
     ./src/ExecutableSequential.cpp
     ./src/DeviceCLImpl.cpp
     ./src/Device.cpp

@@ -7,14 +7,16 @@ include_directories(${CE_DIR}/include)
 include_directories(${PROJECT_SOURCE_DIR}/include)
 include_directories(${PROJECT_SOURCE_DIR}/src)
 
-add_definitions(-DHQ_STATIC_LIBRARY)
+# add_definitions(-DHQ_STATIC_LIBRARY)
+
+add_definitions(-DHQ_EXPORT_API)
 
 # Get files that should be installed to target prefix
 FILE(GLOB PUBLIC_HEADER_FILES ${PROJECT_SOURCE_DIR}/include/*)
 
 
 add_library(
-    HQ STATIC
+    HQ SHARED
     src/ComputeUnit.cpp
     src/HeterogeneousQueue.cpp
     src/ComputePlatform.cpp
