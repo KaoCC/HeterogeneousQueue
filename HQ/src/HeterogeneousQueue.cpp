@@ -20,6 +20,7 @@ namespace HQ {
 		terminated = true;
 
 		// thread cleanup
+		// KAOCC: this is wrong ... check popWait
 		std::for_each(mWorkerThreads.begin(), mWorkerThreads.end(), std::mem_fun_ref(&std::thread::join));
 	}
 
@@ -43,19 +44,19 @@ namespace HQ {
 
 
 	// helper function
-	void HeterogeneousQueue::submitTask(ComputePlatform& platform, Task * task) {
+	//void HeterogeneousQueue::submitTask(ComputePlatform& platform, Task * task) {
 
 
-		// more here !
+	//	// more here !
 
-		//platform.enqueue(task);
+	//	//platform.enqueue(task);
 
-		//// Need to change the Event system
-		//Event* event = task->getEvent();
-		//if (event) {
-		//	event->signal();
-		//}
-	}
+	//	//// Need to change the Event system
+	//	//Event* event = task->getEvent();
+	//	//if (event) {
+	//	//	event->signal();
+	//	//}
+	//}
 
 	void HeterogeneousQueue::runLoop(ComputeUnit & cu) {
 

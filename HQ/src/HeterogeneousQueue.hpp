@@ -28,7 +28,7 @@ namespace HQ {
 
 		// enqueue helper function
 		// remove ?
-		static void submitTask(ComputePlatform& platform, Task* task);
+		//static void submitTask(ComputePlatform& platform, Task* task);
 
 		ComputePlatform mPlatform;
 		//ThreadPool<void> threadPool;

@@ -63,7 +63,10 @@ namespace CE {
 
 
 
-		// KAOCC: this is not optimal....
+		// KAOCC: this is not optimal.... 
+
+		// TODO: make this device a thread pool ..
+
 		task();
 
 		// KAOCC: FIXME: Event handling
