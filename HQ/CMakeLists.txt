@@ -7,9 +7,8 @@ include_directories(${CE_DIR}/include)
 include_directories(${PROJECT_SOURCE_DIR}/include)
 include_directories(${PROJECT_SOURCE_DIR}/src)
 
-add_definitions(-DHQ_STATIC_LIBRARY)
-add_definitions(-DCE_STATIC_LIBRARY)
-
+# add_definitions(-DHQ_STATIC_LIBRARY)
+# add_definitions(-DCE_STATIC_LIBRARY)
 # add_definitions(-DHQ_EXPORT_API)
 
 # Get files that should be installed to target prefix
