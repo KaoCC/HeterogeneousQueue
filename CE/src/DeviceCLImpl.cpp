@@ -124,7 +124,7 @@ namespace CE {
 			// KAOCC: FIXME: Event handling 
 
 			if (eventFlag) {
-				EventCLImpl* evtCL = createEventCL();
+				EventCLImpl* evtCL{ createEventCL() };
 				evtCL->setEvent(evt);
 				retEvent = evtCL;
 			}
@@ -237,7 +237,7 @@ namespace CE {
 	EventCLImpl * DeviceCLImpl::createEventCL() const {
 
 
-		EventCLImpl* eventCL = nullptr;
+		EventCLImpl* eventCL{ nullptr };
 
 		if (eventPool.empty()) {
 			eventCL = new EventCLImpl();

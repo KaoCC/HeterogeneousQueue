@@ -20,16 +20,20 @@ namespace HQ {
 
         // rval ref
         void push(T&& rvalRef) {
-            std::lock_guard<std::mutex> lock(queueMutex);
-            localQueue.push(std::move(rvalRef));
+			{
+				std::lock_guard<std::mutex> lock(queueMutex);
+				localQueue.push(std::move(rvalRef));
+			}
             condition.notify_one();
         }
 
 
         // const T ref
         void push(const T& element) {
-            std::lock_guard<std::mutex> lock(queueMutex);
-            localQueue.push(element);
+			{
+				std::lock_guard<std::mutex> lock(queueMutex);
+				localQueue.push(element);
+			}
             condition.notify_one();
         }
 

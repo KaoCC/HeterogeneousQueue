@@ -14,6 +14,8 @@ namespace HQ {
 
 	public:
 		HeterogeneousQueue();
+
+		~HeterogeneousQueue();
 		
 		void enqueue(Task* task);
 		size_t getNumberOfUnitOnPlatform() const;
@@ -25,10 +27,27 @@ namespace HQ {
 	private:
 
 		// enqueue helper function
-		static void submitTask(ComputePlatform& platform, Task* task);
+		// remove ?
+		//static void submitTask(ComputePlatform& platform, Task* task);
 
-		ComputePlatform platform;
-		ThreadPool<void> threadPool;
+		ComputePlatform mPlatform;
+		//ThreadPool<void> threadPool;
+
+
+		// ---- new design
+
+		void runLoop(ComputeUnit& cu);
+
+		// check for the lock
+		// atomic ?
+		std::atomic_bool terminated{ false };
+
+		std::vector<std::thread> mWorkerThreads;
+
+		// task Queue
+		ThreadSafeQueue<Task*> mTaskQueue;
+
+
 	};
 
 

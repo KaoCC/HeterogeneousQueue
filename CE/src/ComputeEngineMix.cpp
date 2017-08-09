@@ -5,6 +5,8 @@
 #include "DeviceSequential.hpp"
 #include "DeviceCLImpl.hpp"
 
+#include <iostream>
+
 namespace CE {
 
 	ComputeEngineMix::ComputeEngineMix() : numberOfDeviceInEngine(0) {
@@ -20,8 +22,12 @@ namespace CE {
 			for (auto const& platform : platforms) {
 				size_t numOfDevices = platform.getDeviceCount();
 
+				std::cerr << "Platform: " << platform.getName() << platform.getVendor() << platform.getProfile() << std::endl;
+
 				for (size_t i = 0; i < numOfDevices; ++i) {
 					auto device = platform.getDevice(i);
+
+					std::cerr << "Device:" << device.getName() << device.getVendor() << device.getType() << device.getVersion() << std::endl;
 
 					// Take out CPUs
 					if (device.getType() != CL_DEVICE_TYPE_CPU) {
@@ -39,6 +45,7 @@ namespace CE {
 		// plus one for CPU Sequential Device
 		numberOfDeviceInEngine += 1;
 		
+		std::cerr << "device count: " << numberOfDeviceInEngine << std::endl;
 
 	}
 
@@ -54,7 +61,7 @@ namespace CE {
 		//FIXME: yet to be done
 	
 		if (index >= numberOfDeviceInEngine) {
-			throw "Number of device exceeds";
+			throw std::runtime_error("Number of device exceeds");
 		}
 
 		

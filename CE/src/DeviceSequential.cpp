@@ -3,6 +3,10 @@
 #include "FunctionSequential.hpp"
 #include "BufferSequential.hpp"
 
+#include "EventSequentialImpl.hpp"
+
+#include <future>
+
 namespace CE {
 
 	DeviceSpec CE::DeviceSequential::getSpec(void) {
@@ -52,19 +56,32 @@ namespace CE {
 
 		Event* retEvent = nullptr;
 
-		// execute through the ND-Range sequentially
-		for (size_t i = 0; i < global_size; ++i) {
-			execFunc(i);
-		}
+		std::packaged_task<void()> task{ [&] {		// execute through the ND-Range sequentially
+			for (size_t i = 0; i < global_size; ++i) {
+				execFunc(i);
+			}} };
+
+
+
+		// KAOCC: this is not optimal.... 
+
+		// TODO: make this device a thread pool ..
+
+		task();
 
 		// KAOCC: FIXME: Event handling
 		if (eventFlag) {
 			//retEvent = ...
+
+			EventSequentialImpl* evtSeq{ createEventSeq(task.get_future()) };
+			retEvent = evtSeq;
 		}
 
 		// tmp
 		return retEvent;
 	}
+
+
 
 
 	Executable * DeviceSequential::createExecutable() {
@@ -76,23 +93,24 @@ namespace CE {
 	}
 
 	void DeviceSequential::mapBuffer(Buffer const * buffer, size_t queue, size_t offset, size_t size, size_t map_type, void ** mapdata, Event ** e) {
-		throw "Yet to be done";
+		throw std::runtime_error("Yet to be done");
 	}
 
 	void DeviceSequential::unmapBuffer(Buffer const * buffer, size_t queue, void * mapdata, Event ** e) {
-		throw "Yet to be done";
+		throw std::runtime_error("Yet to be done");
 	}
 
+	// check !!!
 	void DeviceSequential::deleteEvent(Event * e) {
-		throw "Yet to be done";
+		delete e;
 	}
 
 	void DeviceSequential::readBuffer(Buffer const * buffer, size_t queue, size_t offset, size_t size, void * dst, Event ** e) const {
-		throw "Yet to be done";
+		//throw "Yet to be done";
 	}
 
 	void DeviceSequential::writeBuffer(Buffer const * buffer, size_t queue, size_t offset, size_t size, void * src, Event ** e) {
-		throw "Yet to be done";
+		//throw "Yet to be done";
 	}
 
 	void DeviceSequential::deleteExecutable(Executable * executable) {
@@ -100,25 +118,29 @@ namespace CE {
 	}
 
 	void DeviceSequential::waitForEvent(Event * e) {
-		throw "Yet to be done";
+		throw std::runtime_error("Yet to be done");
 	}
 
 	void DeviceSequential::flush(size_t queue) {
-		throw "Yet to be done";
+		throw std::runtime_error("Yet to be done");
 	}
 
 	void DeviceSequential::finish(size_t queue) {
-		throw "Yet to be done";
+		throw std::runtime_error("Yet to be done");
+	}
+
+	EventSequentialImpl * DeviceSequential::createEventSeq(std::future<void>&& fu) const {
+		return new EventSequentialImpl(fu);
 	}
 
 
 	// Global access functions for APIs
 
-	CE_API Executable * CreateSequentialExecutable(Device * device) {
+	Executable * CreateSequentialExecutable(Device * device) {
 
 		// KAOCC: change to dynamic cast;
 		DeviceSequential* deviceSeq = dynamic_cast<DeviceSequential*>(device);
-		
+
 
 		if (deviceSeq != nullptr) {
 			return deviceSeq->createExecutable();

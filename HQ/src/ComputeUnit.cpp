@@ -14,9 +14,10 @@ namespace HQ {
 	ComputeUnit::ComputeUnit(CE::ComputeEngine* ce, size_t index) :
 		indexID(index),
 		ceRefPtr ( ce ),
-		device(ceRefPtr->createDevice(index) ),
-		spec(device->getSpec()),
-		pool(spec.isThreadSafe ? 0 : 1) {
+		mDevice(ceRefPtr->createDevice(index) ),
+		spec(mDevice->getSpec())
+		//pool(spec.isThreadSafe ? 0 : 1) {
+		{
 		// KAOCC: NOTE: 0 for auto-test
 
 		// tmp
@@ -37,20 +38,20 @@ namespace HQ {
 	}
 
 	ComputeUnit::~ComputeUnit() {
-		ceRefPtr->deleteDevice(device);
+		ceRefPtr->deleteDevice(mDevice);
 	}
 
 	// should be removed
 	CE::Device * ComputeUnit::getDevice() const {
-		return device;
+		return mDevice;
 	}
 
-	std::future<CE::Event*> ComputeUnit::submit(Task * task) {
+	//std::future<CE::Event*> ComputeUnit::submit(Task * task) {
 
-		auto eventFuture = pool.enqueue(std::bind(execution, std::ref(*this), task));
+		//auto eventFuture = pool.enqueue(std::bind(execution, std::ref(*this), task));
 
-		return eventFuture;
-	}
+		//return eventFuture;
+	//}
 
 	//std::future<CE::Event*> ComputeUnit::submit(CE::Function const* f, size_t globalSize, bool eventFlag) {
 
@@ -71,9 +72,9 @@ namespace HQ {
 
 		CE::Executable* program = nullptr;
 
-		CE::DeviceSpec spec = cu.device->getSpec();
+		CE::DeviceSpec spec = cu.mDevice->getSpec();
 		if (spec.type == CE::DeviceType::kSequential) {
-			program = CreateSequentialExecutable(cu.device);
+			program = CreateSequentialExecutable(cu.mDevice);
 		}
 
 		return program;
@@ -87,25 +88,23 @@ namespace HQ {
 
 		CE::Executable* program = nullptr;
 
-		CE::DeviceSpec spec = cu.device->getSpec();
+		CE::DeviceSpec spec = cu.mDevice->getSpec();
 		if (spec.type == CE::DeviceType::kGpu || spec.type == CE::DeviceType::kCpu) {
-			program = cu.device->compileExecutable(filename, nullptr, 0, options);
+			program = cu.mDevice->compileExecutable(filename, nullptr, 0, options);
 		}
 
 		return program;
 	}
 
-
-	CE::Event * ComputeUnit::execution(const ComputeUnit& cu, Task * task) {
-
+	void ComputeUnit::execute(Task * task) {
 		//NOTE: MAKE SURE EVERYTHING HERE CAN BE EXECUTED IN PARALLEL !!!!!!!
 		// ex: Createbuffer, Read, Write, Exec with CL Queue
 
 		// get the device from CU
-		CE::Device* dev = cu.getDevice();
+		//CE::Device* dev{mDevice};
 
 		// get the function from task
-		CE::Function* func = task->getRunFunction(cu.indexID);
+		CE::Function* func = task->getRunFunction(indexID);
 
 		// get number of parameters
 		size_t numOfParams = task->getNumOfParameters();
@@ -121,7 +120,7 @@ namespace HQ {
 
 			// create buffers based on the parameters
 			// KAOCC: flag is not used (0)
-			buffers[i] = dev->createBuffer(taskParam->getSizeInByte(), 0, taskParam->getData());
+			buffers[i] = mDevice->createBuffer(taskParam->getSizeInByte(), 0, taskParam->getData());
 
 			// copy buffers (kernel set Args ?)
 
@@ -133,7 +132,7 @@ namespace HQ {
 		}
 
 		const size_t tmpLocalSize = 64;
-		CE::Event* evt = dev->execute(func, 0, task->getGlobalSize(), tmpLocalSize, true);
+		CE::Event* evt = mDevice->execute(func, 0, task->getGlobalSize(), tmpLocalSize, true);
 		evt->wait();
 
 		// when done ..
@@ -145,23 +144,22 @@ namespace HQ {
 
 			// KAOCC: Queue index is always 0 in the current impl.
 			// KAOCC: Event is set to nullptr
-			dev->readBuffer(buffers[i], 0, 0, taskParam->getSizeInByte(), taskParam->getData(), nullptr);
+			mDevice->readBuffer(buffers[i], 0, 0, taskParam->getSizeInByte(), taskParam->getData(), nullptr);
 
 		}
 
 
 		// relese event
 
-		dev->deleteEvent(evt);
+		mDevice->deleteEvent(evt);
 
 		// destroy buffers
 
 		// ???
 
 		for (size_t i = 0; i < numOfParams; ++i) {
-			dev->deleteBuffer(buffers[i]);
+			mDevice->deleteBuffer(buffers[i]);
 		}
-
 
 
 		// test !!!
@@ -173,8 +171,89 @@ namespace HQ {
 
 		// what to return ?
 
-		return nullptr;
+		//return nullptr;
 	}
+
+
+	//CE::Event * ComputeUnit::execution(const ComputeUnit& cu, Task * task) {
+
+	//	//NOTE: MAKE SURE EVERYTHING HERE CAN BE EXECUTED IN PARALLEL !!!!!!!
+	//	// ex: Createbuffer, Read, Write, Exec with CL Queue
+
+	//	// get the device from CU
+	//	CE::Device* dev = cu.getDevice();
+
+	//	// get the function from task
+	//	CE::Function* func = task->getRunFunction(cu.indexID);
+
+	//	// get number of parameters
+	//	size_t numOfParams = task->getNumOfParameters();
+
+	//	// records for buffers
+	//	std::vector<CE::Buffer*> buffers(numOfParams);
+
+
+	//	for (size_t i = 0; i < numOfParams; ++i) {
+
+	//		// get Task parameters from the task
+	//		TaskParameter* taskParam = task->getTaskParameter(i);
+
+	//		// create buffers based on the parameters
+	//		// KAOCC: flag is not used (0)
+	//		buffers[i] = dev->createBuffer(taskParam->getSizeInByte(), 0, taskParam->getData());
+
+	//		// copy buffers (kernel set Args ?)
+
+	//		// Seems like we dont need to write ?
+	//		//dev->writeBuffer();
+
+	//		// kernel set Args 
+	//		func->setArg(i, buffers[i]);
+	//	}
+
+	//	const size_t tmpLocalSize = 64;
+	//	CE::Event* evt = dev->execute(func, 0, task->getGlobalSize(), tmpLocalSize, true);
+	//	evt->wait();
+
+	//	// when done ..
+
+	//	// copy the buffer back to host
+	//	for (size_t i = 0; i < numOfParams; ++i) {
+
+	//		TaskParameter* taskParam = task->getTaskParameter(i);
+
+	//		// KAOCC: Queue index is always 0 in the current impl.
+	//		// KAOCC: Event is set to nullptr
+	//		dev->readBuffer(buffers[i], 0, 0, taskParam->getSizeInByte(), taskParam->getData(), nullptr);
+
+	//	}
+
+
+	//	// relese event
+
+	//	dev->deleteEvent(evt);
+
+	//	// destroy buffers
+
+	//	// ???
+
+	//	for (size_t i = 0; i < numOfParams; ++i) {
+	//		dev->deleteBuffer(buffers[i]);
+	//	}
+
+
+
+	//	// test !!!
+	//	// Need to change the Event system
+	//	Event* event = task->getEvent();
+	//	if (event) {
+	//		event->signal();
+	//	}
+
+	//	// what to return ?
+
+	//	return nullptr;
+	//}
 
 	//CE::Function* ComputeUnit::createSequentialFunction(const char* name, std::function<void(int)>&& f) {
 

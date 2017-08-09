@@ -6,12 +6,11 @@
 
 //#define HQ_API_VERSION 1.0
 
-//tmp
-#define HQ_STATIC_LIBRARY 1
+
 
 #ifndef HQ_STATIC_LIBRARY
 #ifdef WIN32
-    #ifdef EXPORT_API
+    #ifdef HQ_EXPORT_API
         #define HQAPI __declspec(dllexport)
     #else
         #define HQAPI __declspec(dllimport)

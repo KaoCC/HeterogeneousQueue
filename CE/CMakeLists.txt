@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.1)
 
 # Project source dir changes after the project() definition
 project(CE)
@@ -7,14 +7,22 @@ include_directories(${CLAL_DIR}/include)
 include_directories(${PROJECT_SOURCE_DIR}/include)
 include_directories(${PROJECT_SOURCE_DIR}/src)
 
+include_directories(${OpenCL_INCLUDE_DIR})
+
+# definition for static library
+# add_definitions(-DCE_STATIC_LIBRARY)
+
+# definition for shared
+# add_definitions(-DCE_EXPORT_API)
+
 # Get files that should be installed to target prefix
 FILE(GLOB PUBLIC_HEADER_FILES ${PROJECT_SOURCE_DIR}/include/*)
 
 # Get rid off annoying OpenCL warning
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wno-deprecated -Wno-deprecated-declarations")
+# set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wno-deprecated -Wno-deprecated-declarations")
 
 add_library(
-    CE STATIC
+    CE SHARED
     ./src/ExecutableSequential.cpp
     ./src/DeviceCLImpl.cpp
     ./src/Device.cpp
@@ -30,7 +38,35 @@ add_library(
     ./src/DeviceSequential.cpp
     ./src/ComputeEngineCL.cpp
     ./src/Function.cpp
+    ./src/EventSequentialImpl.cpp
     )
+
+add_library(
+    CE-static STATIC
+    ./src/ExecutableSequential.cpp
+    ./src/DeviceCLImpl.cpp
+    ./src/Device.cpp
+    ./src/ComputeEngine.cpp
+    ./src/ComputeEngineMix.cpp
+    ./src/Executable.cpp
+    ./src/FunctionSequential.cpp
+    ./src/BufferSequential.cpp
+    ./src/ExecutableCLImpl.cpp
+    ./src/EventCLImpl.cpp
+    ./src/FunctionCLImpl.cpp
+    ./src/Buffer.cpp
+    ./src/DeviceSequential.cpp
+    ./src/ComputeEngineCL.cpp
+    ./src/Function.cpp
+    ./src/EventSequentialImpl.cpp
+    )
+
+target_link_libraries(CE CLAL)
+target_compile_definitions(CE PUBLIC CE_EXPORT_API)
+target_link_libraries(CE-static CLAL)
+target_compile_definitions(CE-static PUBLIC CE_STATIC_LIBRARY)
+
+
 
 # Install target
 install(TARGETS CE

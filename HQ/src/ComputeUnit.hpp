@@ -18,11 +18,15 @@ namespace HQ {
 		ComputeUnit(CE::ComputeEngine* ce, size_t index);
 		~ComputeUnit();
 
+
+		ComputeUnit(const ComputeUnit& rhs) = delete;
+		
+
 		// KAOCC: this should be removed
 		CE::Device* getDevice() const;
 
 		//std::future<CE::Event*> submit(CE::Function const* f, size_t globalSize, bool eventFlag);
-		std::future<CE::Event*> submit(Task* f);
+		//std::future<CE::Event*> submit(Task* f);
 
 		//CE::Function* createSequentialFunction(const char* name, std::function<void(int)>&& f);
 
@@ -33,6 +37,10 @@ namespace HQ {
 		static CE::Executable* compileExecutableFromFile(const ComputeUnit& cu, char const* filename, char const* options);
 
 
+
+		void execute(Task* task);
+
+
 	private:
 
 		// helper
@@ -41,8 +49,8 @@ namespace HQ {
 		//	return device->execute(f, 0, globalSize, tmpLocalSize, true);
 		//}
 
-
-		static CE::Event* execution(const ComputeUnit& cu, Task* task);
+		// to be removed
+		//static CE::Event* execution(const ComputeUnit& cu, Task* task);
 
 
 		// Index
@@ -51,14 +59,15 @@ namespace HQ {
 		// ref to ComputeEngine
 		CE::ComputeEngine * const ceRefPtr;
 
-		CE::Device* device {nullptr};
+		CE::Device* mDevice{nullptr};
 		//CE::Executable* program {nullptr};
 
 		// KAOCC: test
 		CE::DeviceSpec spec;
 
 		// KAOCC: is the device thread safe ? We need to check in advance
-		ThreadPool<CE::Event*> pool;
+		//ThreadPool<CE::Event*> pool;
+
 
 
 	};

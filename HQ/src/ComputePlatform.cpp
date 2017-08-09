@@ -17,7 +17,7 @@
 namespace HQ {
 
 	ComputePlatform::ComputePlatform() : 
-		ce (CE::CreateComputeEngine(CE::kMix)) {
+		ce{ CE::CreateComputeEngine(CE::kMix) } {
 
 		// kMix for sequential & CL
 		//ce = CE::CreateComputeEngine(CE::kMix);
@@ -27,45 +27,44 @@ namespace HQ {
 
 		// tmp solution
 
-		size_t deviceCount = ce->getDeviceCount();
+		size_t deviceCount{ ce->getDeviceCount() };
 
+		computeUnits.resize(deviceCount);
 		for (size_t i = 0; i < deviceCount; ++i) {
-			computeUnits.push_back(new ComputeUnit(ce, i));
+			computeUnits[i] = std::make_unique<ComputeUnit>(ce, i);
 		}
 
 
 		//std::cerr << "Number of CUs:" << deviceCount << std::endl;
 	}
 
-	// NOTE: multi-thread
-	void ComputePlatform::enqueue(Task * task) {
+	//// NOTE: multi-thread
+	//void ComputePlatform::enqueue(Task * task) {
 
 
-		// we will first implement a very simple dispatching algorithm to demo the effectiveness
+	//	// we will first implement a very simple dispatching algorithm to demo the effectiveness
 
-		//NOTE: MAKE SURE EVERYTHING HERE CAN BE EXECUTED IN PARALLEL !!!!!!!
-		// ex: Createbuffer, Read, Write, Exec with CL Queue
+	//	//NOTE: MAKE SURE EVERYTHING HERE CAN BE EXECUTED IN PARALLEL !!!!!!!
+	//	// ex: Createbuffer, Read, Write, Exec with CL Queue
 
-		// get a CU (index);
-		// temp !!!
-		// NOTE: index = 1 for GPU on CL
-		int index = 1;
+	//	// get a CU (index);
+	//	// temp !!!
+	//	// NOTE: index = 1 for GPU on CL
+	//	int index = 1;
+	//
+	//	//std::future<CE::Event*> eventConsumer = computeUnits[index]->submit(task);
+
+	//}
 
 
-		
-		std::future<CE::Event*> eventConsumer = computeUnits[index]->submit(task);
+	// need to change
+	ComputeUnit& ComputePlatform::getComputeUnit(size_t index) {
 
+		return *computeUnits[index];
 	}
 
-	// should be removed
-	ComputeUnit * ComputePlatform::getComputeUnit(size_t index) const {
-
-		if (index < computeUnits.size()) {
-			return computeUnits[index];
-		} else {
-			// throw ?
-			return nullptr;
-		}
+	const ComputeUnit & ComputePlatform::getComputeUnit(size_t index) const {
+		return *computeUnits[index];
 	}
 
 
@@ -75,9 +74,6 @@ namespace HQ {
 
 
 	ComputePlatform::~ComputePlatform() {
-		for (size_t i = 0; i < computeUnits.size(); ++i) {
-			delete computeUnits[i];
-		}
 
 		CE::DeleteComputeEngine(ce);
 	}
