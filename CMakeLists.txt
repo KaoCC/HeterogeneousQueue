@@ -17,6 +17,9 @@ set(HQ_DIR ${CMAKE_SOURCE_DIR}/HQ)
 set(CE_DIR ${CMAKE_SOURCE_DIR}/CE)
 set(CLAL_DIR ${CMAKE_SOURCE_DIR}/CLAL)
 
+
+
+
 project(StreamingPrototype)
 
 message("CMAKE_BUILD_TYPE= ${CMAKE_BUILD_TYPE}")
@@ -24,6 +27,8 @@ message("CMAKE_SOURCE_DIR= ${CMAKE_SOURCE_DIR}")
 message("CMAKE_BINARY_DIR= ${CMAKE_BINARY_DIR}")
 message("CMAKE_INSTALL_PREFIX= ${CMAKE_INSTALL_PREFIX}")
 message("CMAKE_CXX_STANDARD= ${CMAKE_CXX_STANDARD}")
+
+find_package(OpenCL REQUIRED)
 
 # Source dir is HQ and rename it to HQ
 add_subdirectory(HQ)

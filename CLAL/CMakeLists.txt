@@ -15,7 +15,7 @@ include_directories(${PROJECT_SOURCE_DIR}/src)
 
 
 # OpenCL
-# include_directories(${OpenCL_INCLUDE_DIR})
+include_directories(${OpenCL_INCLUDE_DIR})
 
 # Get files that should be installed to target prefix
 FILE(GLOB PUBLIC_HEADER_FILES ${PROJECT_SOURCE_DIR}/include/*)
