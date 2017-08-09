@@ -6,8 +6,7 @@
 
 //#define HQ_API_VERSION 1.0
 
-//tmp
-#define HQ_STATIC_LIBRARY 1
+
 
 #ifndef HQ_STATIC_LIBRARY
 #ifdef WIN32
