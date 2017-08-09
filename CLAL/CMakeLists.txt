@@ -21,7 +21,7 @@ include_directories(${PROJECT_SOURCE_DIR}/src)
 FILE(GLOB PUBLIC_HEADER_FILES ${PROJECT_SOURCE_DIR}/include/*)
 
 # Get rid off annoying OpenCL warning
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wno-deprecated -Wno-deprecated-declarations")
+# set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wno-deprecated -Wno-deprecated-declarations")
 
 add_library(
     CLAL STATIC

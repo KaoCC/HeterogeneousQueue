@@ -25,7 +25,7 @@ message("CMAKE_BINARY_DIR= ${CMAKE_BINARY_DIR}")
 message("CMAKE_INSTALL_PREFIX= ${CMAKE_INSTALL_PREFIX}")
 message("CMAKE_CXX_STANDARD= ${CMAKE_CXX_STANDARD}")
 
-# Srouce dir is HQ and rename it to HQ
+# Source dir is HQ and rename it to HQ
 add_subdirectory(HQ)
 add_subdirectory(CE)
 add_subdirectory(CLAL)

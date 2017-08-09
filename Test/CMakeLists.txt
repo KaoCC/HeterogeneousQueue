@@ -14,7 +14,7 @@ include_directories(${OpenCL_INCLUDE_DIR})
 include_directories(${PROJECT_SOURCE_DIR}/src)
 
 # Get rid off annoying OpenCL warning
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wno-deprecated -Wno-deprecated-declarations")
+# set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wno-deprecated -Wno-deprecated-declarations")
 
 add_executable(
     Test
