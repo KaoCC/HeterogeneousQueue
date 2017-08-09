@@ -131,7 +131,7 @@ namespace CE {
 
 	// Global access functions for APIs
 
-	CE_API Executable * CreateSequentialExecutable(Device * device) {
+	Executable * CreateSequentialExecutable(Device * device) {
 
 		// KAOCC: change to dynamic cast;
 		DeviceSequential* deviceSeq = dynamic_cast<DeviceSequential*>(device);
