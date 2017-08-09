@@ -20,7 +20,7 @@ set(CLAL_DIR ${CMAKE_SOURCE_DIR}/CLAL)
 
 
 
-project(StreamingPrototype)
+project(HeterogeneousQueue)
 
 message("CMAKE_BUILD_TYPE= ${CMAKE_BUILD_TYPE}")
 message("CMAKE_SOURCE_DIR= ${CMAKE_SOURCE_DIR}")
