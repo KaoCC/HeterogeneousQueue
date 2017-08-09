@@ -37,6 +37,9 @@ add_library(
     ./src/CLDevice.cpp
     )
 
+target_link_libraries(CLAL ${OpenCL_LIBRARY}) 
+
+
 # Install target
 install(TARGETS CLAL
     RUNTIME DESTINATION bin

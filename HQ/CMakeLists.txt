@@ -12,6 +12,7 @@ add_definitions(-DHQ_STATIC_LIBRARY)
 # Get files that should be installed to target prefix
 FILE(GLOB PUBLIC_HEADER_FILES ${PROJECT_SOURCE_DIR}/include/*)
 
+
 add_library(
     HQ STATIC
     src/ComputeUnit.cpp
@@ -20,6 +21,8 @@ add_library(
     src/EventSys.cpp
     src/HQ.cpp
     )
+
+target_link_libraries(HQ CE)
 
 # Install target
 install(TARGETS HQ

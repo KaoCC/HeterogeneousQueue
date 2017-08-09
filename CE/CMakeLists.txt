@@ -38,6 +38,8 @@ add_library(
     ./src/EventSequentialImpl.cpp
     )
 
+target_link_libraries(CE CLAL) 
+
 # Install target
 install(TARGETS CE
     RUNTIME DESTINATION bin

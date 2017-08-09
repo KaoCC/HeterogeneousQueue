@@ -21,4 +21,4 @@ add_executable(
     ./src/main.cpp
     )
 
-target_link_libraries(Test HQ CE CLAL ${OpenCL_LIBRARY} ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries(Test HQ ${CMAKE_THREAD_LIBS_INIT})
