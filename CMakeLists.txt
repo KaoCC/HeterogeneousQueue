@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.10)
 
 set(CMAKE_BUILD_TYPE debug)
 
@@ -39,12 +39,17 @@ message("CMAKE_BINARY_DIR= ${CMAKE_BINARY_DIR}")
 message("CMAKE_INSTALL_PREFIX= ${CMAKE_INSTALL_PREFIX}")
 message("CMAKE_CXX_STANDARD= ${CMAKE_CXX_STANDARD}")
 
+
+
+
 find_package(OpenCL REQUIRED)
+find_package(Boost REQUIRED)
+
 
 # Source dir is HQ and rename it to HQ
 add_subdirectory(HQ)
-add_subdirectory(CE)
-add_subdirectory(CLAL)
+#add_subdirectory(CE)
+#add_subdirectory(CLAL)
 add_subdirectory(Test)
 
 # Add test execution in Makefile for testing `make test_run`

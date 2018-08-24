@@ -23,12 +23,12 @@ add_executable(
     ./src/main.cpp
     )
 
-add_executable(
-    Test-static
-    ./src/main.cpp
-    )    
+#add_executable(
+#    Test-static
+#    ./src/main.cpp
+#    )    
 
-target_link_libraries(Test CE HQ)
-target_link_libraries(Test-static CE-static HQ-static)
+target_link_libraries(Test HQ)
+#target_link_libraries(Test-static)
 
 # ${CMAKE_THREAD_LIBS_INIT}
