@@ -4,31 +4,102 @@
 
 #include <vector>
 #include <thread>
-#include <boost/compute/core.hpp> 
+#include <queue>
+
+#include <mutex>
+#include <condition_variable>
+
+#include <boost/fiber/all.hpp>
 
 namespace hq {
 
-
-
 class heterogeneous_queue {
+    class thread_worker {
+
+    public:
+
+        thread_worker(heterogeneous_queue& hq_ref) : hq{hq_ref} {
+        }
+
+        void operator()() {
+
+            for (auto i = 0; i < FIBER_COUNT; ++i) {
+                fibers.push_back(boost::fibers::fiber([this]{process_task();}));
+            }
+
+            //process_task();
+            std::for_each(std::begin(fibers), std::end(fibers), std::mem_fun_ref(&boost::fibers::fiber::join));
+        }
+
+    private:
+
+        void process_task() {
+
+            task_t current_task;
+            while (hq.task_channel.pop(current_task) != boost::fibers::channel_op_status::closed) {
+                current_task();
+            }
+        }
+
+        std::vector<boost::fibers::fiber> fibers;
+
+        static constexpr unsigned FIBER_COUNT = 8;
+        heterogeneous_queue& hq;
+    };
+
 
 public:
-    heterogeneous_queue();
-    ~heterogeneous_queue();
+
+    using future_t = std::future<void>;
+
+    heterogeneous_queue() {
+        auto num_thread = std::thread::hardware_concurrency();
+
+        if (num_thread == 0) {
+            num_thread = 2;
+        }
+
+        for (auto i = 0; i < num_thread; ++i) {
+            workers.push_back(std::thread(thread_worker(*this)));
+        }
+
+    }
+
+    ~heterogeneous_queue() {
+
+        task_channel.close();
+        std::for_each(std::begin(workers), std::end(workers), std::mem_fun_ref(&std::thread::join));
+
+        // test
+        std::cout << "Joined" << std::endl;
+    }
 
     heterogeneous_queue(const heterogeneous_queue&) = delete;
     heterogeneous_queue& operator=(const heterogeneous_queue&) = delete;
 
+    // enqueue function
+    template<class Func, class... Args>
+    auto enqueue(Func&& func, Args&&... args) {
+
+        task_t task {std::bind(std::forward<Func>(func), std::forward<Args>(args)...)};
+        auto task_future = task.get_future();
+
+        task_channel.push(std::move(task));
+
+        return task_future;
+    }
  
 private:
 
-    
-
-    std::vector<boost::compute::device> devices;
-    std::vector<boost::compute::context> contexts;
-    std::vector<boost::compute::command_queue> queues;
 
     std::vector<std::thread> workers;
+
+    using task_t = std::packaged_task<void()>;
+    boost::fibers::buffered_channel<task_t> task_channel {2048};
+ 
+
+    // ?
+    // bool stop;
 };
 
 
