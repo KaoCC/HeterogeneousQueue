@@ -30,9 +30,14 @@ if(MSVC)
 elseif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
   # Update if necessary
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-long-long -pedantic -Werror")
+
+elseif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
+  # test for Clang
+  message("APPLE !")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-long-long -pedantic -Werror")
 endif()
 
-
+message("CMAKE_CXX_COMPILER_ID= ${CMAKE_CXX_COMPILER_ID}")
 message("CMAKE_BUILD_TYPE= ${CMAKE_BUILD_TYPE}")
 message("CMAKE_SOURCE_DIR= ${CMAKE_SOURCE_DIR}")
 message("CMAKE_BINARY_DIR= ${CMAKE_BINARY_DIR}")
@@ -40,14 +45,16 @@ message("CMAKE_INSTALL_PREFIX= ${CMAKE_INSTALL_PREFIX}")
 message("CMAKE_CXX_STANDARD= ${CMAKE_CXX_STANDARD}")
 
 
-
+# set(Boost_DEBUG ON)
 
 find_package(OpenCL REQUIRED)
-find_package(Boost REQUIRED)
+find_package(Boost 1.68.0 REQUIRED COMPONENTS system thread fiber)
+
+message("Boost_LIB: ${Boost_LIBRARIES}") 
 
 
 # Source dir is HQ and rename it to HQ
-add_subdirectory(HQ)
+#add_subdirectory(HQ)
 #add_subdirectory(CE)
 #add_subdirectory(CLAL)
 add_subdirectory(Test)
