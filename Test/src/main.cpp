@@ -1,24 +1,102 @@
 
 
 #include <iostream>
-#include <string>
-#include <functional>
-
-
-#include <algorithm>
+#include <thread>
+#include <vector>
 
 #include "heterogeneous_queue.hpp"
 
+#include <boost/compute/algorithm/copy.hpp>
+#include <boost/compute/container/vector.hpp>
+
+void test_function(int id, int number, 
+    const std::vector<int>& host_vector, boost::compute::vector<int>& device_vector, 
+    boost::compute::command_queue& queue) {
+
+    std::cout << "Hello : " << id << " " <<  number << " " << std::endl;
+
+
+    boost::fibers::promise<void> fiber_promise;
+    boost::fibers::future<void> fiber_future { fiber_promise.get_future() };
+
+    auto f = boost::compute::copy_async(
+        host_vector.begin(), host_vector.end(), device_vector.begin(), queue
+    ).then(
+        [&fiber_promise, id, number](){ 
+            std::cout << id << " " << number << " async copy completed, promise set !!! \n"; 
+            fiber_promise.set_value();
+        }
+    );
+
+    queue.flush();
+
+    fiber_future.get();
+
+    std::cout << "After : " << id << " " <<  number << " " << std::endl;
+}
 
 int main() {
 
-    hq::heterogeneous_queue test_hq;
+
+    std::cout << "Start Testing HQ\n";
+
+    hq::heterogeneous_queue hqueue;
+
+    std::vector<std::thread> ths;
+
+    auto max_num = std::thread::hardware_concurrency();
+
+    if (max_num == 0) {
+        max_num = 2;
+    }
+
+    // create data array on host
+    std::vector<int> host_vec(1000000);
+    std::iota(host_vec.begin(), host_vec.end(), 0);
 
 
+    std::cout << max_num << std::endl;
+
+    for (int id = 0; id < max_num; ++id) {
+
+        std::cout << "id : " << id << std::endl;
+
+        ths.push_back( std::thread( [id, &hqueue, &host_vec] {
+
+                    // get default device and setup context
+                    boost::compute::device device = boost::compute::system::default_device();
+
+                    std::cout << device.name() << std::endl;
+
+                    boost::compute::context context(device);
+                    boost::compute::command_queue queue(context, device);
+
+                    // create vector on device
+                    boost::compute::vector<int> device_vector(host_vec.size(), context);
+
+                    for (int i = 0 ; i < 200; ++i) {
+                        hqueue.enqueue(test_function, id, i, host_vec, device_vector, queue);
+                    }
+
+                    //queue.flush();
+
+                    std::cout << "Enqueued: " << id << std::endl;
+                    
+                }
+            )
+        );
+    }
+
+    std::cout << "Task launched\n";
+
+    for (auto&& t : ths) {
+        t.join();
+    }
+
+    std::cout << "Done\n";
 
 
-	return 0;
+    return 0;
 }
-
 
 
