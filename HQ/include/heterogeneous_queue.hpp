@@ -28,7 +28,7 @@ class heterogeneous_queue {
             }
 
             //process_task();
-            std::for_each(std::begin(fibers), std::end(fibers), std::mem_fun_ref(&boost::fibers::fiber::join));
+            std::for_each(std::begin(fibers), std::end(fibers), std::mem_fn(&boost::fibers::fiber::join));
         }
 
     private:
@@ -68,7 +68,7 @@ public:
     ~heterogeneous_queue() {
 
         task_channel.close();
-        std::for_each(std::begin(workers), std::end(workers), std::mem_fun_ref(&std::thread::join));
+        std::for_each(std::begin(workers), std::end(workers), std::mem_fn(&std::thread::join));
 
         // test
         std::cout << "Joined" << std::endl;
