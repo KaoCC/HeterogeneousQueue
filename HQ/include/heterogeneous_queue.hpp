@@ -78,10 +78,10 @@ public:
     heterogeneous_queue& operator=(const heterogeneous_queue&) = delete;
 
     // enqueue function
-    template<class Func, class... Args>
-    auto enqueue(Func&& func, Args&&... args) {
+    template<class NonBlockingFunction, class... Args>
+    auto enqueue(NonBlockingFunction&& func, Args&&... args) {
 
-        task_t task {std::bind(std::forward<Func>(func), std::forward<Args>(args)...)};
+        task_t task {std::bind(std::forward<NonBlockingFunction>(func), std::forward<Args>(args)...)};
         auto task_future = task.get_future();
 
         task_channel.push(std::move(task));
