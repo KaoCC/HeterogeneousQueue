@@ -44,13 +44,15 @@ message("CMAKE_BINARY_DIR= ${CMAKE_BINARY_DIR}")
 message("CMAKE_INSTALL_PREFIX= ${CMAKE_INSTALL_PREFIX}")
 message("CMAKE_CXX_STANDARD= ${CMAKE_CXX_STANDARD}")
 
+include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+conan_basic_setup()
 
 # set(Boost_DEBUG ON)
 
 find_package(OpenCL REQUIRED)
-find_package(Boost 1.68.0 REQUIRED COMPONENTS system thread fiber)
+# find_package(Boost 1.69.0 REQUIRED COMPONENTS system thread fiber)
 
-message("Boost_LIB: ${Boost_LIBRARIES}") 
+# message("Boost_LIB: ${Boost_LIBRARIES}") 
 
 
 # Source dir is HQ and rename it to HQ

@@ -31,8 +31,11 @@ add_executable(
 ## target_link_libraries(Test HQ)
 #target_link_libraries(Test-static)
 
-message("Boost_LIB: ${Boost_LIBRARIES}") 
+# message("Boost_LIB: ${Boost_LIBRARIES}") 
 
-target_link_libraries(Test ${Boost_LIBRARIES} ${OpenCL_LIBRARY})
+# target_link_libraries(Test ${Boost_LIBRARIES} ${OpenCL_LIBRARY})
+
+target_link_libraries(Test ${CONAN_LIBS} ${OpenCL_LIBRARY})
+
 
 # ${CMAKE_THREAD_LIBS_INIT}
