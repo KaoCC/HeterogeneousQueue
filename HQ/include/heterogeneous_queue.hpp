@@ -14,8 +14,8 @@
 namespace hq {
 
 class heterogeneous_queue {
-    class thread_worker {
 
+    class thread_worker {
     public:
 
         thread_worker(heterogeneous_queue& hq_ref) : hq{hq_ref} {
@@ -23,7 +23,7 @@ class heterogeneous_queue {
 
         void operator()() {
 
-            for (auto i = 0; i < FIBER_COUNT; ++i) {
+            for (auto i = 0; i < fiber_count; ++i) {
                 fibers.push_back(boost::fibers::fiber([this]{process_task();}));
             }
 
@@ -43,7 +43,7 @@ class heterogeneous_queue {
 
         std::vector<boost::fibers::fiber> fibers;
 
-        static constexpr unsigned FIBER_COUNT = 8;
+        static constexpr unsigned fiber_count = 4;
         heterogeneous_queue& hq;
     };
 
@@ -91,11 +91,12 @@ public:
  
 private:
 
+    static constexpr unsigned channel_size = 2048;
 
     std::vector<std::thread> workers;
 
     using task_t = std::packaged_task<void()>;
-    boost::fibers::buffered_channel<task_t> task_channel {2048};
+    boost::fibers::buffered_channel<task_t> task_channel {channel_size};
  
 
     // ?
