@@ -1,266 +1,141 @@
 
 
 #include <iostream>
-#include <string>
-#include <functional>
-#include "HQ.hpp"
+#include <thread>
+#include <vector>
+
+#include "heterogeneous_queue.hpp"
+
+#include <boost/compute/algorithm/copy.hpp>
+#include <boost/compute/container/vector.hpp>
 
 
-#include <algorithm>
-
-using namespace HQ;
 
 
 
-class TestTaskParameter : public TaskParameter {
+void test_function(int id, int number, 
+    const std::vector<int>& host_vector, boost::compute::vector<int>& device_vector, 
+    boost::compute::command_queue& queue) {
 
+    std::cout << "Hello : " << id << " " <<  number << " " << std::endl;
+
+    boost::fibers::promise<void> fiber_promise;
+    boost::fibers::future<void> fiber_future { fiber_promise.get_future() };
+
+    boost::compute::copy_async(
+        host_vector.begin(), host_vector.end(), device_vector.begin(), queue
+    ).then(
+        [&fiber_promise, id, number](){ 
+            std::cout << id << " " << number << " async copy completed, promise set !!! \n"; 
+            fiber_promise.set_value();
+        }
+    );
+
+    std::cout << "launched async copy" << std::endl;
+
+
+    queue.flush();
+
+    fiber_future.get();
+
+    // enqueue write
+
+    // enqueue_nd_range_kernel
+
+    // enqueue read    
+    
+
+    std::cout << "After : " << id << " " <<  number << " " << std::endl;
+}
+
+
+void opencl_kernel_test() {
+
+
+}
+
+
+class fiber_callable : public hq::nonblocking_callable {
 public:
-	TestTaskParameter() {
+    template<class NonBlockingFunction, class... Args>
+    void operator()(NonBlockingFunction&& func, Args&&... args) {
+        func(args...);
+    }
 
-	}
-
-	// Inherited via TaskParameter
-	virtual size_t getSizeInByte() override {
-		return TestTaskParameter::SIZE * sizeof(int);
-	}
-	virtual void * getData() override {
-		return a;
-	}
-
-
-	static const size_t SIZE = 10000;
-	int a[SIZE];
-
-	std::string name{ "test" };
-	
+    ~fiber_callable() = default;
 };
 
-
-void f(TaskParameter* t) {
-	std::cout << " This is a test " << std::endl;
-}
-
-
-void ff(TaskParameter* tt) {
-	TestTaskParameter* real = static_cast<TestTaskParameter*>(tt);
-	std::cout << "NAME:" << real->name << std::endl;
-}
-
-void fff(int gid) {
-	std::cout << gid << std::endl;
-}
-
-
-
-void ffff(int gid, int* buffer) {
-
-	std::cerr << gid << ":" << buffer[gid] << std::endl;
-	buffer[gid] += gid;
-}
-
-
-class TestTask : public HQ::Task {
-
-public:
-
-
-	TestTask() {
-
-
-		// init buffer array
-		bufferArray = new int[MAX_NDR_SIZE];
-		std::fill(bufferArray, bufferArray + MAX_NDR_SIZE, 0);
-
-
-		// bind it !
-		std::function<void(int)> testFunc = std::bind(ffff, std::placeholders::_1, bufferArray);
-
-		program[0] = CreateSequentialExecutableWithIndex(0);
-		runF[0] = CreateSequentialFunction(program[0], "add", std::move(testFunc));
-
-		// init params
-
-		int* tmpArray = getPtrArray();
-		std::fill(tmpArray, tmpArray + MAX_NDR_SIZE, 0);
-
-		// CL ?
-		//buffer = CreateBufferWithIndex(1, MAX_NDR_SIZE * sizeof(int), bufferArray);
-
-		// KAOCC: check the location of the CL source
-		program[1] = CompileExecutableWithIndex(1, "test.cl", nullptr);
-		runF[1] = program[1]->createFunction("add");
-
-
-		//MapBufferWithIndex(1, buffer, 0, MAX_NDR_SIZE * sizeof(int), (void**)&bufferArray);
-
-		//set argument ?
-		//runF[1]->setArg(0, buffer);
-
-
-	}
-
-	CE::Function* getRunFunction(size_t index) override {
-		return runF[index];
-	}
-
-	TaskParameter* getTaskParameter(size_t index) override {
-		return &param;
-	}
-
-	size_t getGlobalSize() override {
-		return MAX_NDR_SIZE;
-	}
-
-	Event* getEvent() override {
-		return event;
-	}
-
-	void setEvent(Event* e) {
-		event = e;
-	}
-
-	// for testing only
-	int* getPtrArray() {
-		return static_cast<int*>(param.getData());
-	}
-
-	// for testing only
-	CE::Buffer* getBuffer() {
-		return buffer;
-	}
-
-
-
-	// Inherited via Task
-	virtual size_t getNumOfParameters() override {
-		return NUM_OF_PARAMS;
-	}
-
-	~TestTask() {
-		delete[] bufferArray;
-	}
-
-private:
-	//CE::Function const* runF { CreateSequentialFunctionWithIndex(0, "test", std::move(fff) )};
-
-
-	static const size_t MAX_NDR_SIZE = 10000;
-	static const size_t NUM_OF_INSTANCE = 2;
-
-	CE::Function* runF[NUM_OF_INSTANCE];
-	CE::Executable* program[NUM_OF_INSTANCE];
-
-	// TEST!
-	TestTaskParameter param;
-	static const size_t NUM_OF_PARAMS = 1;
-
-	Event* event {nullptr};
-
-
-	CE::Buffer* buffer;
-	int* bufferArray = nullptr;
-
-
-
-};
-
-
-void test(int i) {
-	std::cout << "test function" << std::endl;
-}
 
 
 int main() {
 
 
-	// test
+    std::cout << "Start Testing HQ\n";
+
+    hq::heterogeneous_queue<void> hqueue;
+
+    std::vector<std::thread> ths;
+
+    int max_num = std::thread::hardware_concurrency() - 1;
+
+    if (max_num <= 0) {
+        max_num = 2;
+    }
+
+    // create data array on host
+    std::vector<int> host_vec(30000000);
+    std::iota(host_vec.begin(), host_vec.end(), 0);
+
+    std::cout << max_num << std::endl;
+
+    for (int id = 0; id < max_num; ++id) {
+
+        std::cout << "id : " << id << std::endl;
+
+        ths.push_back( std::thread( [id, &hqueue, &host_vec] {
+
+                    // get default device and setup context
+                    boost::compute::device device = boost::compute::system::default_device();
+
+                    std::cout << device.name() << std::endl;
+
+                    boost::compute::context context(device);
+                    boost::compute::command_queue queue(context, device);
+
+                    // create vector on device
+                    boost::compute::vector<int> device_vector(host_vec.size(), context);
+
+                    std::vector<hq::heterogeneous_queue<void>::future_t> futures;
+
+                    for (int i = 0 ; i < 32; ++i) {
+                        futures.push_back(hqueue.enqueue(fiber_callable(), test_function, id, i, host_vec, device_vector, queue));
+                    }
+
+                    // queue.flush();
+
+                    std::cout << "Enqueued: " << id << std::endl;
+
+                    for (auto&& fu : futures) {
+                        fu.get();
+                    }
+
+                    std::cout << "Thread " << id << " Done" << std::endl;
+                    
+                }
+            )
+        );
+    }
+
+    std::cout << "Task launched\n";
+
+    for (auto&& t : ths) {
+        t.join();
+    }
+
+    std::cout << "All Done\n";
 
 
-
-
-	HQ::CreateHeterogeneousQueue();
-
-	int tmp;
-	//std::cin >> tmp;
-
-	TestTask testTask;
-	testTask.setEvent(HQ::CreateEvent());
-
-	int* ptr = testTask.getPtrArray();
-
-	//WriteBufferWithIndex(1, testTask->getBuffer(), 0, testTask->getGlobalSize() * sizeof(int), ptr);
-
-	// Task with Event
-	std::cout << "enqueue Task One" << std::endl;
-	HQ::EnqueueHeterogeneousQueue(&testTask);
-	testTask.getEvent()->wait();
-
-	// KAOCC: NOTE: the Event system here is currently broken ...
-
-	//test
-	//_sleep(5000);
-
-	std::cout << "Task 1 complete" << std::endl;
-
-
-	// KAOCC: how do you know which part of the buffer should be loaded ?
-	//ReadBufferWithIndex(1, testTask->getBuffer(), 0, (testTask->getGlobalSize() * sizeof(int)) / 2, ptr + 500);
-
-	std::cerr << "Result" << std::endl;
-
-	std::for_each(ptr, ptr + testTask.getGlobalSize(), [](const int& n) { std::cerr << n << std::endl; });
-	
-
-	std::cerr << "Result END" << std::endl;
-
-
-	std::cin >> tmp;
-
-	// this will be non-blocking
-	//TestTask testTaskB;
-	//HQ::EnqueueHeterogeneousQueue(&testTaskB);
-
-	//_sleep(5000);
-
-	//std::cout << "Task 2 complete" << std::endl;
-
-
-	const size_t ARRAY_SZ = 10;
-	TestTask taskArray[ARRAY_SZ];
-
-	for (size_t i = 0; i < ARRAY_SZ; ++i) {
-		taskArray[i].setEvent(HQ::CreateEvent());
-	}
-
-	for (size_t i = 0; i < ARRAY_SZ; ++i) {
-		HQ::EnqueueHeterogeneousQueue(&taskArray[i]);
-	}
-
-	for (size_t i = 0; i < ARRAY_SZ; ++i) {
-		taskArray[i].getEvent()->wait();
-	}
-
-	std::cout << "Task Array complete" << std::endl;
-
-	std::cin >> tmp;
-
-	std::cerr << "Result" << std::endl;
-	for (size_t i = 0; i < ARRAY_SZ; ++i) {
-		std::cerr << "--------------- Test Array: " << i << " --------------- " << std::endl;
-		//std::cin >> tmp;
-		int* ptr = taskArray[i].getPtrArray();
-		//std::for_each(ptr, ptr + taskArray[i].getGlobalSize(), [](const int& n) { std::cerr << n << std::endl; });
-	}
-
-	std::cerr << "Result END" << std::endl;
-
-	HQ::DestroyEvent(testTask.getEvent());
-	HQ::DestroyHeterogeneousQueue();
-
-	//delete testTask;
-
-	return 0;
+    return 0;
 }
-
 
 

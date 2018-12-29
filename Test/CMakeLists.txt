@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.10)
 
 # Project source dir changes after the project() definition
 project(cl_test)
@@ -23,12 +23,19 @@ add_executable(
     ./src/main.cpp
     )
 
-add_executable(
-    Test-static
-    ./src/main.cpp
-    )    
+#add_executable(
+#    Test-static
+#    ./src/main.cpp
+#    )    
 
-target_link_libraries(Test CE HQ)
-target_link_libraries(Test-static CE-static HQ-static)
+## target_link_libraries(Test HQ)
+#target_link_libraries(Test-static)
+
+# message("Boost_LIB: ${Boost_LIBRARIES}") 
+
+# target_link_libraries(Test ${Boost_LIBRARIES} ${OpenCL_LIBRARY})
+
+target_link_libraries(Test ${CONAN_LIBS} ${OpenCL_LIBRARY})
+
 
 # ${CMAKE_THREAD_LIBS_INIT}
