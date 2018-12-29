@@ -13,6 +13,15 @@
 
 namespace hq {
 
+class nonblocking_callable {
+public:
+    virtual ~nonblocking_callable() = 0;
+};
+
+nonblocking_callable::~nonblocking_callable() {
+}
+
+template<class T>
 class heterogeneous_queue {
 
     class thread_worker {
@@ -50,7 +59,7 @@ class heterogeneous_queue {
 
 public:
 
-    using future_t = std::future<void>;
+    using future_t = std::future<T>;
 
     heterogeneous_queue() {
         auto num_thread = std::thread::hardware_concurrency();
@@ -95,7 +104,7 @@ private:
 
     std::vector<std::thread> workers;
 
-    using task_t = std::packaged_task<void()>;
+    using task_t = std::packaged_task<T()>;
     boost::fibers::buffered_channel<task_t> task_channel {channel_size};
  
 

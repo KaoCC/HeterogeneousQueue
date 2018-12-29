@@ -44,16 +44,15 @@ int main() {
 
     std::vector<std::thread> ths;
 
-    auto max_num = std::thread::hardware_concurrency();
+    int max_num = std::thread::hardware_concurrency() - 1;
 
-    if (max_num == 0) {
+    if (max_num <= 0) {
         max_num = 2;
     }
 
     // create data array on host
-    std::vector<int> host_vec(1000000);
+    std::vector<int> host_vec(30000000);
     std::iota(host_vec.begin(), host_vec.end(), 0);
-
 
     std::cout << max_num << std::endl;
 
@@ -74,13 +73,21 @@ int main() {
                     // create vector on device
                     boost::compute::vector<int> device_vector(host_vec.size(), context);
 
-                    for (int i = 0 ; i < 200; ++i) {
-                        hqueue.enqueue(test_function, id, i, host_vec, device_vector, queue);
+                    std::vector<hq::heterogeneous_queue::future_t> futures;
+
+                    for (int i = 0 ; i < 32; ++i) {
+                        futures.push_back(hqueue.enqueue(test_function, id, i, host_vec, device_vector, queue));
                     }
 
-                    //queue.flush();
+                    // queue.flush();
 
                     std::cout << "Enqueued: " << id << std::endl;
+
+                    for (auto&& fu : futures) {
+                        fu.get();
+                    }
+
+                    std::cout << "Thread " << id << " Done" << std::endl;
                     
                 }
             )
@@ -93,7 +100,7 @@ int main() {
         t.join();
     }
 
-    std::cout << "Done\n";
+    std::cout << "All Done\n";
 
 
     return 0;
