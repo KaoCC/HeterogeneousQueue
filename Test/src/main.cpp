@@ -9,17 +9,20 @@
 #include <boost/compute/algorithm/copy.hpp>
 #include <boost/compute/container/vector.hpp>
 
+
+
+
+
 void test_function(int id, int number, 
     const std::vector<int>& host_vector, boost::compute::vector<int>& device_vector, 
     boost::compute::command_queue& queue) {
 
     std::cout << "Hello : " << id << " " <<  number << " " << std::endl;
 
-
     boost::fibers::promise<void> fiber_promise;
     boost::fibers::future<void> fiber_future { fiber_promise.get_future() };
 
-    auto f = boost::compute::copy_async(
+    boost::compute::copy_async(
         host_vector.begin(), host_vector.end(), device_vector.begin(), queue
     ).then(
         [&fiber_promise, id, number](){ 
@@ -28,19 +31,48 @@ void test_function(int id, int number,
         }
     );
 
+    std::cout << "launched async copy" << std::endl;
+
+
     queue.flush();
 
     fiber_future.get();
 
+    // enqueue write
+
+    // enqueue_nd_range_kernel
+
+    // enqueue read    
+    
+
     std::cout << "After : " << id << " " <<  number << " " << std::endl;
 }
+
+
+void opencl_kernel_test() {
+
+
+}
+
+
+class fiber_callable : public hq::nonblocking_callable {
+public:
+    template<class NonBlockingFunction, class... Args>
+    void operator()(NonBlockingFunction&& func, Args&&... args) {
+        func(args...);
+    }
+
+    ~fiber_callable() = default;
+};
+
+
 
 int main() {
 
 
     std::cout << "Start Testing HQ\n";
 
-    hq::heterogeneous_queue hqueue;
+    hq::heterogeneous_queue<void> hqueue;
 
     std::vector<std::thread> ths;
 
@@ -73,10 +105,10 @@ int main() {
                     // create vector on device
                     boost::compute::vector<int> device_vector(host_vec.size(), context);
 
-                    std::vector<hq::heterogeneous_queue::future_t> futures;
+                    std::vector<hq::heterogeneous_queue<void>::future_t> futures;
 
                     for (int i = 0 ; i < 32; ++i) {
-                        futures.push_back(hqueue.enqueue(test_function, id, i, host_vec, device_vector, queue));
+                        futures.push_back(hqueue.enqueue(fiber_callable(), test_function, id, i, host_vec, device_vector, queue));
                     }
 
                     // queue.flush();
