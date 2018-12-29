@@ -90,7 +90,16 @@ public:
     template<class NonBlockingFunction, class... Args>
     auto enqueue(NonBlockingFunction&& func, Args&&... args) {
 
-        task_t task {std::bind(std::forward<NonBlockingFunction>(func), std::forward<Args>(args)...)};
+        static_assert(std::is_base_of_v<nonblocking_callable, NonBlockingFunction>);
+
+        // task_t task {std::bind(std::forward<NonBlockingFunction>(func), std::forward<Args>(args)...)};
+
+        task_t task {
+            [callable = std::forward<NonBlockingFunction>(func), arguments = std::make_tuple(std::forward<Args>(args)...) ] () mutable {
+                return std::apply(callable, std::move(arguments));
+            }
+        };
+
         auto task_future = task.get_future();
 
         task_channel.push(std::move(task));
