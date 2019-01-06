@@ -8,10 +8,12 @@ project(cl_test)
 # find_package(OpenCL REQUIRED)
 find_package (Threads REQUIRED)
 
-include_directories(${CE_DIR}/include)
+# include_directories(${CE_DIR}/include)
+# include_directories(${CLAL_DIR}/include)
+
 include_directories(${HQ_DIR}/include)
-include_directories(${CLAL_DIR}/include)
-# include_directories(${OpenCL_INCLUDE_DIR})
+
+include_directories(${OpenCL_INCLUDE_DIR})
 include_directories(${PROJECT_SOURCE_DIR}/src)
 
 
