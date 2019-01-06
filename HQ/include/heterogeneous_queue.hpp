@@ -33,7 +33,7 @@ class heterogeneous_queue {
         void operator()() {
 
             for (auto i = 0; i < fiber_count; ++i) {
-                fibers.push_back(boost::fibers::fiber([this]{process_task();}));
+                fibers.emplace_back([this] { process_task(); });
             }
 
             //process_task();
@@ -69,7 +69,7 @@ public:
         }
 
         for (auto i = 0; i < num_thread; ++i) {
-            workers.push_back(std::thread(thread_worker(*this)));
+            workers.emplace_back(thread_worker(*this));
         }
 
     }
