@@ -1,31 +1,29 @@
 # Heterogeneous Queue
-The Heterogeneous Queuing Framework
 
+The Heterogeneous Queuing Framework for GPU or Memory & IO-intensive tasks
+
+
+## Dependency
+
+- C++ 17 Compiler
+- Conan 1.11
+- CMake 3.10
+- Boost.Fiber
+- Boost.Compute
 
 ## Build
 
+The following compilers are tested:
 
-The following compilers are supported:
-
-- Visual Studio 2015 or 2017
-
-- GCC 5.4
-
-### Windows
-
-- Create Visual Studio 2017 Solution
-
-`./Tool/premake/win/premake5.exe vs2017`
+- Clang: Apple LLVM 10.0.0
+- Visual Studio 2017 (15.9.4)
 
 
-### Linux
+### Windows & Linux
 
-1. Create your build directory `mkdir build`
-2. Run CMake `cmake ..` for development or `cmake -DCMAKE_BUILD_TYPE=Release` for a release build
-3. Compile by running `make`
-4. Run test case by `make test`
+1. Create your build directory `mkdir build && cd build`
+2. Run Conan `conan install .. -s cppstd=17 --build missing`
+3. Run CMake `cmake ..` for development or `cmake -DCMAKE_BUILD_TYPE=Release` for a release build
+4. Compile by running `make`
+5. Run test case by `make test`
 
-
-- Build it !
-
-`make config=release_x64`
