@@ -68,7 +68,7 @@ public:
             num_thread = 2;
         }
 
-        for (auto i = 0; i < num_thread; ++i) {
+        for (unsigned i = 0; i < num_thread; ++i) {
             workers.emplace_back(thread_worker(*this));
         }
 
