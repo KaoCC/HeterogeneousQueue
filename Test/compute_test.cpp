@@ -4,7 +4,7 @@
 #include <thread>
 #include <vector>
 
-#include "heterogeneous_queue.hpp"
+#include "hq/heterogeneous_queue.hpp"
 
 #include <boost/compute/algorithm/copy.hpp>
 #include <boost/compute/container/vector.hpp>

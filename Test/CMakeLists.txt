@@ -1,7 +1,7 @@
-cmake_minimum_required(VERSION 3.10)
+
 
 # Project source dir changes after the project() definition
-project(cl_test)
+# project(cl_test)
 
 
 # Read More @ https://cmake.org/cmake/help/v3.1/module/FindOpenCL.html
@@ -11,19 +11,14 @@ find_package (Threads REQUIRED)
 # include_directories(${CE_DIR}/include)
 # include_directories(${CLAL_DIR}/include)
 
-include_directories(${HQ_DIR}/include)
 
 include_directories(${OpenCL_INCLUDE_DIR})
-include_directories(${PROJECT_SOURCE_DIR}/src)
 
 
 # Get rid off annoying OpenCL warning
 # set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wno-deprecated -Wno-deprecated-declarations")
 
-add_executable(
-    Test
-    ./src/main.cpp
-    )
+add_executable(compute_test compute_test.cpp)
 
 #add_executable(
 #    Test-static
@@ -37,7 +32,13 @@ add_executable(
 
 # target_link_libraries(Test ${Boost_LIBRARIES} ${OpenCL_LIBRARY})
 
-target_link_libraries(Test ${CONAN_LIBS} ${OpenCL_LIBRARY})
 
+
+add_test(NAME compute_async_test COMMAND compute_test)
+
+
+target_include_directories(compute_test PRIVATE ${PROJECT_SOURCE_DIR}/include)
+target_link_libraries(compute_test ${CONAN_LIBS} ${OpenCL_LIBRARY})
+target_compile_features(compute_test PUBLIC cxx_std_17)
 
 # ${CMAKE_THREAD_LIBS_INIT}
