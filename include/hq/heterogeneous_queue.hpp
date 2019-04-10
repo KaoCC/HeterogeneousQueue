@@ -59,7 +59,7 @@ class heterogeneous_queue {
 
 public:
 
-    using future_t = std::future<T>;
+    using future_t = boost::fibers::future<T>;
 
     heterogeneous_queue() {
         auto num_thread = std::thread::hardware_concurrency();
@@ -113,7 +113,7 @@ private:
 
     std::vector<std::thread> workers;
 
-    using task_t = std::packaged_task<T()>;
+    using task_t = boost::fibers::packaged_task<T()>;
     boost::fibers::buffered_channel<task_t> task_channel {channel_size};
  
 
