@@ -21,8 +21,34 @@ public:
 nonblocking_callable::~nonblocking_callable() {
 }
 
-template<class T>
+
 class heterogeneous_queue {
+
+
+	class task_base {
+	public:
+		virtual void execute() = 0;
+		virtual ~task_base() = default;
+	};
+
+	template<class R>
+	class fiber_task : public task_base {
+
+	public:
+
+		using task_t = boost::fibers::packaged_task<R()>;
+
+		fiber_task(task_t&& func) : callable(std::move(func)) {
+		}
+
+		void execute() override {
+			callable();
+		}
+
+		task_t callable;
+		
+	};
+
 
     class thread_worker {
     public:
@@ -44,9 +70,9 @@ class heterogeneous_queue {
 
         void process_task() {
 
-            task_t current_task;
+			std::unique_ptr<task_base> current_task;
             while (hq.task_channel.pop(current_task) != boost::fibers::channel_op_status::closed) {
-                current_task();
+                current_task->execute();
             }
         }
 
@@ -59,7 +85,6 @@ class heterogeneous_queue {
 
 public:
 
-    using future_t = std::future<T>;
 
     heterogeneous_queue() {
         auto num_thread = std::thread::hardware_concurrency();
@@ -68,7 +93,7 @@ public:
             num_thread = 2;
         }
 
-        for (auto i = 0; i < num_thread; ++i) {
+        for (unsigned i = 0; i < num_thread; ++i) {
             workers.emplace_back(thread_worker(*this));
         }
 
@@ -87,22 +112,34 @@ public:
     heterogeneous_queue& operator=(const heterogeneous_queue&) = delete;
 
     // enqueue function
-    template<class NonBlockingFunction, class... Args>
+    template<class R, class NonBlockingFunction, class... Args>
     auto enqueue(NonBlockingFunction&& func, Args&&... args) {
 
         static_assert(std::is_base_of_v<nonblocking_callable, NonBlockingFunction>);
 
         // task_t task {std::bind(std::forward<NonBlockingFunction>(func), std::forward<Args>(args)...)};
 
-        task_t task {
-            [callable = std::forward<NonBlockingFunction>(func), arguments = std::make_tuple(std::forward<Args>(args)...) ] () mutable {
-                return std::apply(callable, std::move(arguments));
-            }
-        };
+        //task_t task {
+        //    [callable = std::forward<NonBlockingFunction>(func), arguments = std::make_tuple(std::forward<Args>(args)...) ] () mutable {
+        //        return std::apply(callable, std::move(arguments));
+        //    }
+        //};
 
-        auto task_future = task.get_future();
+		auto fiber_task_ptr = std::make_unique<fiber_task<R>>(
+			
+			static_cast<typename fiber_task<R>::task_t>(
 
-        task_channel.push(std::move(task));
+				[callable = std::forward<NonBlockingFunction>(func), arguments = std::make_tuple(std::forward<Args>(args)...) ] () mutable {
+					return std::apply(callable, std::move(arguments));
+				}
+
+			)
+
+		);
+
+        auto task_future = fiber_task_ptr->callable.get_future();
+
+        task_channel.push(std::move(fiber_task_ptr));
 
         return task_future;
     }
@@ -113,8 +150,7 @@ private:
 
     std::vector<std::thread> workers;
 
-    using task_t = std::packaged_task<T()>;
-    boost::fibers::buffered_channel<task_t> task_channel {channel_size};
+    boost::fibers::buffered_channel<std::unique_ptr<task_base>> task_channel {channel_size};
  
 
     // ?
