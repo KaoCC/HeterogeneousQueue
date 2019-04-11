@@ -74,7 +74,7 @@ int main() {
 
     std::cout << "Start Testing HQ\n";
 
-    hq::heterogeneous_queue<int> hqueue;
+    hq::heterogeneous_queue hqueue;
 
     std::vector<std::thread> ths;
 
@@ -84,7 +84,6 @@ int main() {
         max_num = 2;
     }
 
-	max_num = 1;
 
     // create data array on host
     std::vector<int> host_vec(20000000);
@@ -109,13 +108,13 @@ int main() {
                     // create vector on device
                     boost::compute::vector<int> device_vector(host_vec.size(), context);
 
-                    std::vector<hq::heterogeneous_queue<int>::future_t> futures;
+                    std::vector<boost::fibers::future<int>> futures;
 
 
 					constexpr int ss = 32;
 
                     for (int i = 0 ; i < ss; ++i) {
-						futures.emplace_back(hqueue.enqueue(fiber_callable(), test_function, id, i, host_vec, device_vector, queue));
+						futures.emplace_back(hqueue.enqueue<int>(fiber_callable(), test_function, id, i, host_vec, device_vector, queue));
 						std::cout << "+++ enqueue " << id << " " << i << std::endl;
                     }
 
