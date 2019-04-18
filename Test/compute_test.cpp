@@ -57,16 +57,6 @@ void opencl_kernel_test() {
 }
 
 
-class fiber_callable : public hq::nonblocking_callable {
-public:
-    template<class NonBlockingFunction, class... Args>
-    int operator()(NonBlockingFunction&& func, Args&&... args) {
-        return func(args...);
-    }
-
-    ~fiber_callable() = default;
-};
-
 
 
 int main() {
@@ -114,7 +104,7 @@ int main() {
 					constexpr int ss = 32;
 
                     for (int i = 0 ; i < ss; ++i) {
-						futures.emplace_back(hqueue.enqueue<int>(fiber_callable(), test_function, id, i, host_vec, device_vector, queue));
+						futures.emplace_back(hqueue.enqueue<int>(test_function, id, i, std::cref(host_vec), std::ref(device_vector), std::ref(queue)));
 						std::cout << "+++ enqueue " << id << " " << i << std::endl;
                     }
 
