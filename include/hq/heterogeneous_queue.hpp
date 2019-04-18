@@ -13,14 +13,6 @@
 
 namespace hq {
 
-class nonblocking_callable {
-public:
-    virtual ~nonblocking_callable() = 0;
-};
-
-nonblocking_callable::~nonblocking_callable() {
-}
-
 
 class heterogeneous_queue {
 
@@ -112,10 +104,9 @@ public:
     heterogeneous_queue& operator=(const heterogeneous_queue&) = delete;
 
     // enqueue function
-    template<class R, class NonBlockingFunction, class... Args>
-    auto enqueue(NonBlockingFunction&& func, Args&&... args) {
+    template<class R, class FiberFunc, class... Args>
+    auto enqueue(FiberFunc&& func, Args&&... args) {
 
-        static_assert(std::is_base_of_v<nonblocking_callable, NonBlockingFunction>);
 
         // task_t task {std::bind(std::forward<NonBlockingFunction>(func), std::forward<Args>(args)...)};
 
@@ -129,8 +120,8 @@ public:
 			
 			static_cast<typename fiber_task<R>::task_t>(
 
-				[callable = std::forward<NonBlockingFunction>(func), arguments = std::make_tuple(std::forward<Args>(args)...) ] () mutable {
-					return std::apply(callable, std::move(arguments));
+				[callable = std::forward<FiberFunc>(func), arguments = std::make_tuple(std::forward<Args>(args)...) ] () mutable {
+					return std::apply(callable, arguments);
 				}
 
 			)
