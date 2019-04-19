@@ -121,7 +121,7 @@ public:
 			static_cast<typename fiber_task<R>::task_t>(
 
 				[callable = std::forward<FiberFunc>(func), arguments = std::make_tuple(std::forward<Args>(args)...) ] () mutable {
-					return std::apply(callable, arguments);
+					return std::apply(callable, std::move(arguments));
 				}
 
 			)
