@@ -12,6 +12,7 @@
 
 
 
+// warning : check sync issue (queue, vector ... ??!)
 
 int test_function(int id, int number, 
     const std::vector<int>& host_vector, boost::compute::vector<int>& device_vector, 
