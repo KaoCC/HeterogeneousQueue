@@ -50,7 +50,7 @@ class heterogeneous_queue {
 
         void operator()() {
 
-            for (auto i = 0; i < fiber_count; ++i) {
+            for (unsigned i = 0; i < fiber_count; ++i) {
                 fibers.emplace_back([this] { process_task(); });
             }
 
@@ -97,7 +97,7 @@ public:
         std::for_each(std::begin(workers), std::end(workers), std::mem_fn(&std::thread::join));
 
         // test
-        std::cout << "Joined" << std::endl;
+        // std::cout << "Joined" << std::endl;
     }
 
     heterogeneous_queue(const heterogeneous_queue&) = delete;
@@ -121,7 +121,7 @@ public:
 			static_cast<typename fiber_task<R>::task_t>(
 
 				[callable = std::forward<FiberFunc>(func), arguments = std::make_tuple(std::forward<Args>(args)...) ] () mutable {
-					return std::apply(callable, arguments);
+					return std::apply(callable, std::move(arguments));
 				}
 
 			)
