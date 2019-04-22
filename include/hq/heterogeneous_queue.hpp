@@ -4,10 +4,6 @@
 
 #include <vector>
 #include <thread>
-#include <queue>
-
-#include <mutex>
-#include <condition_variable>
 
 #include <boost/fiber/all.hpp>
 
@@ -30,12 +26,21 @@ class heterogeneous_queue {
 
 		using task_t = boost::fibers::packaged_task<R()>;
 
-		fiber_task(task_t&& func) : callable(std::move(func)) {
+		fiber_task(task_t&& func) : callable{std::move(func)} {
 		}
+
+        fiber_task(const fiber_task&) = delete;
+        fiber_task& operator=(const fiber_task&) = delete;
 
 		void execute() override {
 			callable();
 		}
+
+        auto get_future() {
+            return callable.get_future();
+        }
+
+    private:
 
 		task_t callable;
 		
@@ -45,7 +50,7 @@ class heterogeneous_queue {
     class thread_worker {
     public:
 
-        thread_worker(heterogeneous_queue& hq_ref) : hq{hq_ref} {
+        thread_worker(heterogeneous_queue& hq_ref) : shared_queue{hq_ref} {
         }
 
         void operator()() {
@@ -63,15 +68,15 @@ class heterogeneous_queue {
         void process_task() {
 
 			std::unique_ptr<task_base> current_task;
-            while (hq.task_channel.pop(current_task) != boost::fibers::channel_op_status::closed) {
+            while (shared_queue.task_channel.pop(current_task) != boost::fibers::channel_op_status::closed) {
                 current_task->execute();
             }
         }
 
         std::vector<boost::fibers::fiber> fibers;
 
-        static constexpr unsigned fiber_count = 4;
-        heterogeneous_queue& hq;
+        static constexpr unsigned fiber_count {4};
+        heterogeneous_queue& shared_queue;
     };
 
 
@@ -104,7 +109,7 @@ public:
     heterogeneous_queue& operator=(const heterogeneous_queue&) = delete;
 
     // enqueue function
-    template<class R, class FiberFunc, class... Args>
+    template<class FiberFunc, class... Args>
     auto enqueue(FiberFunc&& func, Args&&... args) {
 
 
@@ -116,9 +121,11 @@ public:
         //    }
         //};
 
-		auto fiber_task_ptr = std::make_unique<fiber_task<R>>(
+        using return_type = std::invoke_result_t<FiberFunc, Args...>;
+
+		auto fiber_task_ptr = std::make_unique<fiber_task<return_type>>(
 			
-			static_cast<typename fiber_task<R>::task_t>(
+			static_cast<typename fiber_task<return_type>::task_t>(
 
 				[callable = std::forward<FiberFunc>(func), arguments = std::make_tuple(std::forward<Args>(args)...) ] () mutable {
 					return std::apply(callable, std::move(arguments));
@@ -128,7 +135,7 @@ public:
 
 		);
 
-        auto task_future = fiber_task_ptr->callable.get_future();
+        auto task_future = fiber_task_ptr->get_future();
 
         task_channel.push(std::move(fiber_task_ptr));
 
@@ -137,7 +144,7 @@ public:
  
 private:
 
-    static constexpr unsigned channel_size = 2048;
+    static constexpr unsigned channel_size {2048};
 
     std::vector<std::thread> workers;
 
