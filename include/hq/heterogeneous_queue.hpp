@@ -104,7 +104,7 @@ public:
     heterogeneous_queue& operator=(const heterogeneous_queue&) = delete;
 
     // enqueue function
-    template<class R, class FiberFunc, class... Args>
+    template<class FiberFunc, class... Args>
     auto enqueue(FiberFunc&& func, Args&&... args) {
 
 
@@ -116,9 +116,11 @@ public:
         //    }
         //};
 
-		auto fiber_task_ptr = std::make_unique<fiber_task<R>>(
+        using return_type = std::invoke_result_t<FiberFunc, Args...>;
+
+		auto fiber_task_ptr = std::make_unique<fiber_task<return_type>>(
 			
-			static_cast<typename fiber_task<R>::task_t>(
+			static_cast<typename fiber_task<return_type>::task_t>(
 
 				[callable = std::forward<FiberFunc>(func), arguments = std::make_tuple(std::forward<Args>(args)...) ] () mutable {
 					return std::apply(callable, std::move(arguments));

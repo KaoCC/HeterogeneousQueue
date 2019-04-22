@@ -105,7 +105,7 @@ int main() {
 					constexpr int ss = 32;
 
                     for (int i = 0 ; i < ss; ++i) {
-						futures.emplace_back(hqueue.enqueue<int>(test_function, id, i, std::cref(host_vec), std::ref(device_vector), std::ref(queue)));
+						futures.emplace_back(hqueue.enqueue(test_function, id, i, std::cref(host_vec), std::ref(device_vector), std::ref(queue)));
 						std::cout << "+++ enqueue " << id << " " << i << std::endl;
                     }
 
