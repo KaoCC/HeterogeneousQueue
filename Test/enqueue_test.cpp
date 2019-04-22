@@ -13,6 +13,7 @@ class test_object {
 public:
 
     test_object() = default;
+    
     test_object(const test_object&) = delete;
     test_object& operator=(const test_object&) = delete;
 
@@ -43,8 +44,8 @@ void empty_func() {
 }
 
 
-char val_func(char c) {
-    ++c;
+char val_func(char c, char inc) {
+    c += inc;
     return c;
 }
 
@@ -81,11 +82,12 @@ BOOST_AUTO_TEST_CASE(enqueue_val_func) {
     hq::heterogeneous_queue hetero_queue;
 
     char c = 'A';
-    auto f = hetero_queue.enqueue(val_func, c);
+    constexpr char inc = 1;
+    auto f = hetero_queue.enqueue(val_func, c, inc);
 
     BOOST_TEST(f.valid());
     BOOST_TEST(c == 'A');
-    BOOST_TEST(c == f.get() - 1);
+    BOOST_TEST((c + inc) == f.get());
 
 }
 
@@ -121,7 +123,9 @@ BOOST_AUTO_TEST_CASE(enqueue_obj_move_func) {
 
     hq::heterogeneous_queue hetero_queue;
     test_object obj_a;
-    obj_a.val = 100;
+
+    constexpr int test_val = 100;
+    obj_a.val = test_val;
 
     auto f = hetero_queue.enqueue(obj_move_func, std::move(obj_a));
 
@@ -129,7 +133,7 @@ BOOST_AUTO_TEST_CASE(enqueue_obj_move_func) {
 
     test_object obj_b = f.get();
 
-    BOOST_TEST(obj_b.val == 100);
+    BOOST_TEST(obj_b.val == test_val);
 }
 
 BOOST_AUTO_TEST_CASE(enqueue_functor) {
