@@ -38,3 +38,5 @@ install
 
 
 .DS_Store
+
+.vscode/*
