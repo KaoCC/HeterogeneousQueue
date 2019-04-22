@@ -68,7 +68,7 @@ BOOST_AUTO_TEST_CASE(enqueue_empty_func) {
 
     hq::heterogeneous_queue hetero_queue;
 
-    auto f = hetero_queue.enqueue<void>(empty_func);
+    auto f = hetero_queue.enqueue(empty_func);
 
     BOOST_TEST(f.valid());
 
@@ -81,7 +81,7 @@ BOOST_AUTO_TEST_CASE(enqueue_val_func) {
     hq::heterogeneous_queue hetero_queue;
 
     char c = 'A';
-    auto f = hetero_queue.enqueue<char>(val_func, c);
+    auto f = hetero_queue.enqueue(val_func, c);
 
     BOOST_TEST(f.valid());
     BOOST_TEST(c == 'A');
@@ -95,7 +95,7 @@ BOOST_AUTO_TEST_CASE(enqueue_ref_func) {
 
     int local = 100;
 
-    auto f = hetero_queue.enqueue<int>(ref_func, std::ref(local));
+    auto f = hetero_queue.enqueue(ref_func, std::ref(local));
 
     BOOST_TEST(f.valid());
     auto result = f.get();
@@ -108,7 +108,7 @@ BOOST_AUTO_TEST_CASE(enqueue_obj_func) {
     hq::heterogeneous_queue hetero_queue;
     test_object obj;
 
-    auto f = hetero_queue.enqueue<int>(obj_func, std::ref(obj));
+    auto f = hetero_queue.enqueue(obj_func, std::ref(obj));
 
     BOOST_TEST(f.valid());
     auto result = f.get();
@@ -123,7 +123,7 @@ BOOST_AUTO_TEST_CASE(enqueue_obj_move_func) {
     test_object obj_a;
     obj_a.val = 100;
 
-    auto f = hetero_queue.enqueue<test_object>(obj_move_func, std::move(obj_a));
+    auto f = hetero_queue.enqueue(obj_move_func, std::move(obj_a));
 
     BOOST_TEST(f.valid());
 
@@ -140,7 +140,7 @@ BOOST_AUTO_TEST_CASE(enqueue_functor) {
     test_object obj;
     obj.val = 1000;
 
-    auto f = hetero_queue.enqueue<int>(test_functor(), functor_helper_func, a, std::ref(obj));
+    auto f = hetero_queue.enqueue(test_functor(), functor_helper_func, a, std::ref(obj));
 
     a += 1234;
 
